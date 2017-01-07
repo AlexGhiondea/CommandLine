@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>CommandLine</id>
+        <version>1.0.0-beta-01</version>
+        <authors>Alex Ghiondea</authors>
+        <owners>Alex Ghiondea</owners>
+        <copyright>Alex Ghiondea (c) 2017</copyright>
+        <licenseUrl>https://raw.githubusercontent.com/AlexGhiondea/CommandLine/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/AlexGhiondea/CommandLine</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <title>CommandLine parser</title>
+        <description>Parse command line arguments into user defined objects</description>
+        <tags>CommandLine, Command line, Command, Line, parser, objects, custom</tags>
+    </metadata>
+    <files>
+        <file src="net461\CommandLine.dll" target="lib\net461" />
+    </files>
+</package>
