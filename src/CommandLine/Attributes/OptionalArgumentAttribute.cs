@@ -3,7 +3,7 @@
 namespace CommandLine.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public sealed class OptionalArgumentAttribute : BaseArgumentAttribute
+    public sealed class OptionalArgumentAttribute : ActualArgumentAttribute
     {
         public object DefaultValue { get; private set; }
 

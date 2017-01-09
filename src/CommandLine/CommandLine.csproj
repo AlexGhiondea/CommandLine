@@ -45,7 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\GroupArgumentAttribute.cs" />
     <Compile Include="Attributes\BaseArgumentAttribute.cs" />
+    <Compile Include="Attributes\ActualArgumentAttribute.cs" />
     <Compile Include="Attributes\OptionalArgumentAttribute.cs" />
     <Compile Include="Attributes\RequiredArgumentAttribute.cs" />
     <Compile Include="HelpGenerator.cs" />

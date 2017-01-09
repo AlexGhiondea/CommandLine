@@ -14,16 +14,15 @@ namespace CommandLine
         {
             options = default(TOptions);
 
-            Dictionary<int, PropertyInfo> requiredParam = null;
-            Dictionary<string, PropertyInfo> optionalParam = null;
+            TypePropertyInfo parameters = null;
             try
             {
                 // build a list of properties for the type passed in.
                 // this will throw for cases where the type is incorrecly annotated with attributes
-                ScanTypeForProperties<TOptions>(out requiredParam, out optionalParam);
+                ScanTypeForProperties<TOptions>(out parameters);
 
                 // parse the arguments and build the options object
-                options = InternalParse<TOptions>(args, requiredParam, optionalParam);
+                options = InternalParse<TOptions>(args, parameters.TypeInfo[string.Empty]);
 
                 return true;
             }
@@ -31,7 +30,7 @@ namespace CommandLine
             {
                 Colorizer.WriteLine($"[Red!Error]: {ex.Message} {Environment.NewLine}");
 
-                HelpGenerator.DisplayHelp<TOptions>(requiredParam, optionalParam);
+                HelpGenerator.DisplayHelp<TOptions>(parameters.TypeInfo[string.Empty]);
 
                 return false;
             }
@@ -46,7 +45,7 @@ namespace CommandLine
 
         public static object GetValue(string[] args, ref int currentPosition, PropertyInfo targetType)
         {
-            var value = targetType.GetCustomAttribute<BaseArgumentAttribute>();
+            var value = targetType.GetCustomAttribute<ActualArgumentAttribute>();
             object argValue = null;
 
             if (!value.IsCollection)
@@ -86,12 +85,12 @@ namespace CommandLine
             return Convert.ChangeType(argValue, targetType.PropertyType);
         }
 
-        private static TOptions InternalParse<TOptions>(string[] args, Dictionary<int, PropertyInfo> requiredParam, Dictionary<string, PropertyInfo> optionalParam) where TOptions : new()
+        private static TOptions InternalParse<TOptions>(string[] args, GroupPropertyInfo parameters) where TOptions : new()
         {
             // short circuit the request for help!
             if (args.Length == 1 && (args[0] == "/?" || args[0] == "-?"))
             {
-                HelpGenerator.DisplayHelp<TOptions>(requiredParam, optionalParam);
+                HelpGenerator.DisplayHelp<TOptions>(parameters);
                 return default(TOptions);
             }
 
@@ -99,7 +98,7 @@ namespace CommandLine
             int currentPosition = 0;
 
             // let's match them to actual required args, in positional
-            if (requiredParam.Count > 0)
+            if (parameters.requiredParam.Count > 0)
             {
                 if (args.Length == 0)
                 {
@@ -110,7 +109,7 @@ namespace CommandLine
                 {
                     //set the required property
                     PropertyInfo propInfo;
-                    if (!requiredParam.TryGetValue(currentPosition, out propInfo))
+                    if (!parameters.requiredParam.TryGetValue(currentPosition, out propInfo))
                     {
                         break;
                     }
@@ -119,18 +118,18 @@ namespace CommandLine
                     var value = GetValue(args, ref currentPosition, propInfo);
 
                     propInfo.SetValue(options, value);
-                    requiredParam.Remove(paramPosition);
+                    parameters.requiredParam.Remove(paramPosition);
                 } while (currentPosition < args.Length);
             }
 
             // no more? do we have any properties that we have not yet set?
-            if (requiredParam.Count > 0)
+            if (parameters.requiredParam.Count > 0)
             {
                 throw new ArgumentException("Not all required arguments have been specified");
             }
 
             // at this point, we should have no more required parameters that have not been set
-            Debug.Assert(requiredParam.Count == 0, "All required parameters should have been set.");
+            Debug.Assert(parameters.requiredParam.Count == 0, "All required parameters should have been set.");
 
             // process the optional arguments
             while (currentPosition < args.Length)
@@ -142,7 +141,7 @@ namespace CommandLine
 
                 PropertyInfo optionalProp = null;
                 var optionalParamName = args[currentPosition].Substring(1);
-                if (!optionalParam.TryGetValue(optionalParamName, out optionalProp))
+                if (!parameters.optionalParam.TryGetValue(optionalParamName, out optionalProp))
                 {
                     throw new ArgumentException($"Could not find argument {args[currentPosition]}");
                 }
@@ -153,11 +152,11 @@ namespace CommandLine
                 var value = GetValue(args, ref currentPosition, optionalProp);
 
                 optionalProp.SetValue(options, value);
-                optionalParam.Remove(optionalParamName);
+                parameters.optionalParam.Remove(optionalParamName);
             }
 
             // for all the remaining optional properties, set their default value.
-            foreach (var property in optionalParam.Values)
+            foreach (var property in parameters.optionalParam.Values)
             {
                 //get the default value..
                 var value = property.GetCustomAttribute<OptionalArgumentAttribute>();
@@ -167,25 +166,39 @@ namespace CommandLine
             return options;
         }
 
-        private static void ScanTypeForProperties<TOptions>(out Dictionary<int, PropertyInfo> requiredParam, out Dictionary<string, PropertyInfo> optionalParam)
+        private static void ScanTypeForProperties<TOptions>(out TypePropertyInfo tInfo)
         {
-            requiredParam = new Dictionary<int, PropertyInfo>();
-            optionalParam = new Dictionary<string, PropertyInfo>(StringComparer.OrdinalIgnoreCase);
+            tInfo = new TypePropertyInfo();
+
+            GroupPropertyInfo propertyInfo = null;
 
             // retrieve all the arguments defined on the class
             var allProps = typeof(TOptions).GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
             foreach (var property in allProps)
             {
-                var attrs = property.GetCustomAttributes<BaseArgumentAttribute>().ToList();
-
-                if (attrs.Count > 1)
+                var actualAttribs = property.GetCustomAttributes<ActualArgumentAttribute>().ToList();
+                if (actualAttribs.Count > 1)
                 {
                     throw new ArgumentException($"Only one of Required/Optional attribute are allowed per property ({property.Name}). [Red!Help information might be incorrect!]");
                 }
 
+                string propertyGroupName = string.Empty; // if no group is defined (at all!) use empty string
+                var groupAttrib = property.GetCustomAttribute<GroupArgumentAttribute>();
+                if (groupAttrib != null)
+                {
+                    propertyGroupName = groupAttrib.Name;
+                }
+
+                // have we seen this group before?
+                if (!tInfo.TypeInfo.TryGetValue(propertyGroupName, out propertyInfo))
+                {
+                    propertyInfo = new GroupPropertyInfo();
+                    tInfo.TypeInfo[propertyGroupName] = propertyInfo;
+                }
+
                 // if we have no attributes on that property, move on
-                BaseArgumentAttribute baseAttrib = attrs.FirstOrDefault();
+                ActualArgumentAttribute baseAttrib = actualAttribs.FirstOrDefault();
                 if (baseAttrib == null)
                 {
                     continue;
@@ -194,24 +207,35 @@ namespace CommandLine
                 if (baseAttrib is RequiredArgumentAttribute)
                 {
                     var reqArg = baseAttrib as RequiredArgumentAttribute;
-                    if (requiredParam.ContainsKey(reqArg.ArgumentPosition))
+                    if (propertyInfo.requiredParam.ContainsKey(reqArg.ArgumentPosition))
                     {
                         throw new ArgumentException("Two required arguments share the same position!!");
                     }
 
-                    requiredParam[reqArg.ArgumentPosition] = property;
+                    propertyInfo.requiredParam[reqArg.ArgumentPosition] = property;
                 }
                 else if (baseAttrib is OptionalArgumentAttribute)
                 {
                     var optArg = baseAttrib as OptionalArgumentAttribute;
-                    if (optionalParam.ContainsKey(optArg.Name))
+                    if (propertyInfo.optionalParam.ContainsKey(optArg.Name))
                     {
                         throw new ArgumentException("Two optional arguments share the same name!!");
                     }
 
-                    optionalParam[optArg.Name] = property;
+                    propertyInfo.optionalParam[optArg.Name] = property;
                 }
             }
         }
+    }
+
+    public class TypePropertyInfo
+    {
+        public Dictionary<string, GroupPropertyInfo> TypeInfo { get; } = new Dictionary<string, GroupPropertyInfo>(StringComparer.OrdinalIgnoreCase);
+    }
+
+    public class GroupPropertyInfo
+    {
+        public Dictionary<int, PropertyInfo> requiredParam { get; } = new Dictionary<int, PropertyInfo>();
+        public Dictionary<string, PropertyInfo> optionalParam { get; } = new Dictionary<string, PropertyInfo>(StringComparer.OrdinalIgnoreCase);
     }
 }
