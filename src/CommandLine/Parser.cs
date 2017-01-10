@@ -244,8 +244,10 @@ namespace CommandLine
             // parse the rest of the properties
             foreach (var property in propertiesOnType)
             {
-                // get the group containing this property
-                GroupPropertyInfo grpPropInfo = GetGroupProperty(tInfo, property);
+                // get the group containing this property (note: more than one group can have the same property)
+                // this allows common required parameters
+
+                var groupsWhereThePropertyIs = GetGroupProperty(tInfo, property);
 
                 var actualAttribs = property.GetCustomAttributes<ActualArgumentAttribute>().ToList();
                 if (actualAttribs.Count > 1)
@@ -260,23 +262,31 @@ namespace CommandLine
                     continue;
                 }
 
+                // add the property to add the groups it is a part of
                 if (baseAttrib is RequiredArgumentAttribute)
                 {
-                    if (grpPropInfo.requiredParam.ContainsKey((int)baseAttrib.GetArgumentId()))
+                    foreach (GroupPropertyInfo grpPropInfo in groupsWhereThePropertyIs)
                     {
-                        throw new ArgumentException("Two required arguments share the same position!!");
-                    }
+                        if (grpPropInfo.requiredParam.ContainsKey((int)baseAttrib.GetArgumentId()))
+                        {
+                            throw new ArgumentException("Two required arguments share the same position!!");
+                        }
 
-                    grpPropInfo.requiredParam[(int)baseAttrib.GetArgumentId()] = property;
+                        grpPropInfo.requiredParam[(int)baseAttrib.GetArgumentId()] = property;
+                    }
                 }
                 else if (baseAttrib is OptionalArgumentAttribute)
                 {
-                    if (grpPropInfo.optionalParam.ContainsKey((string)baseAttrib.GetArgumentId()))
+                    foreach (GroupPropertyInfo grpPropInfo in groupsWhereThePropertyIs)
                     {
-                        throw new ArgumentException("Two optional arguments share the same name!!");
-                    }
 
-                    grpPropInfo.optionalParam[(string)baseAttrib.GetArgumentId()] = property;
+                        if (grpPropInfo.optionalParam.ContainsKey((string)baseAttrib.GetArgumentId()))
+                        {
+                            throw new ArgumentException("Two optional arguments share the same name!!");
+                        }
+
+                        grpPropInfo.optionalParam[(string)baseAttrib.GetArgumentId()] = property;
+                    }
                 }
             }
 
@@ -289,19 +299,41 @@ namespace CommandLine
             }
         }
 
-        private static GroupPropertyInfo GetGroupProperty(TypePropertyInfo tInfo, PropertyInfo property)
+        private static List<GroupPropertyInfo> GetGroupProperty(TypePropertyInfo tInfo, PropertyInfo property)
         {
-            // find the group property for this property
-            string grpPropInfoName = property.GetCustomAttribute<CommandGroupArgumentAttribute>()?.Name ?? string.Empty;
+            List<GroupPropertyInfo> groupsForThisProperty = new List<GroupPropertyInfo>();
 
-            GroupPropertyInfo grpPropInfo;
-            if (!tInfo.TypeInfo.TryGetValue(grpPropInfoName, out grpPropInfo))
+            var customAttributes = property.GetCustomAttributes<CommandGroupArgumentAttribute>();
+
+            if (!customAttributes.Any())
             {
-                grpPropInfo = new GroupPropertyInfo();
-                tInfo.TypeInfo[grpPropInfoName] = grpPropInfo;
+                // if we don't have groups defined
+                GroupPropertyInfo grpPropInfo;
+                if (!tInfo.TypeInfo.TryGetValue(string.Empty, out grpPropInfo))
+                {
+                    grpPropInfo = new GroupPropertyInfo();
+                    tInfo.TypeInfo[string.Empty] = grpPropInfo;
+                }
+
+                groupsForThisProperty.Add(grpPropInfo);
+                return groupsForThisProperty;
             }
 
-            return grpPropInfo;
+            foreach (var commandGroup in customAttributes)
+            {
+                string grpPropInfoName = commandGroup?.Name ?? string.Empty;
+                GroupPropertyInfo grpPropInfo;
+                if (!tInfo.TypeInfo.TryGetValue(grpPropInfoName, out grpPropInfo))
+                {
+                    grpPropInfo = new GroupPropertyInfo();
+                    tInfo.TypeInfo[grpPropInfoName] = grpPropInfo;
+                }
+
+                groupsForThisProperty.Add(grpPropInfo);
+            }
+
+            // find the group property for this property
+            return groupsForThisProperty;
         }
 
         private static PropertyInfo FindCommandProperty(PropertyInfo[] propertiesOnType)
@@ -321,16 +353,16 @@ namespace CommandLine
             return result;
         }
     }
+}
 
-    public class TypePropertyInfo
-    {
-        public Dictionary<string, GroupPropertyInfo> TypeInfo { get; } = new Dictionary<string, GroupPropertyInfo>(StringComparer.OrdinalIgnoreCase);
-        public PropertyInfo ActionCommandProperty { get; set; }
-    }
+public class TypePropertyInfo
+{
+    public Dictionary<string, GroupPropertyInfo> TypeInfo { get; } = new Dictionary<string, GroupPropertyInfo>(StringComparer.OrdinalIgnoreCase);
+    public PropertyInfo ActionCommandProperty { get; set; }
+}
 
-    public class GroupPropertyInfo
-    {
-        public Dictionary<int, PropertyInfo> requiredParam { get; } = new Dictionary<int, PropertyInfo>();
-        public Dictionary<string, PropertyInfo> optionalParam { get; } = new Dictionary<string, PropertyInfo>(StringComparer.OrdinalIgnoreCase);
-    }
+public class GroupPropertyInfo
+{
+    public Dictionary<int, PropertyInfo> requiredParam { get; } = new Dictionary<int, PropertyInfo>();
+    public Dictionary<string, PropertyInfo> optionalParam { get; } = new Dictionary<string, PropertyInfo>(StringComparer.OrdinalIgnoreCase);
 }

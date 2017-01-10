@@ -26,11 +26,11 @@ namespace CommandLine.TestApp
             Console.WriteLine("============================");
             var x3 = CommandLine.Parser.Parse<Groups1>(args);
 
-            args = new string[] { "Command1",  };
+            args = new string[] { "Command1", };
             Console.WriteLine("============================");
             var x32 = CommandLine.Parser.Parse<Groups1>(args);
 
-            args = new string[] { "" };
+            args = new string[] { "--help" };
             Console.WriteLine("============================");
             var x4 = CommandLine.Parser.Parse<Groups1>(args);
             Console.WriteLine("----------------");
@@ -50,6 +50,7 @@ namespace CommandLine.TestApp
         public Command Command { get; set; }
 
         [CommandGroupArgument(nameof(Command.Command1))]
+        [CommandGroupArgument(nameof(Command.Command2))]
         [RequiredArgument(0, "p1", "Required parameter 1")]
         public string p1 { get; set; }
 
@@ -58,11 +59,11 @@ namespace CommandLine.TestApp
         public int opt1 { get; set; }
 
         [CommandGroupArgument(nameof(Command.Command2))]
-        [RequiredArgument(0, "p1", "Required parameter 1")]
+        [RequiredArgument(1, "p2", "Required parameter 1")]
         public string p2 { get; set; }
 
         [CommandGroupArgument(nameof(Command.Command2))]
-        [RequiredArgument(1, "p21212", "Required parameter 1")]
+        [RequiredArgument(2, "p21212", "Required parameter 1")]
         public string p3 { get; set; }
 
         [CommandGroupArgument(nameof(Command.Command2))]
