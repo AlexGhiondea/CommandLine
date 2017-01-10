@@ -33,16 +33,12 @@ namespace CommandLine
                 {
                     if (args[0] == "/?" || args[0] == "-?")
                     {
-                        HelpGenerator.DisplayHelp(parameters);
+                        HelpGenerator.DisplayShortHelp(parameters);
                         return false;
                     }
                     else if (args[0] == "--help")
                     {
-                        foreach (var item in parameters.TypeInfo.Keys)
-                        {
-                            HelpGenerator.DisplayParameterHelpForGroup(item, parameters.TypeInfo[item]);
-
-                        }
+                        HelpGenerator.DisplayDetailedHelp(parameters);
                         return false;
                     }
                 }
@@ -66,7 +62,7 @@ namespace CommandLine
             {
                 Colorizer.WriteLine($"[Red!Error]: {ex.Message} {Environment.NewLine}");
 
-                HelpGenerator.DisplayHelp(parameters);
+                HelpGenerator.DisplayShortHelp(parameters);
 
                 return false;
             }

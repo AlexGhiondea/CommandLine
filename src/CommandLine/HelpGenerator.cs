@@ -37,25 +37,38 @@ namespace CommandLine
             return maxStringSize;
         }
 
-        public static void DisplayHelp(TypePropertyInfo type)
+        public static void DisplayShortHelp(TypePropertyInfo type)
+        {
+            string exeName = DisplayCommandLine(type);
+
+            Colorizer.WriteLine(string.Empty);
+            Colorizer.WriteLine("For detailed information run [White!{0} --help]", exeName);
+        }
+
+        private static string DisplayCommandLine(TypePropertyInfo type)
         {
             string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
             Colorizer.WriteLine("Usage: ");
 
-            if (type.TypeInfo.ContainsKey(string.Empty))
+            foreach (var group in type.TypeInfo)
             {
-                Colorizer.Write(" [White!{ 0}.exe] ", exeName);
-                DisplayDetailedParameterHelp(type.TypeInfo[string.Empty]);
-            }
-            else
-            {
-                var attrib = type.ActionCommandProperty.GetCustomAttribute<CommandArgumentAttribute>();
-                foreach (var group in type.TypeInfo)
+                Colorizer.Write(" [White!{0}.exe] ", exeName);
+                if (!string.IsNullOrEmpty(group.Key))
                 {
-                    Colorizer.Write(" [White!{0}.exe]", exeName);
-                    Colorizer.Write($" [Green!{group.Key}] ");
-                    DisplayCommandLine(group.Value);
+                    Colorizer.Write($"[Green!{group.Key}] ");
                 }
+                DisplayCommandLine(group.Value);
+            }
+
+            return exeName;
+        }
+
+        public static void DisplayDetailedHelp(TypePropertyInfo type)
+        {
+            Colorizer.WriteLine("Usage: ");
+            foreach (var item in type.TypeInfo.Keys)
+            {
+                DisplayParameterHelpForGroup(item, type.TypeInfo[item]);
             }
         }
 
@@ -63,7 +76,11 @@ namespace CommandLine
         {
             string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
             Colorizer.WriteLine("Usage: ");
-            Colorizer.Write(" [White!{0}.exe] [Green!{1}] ", exeName, command);
+            Colorizer.Write(" [White!{0}.exe] ", exeName);
+            if (!string.IsNullOrEmpty(command))
+            {
+                Colorizer.Write("[Green!{0}] ", command);
+            }
             DisplayDetailedParameterHelp(parameters);
         }
 
