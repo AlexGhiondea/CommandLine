@@ -21,6 +21,9 @@ namespace CommandLine
         {
             options = default(TOptions);
 
+            //TODO: When parsing, we are actually removing the properties from the list of properties on type.
+            //      this causes the help generator to actually break down when an exception happens.
+
             TypePropertyInfo parameters = null;
             try
             {
@@ -142,10 +145,8 @@ namespace CommandLine
                 ParseRequiredParameters(args, offsetInArray, parameters, options, ref currentLogicalPosition);
             }
 
-            // at this point, we should have no more required parameters that have not been set
-            Debug.Assert(parameters.requiredParam.Count == 0, "All required parameters should have been set.");
-
-            ParseOptionalParameters(args, offsetInArray, parameters, options, ref currentLogicalPosition);
+            // we are going to keep track of any properties that have not been specified so that we can set their default value.
+            var unmatchedOptionalProperties = ParseOptionalParameters(args, offsetInArray, parameters, options, ref currentLogicalPosition);
 
             if (currentLogicalPosition + offsetInArray < args.Length)
             {
@@ -154,7 +155,7 @@ namespace CommandLine
             }
 
             // for all the remaining optional properties, set their default value.
-            foreach (var property in parameters.optionalParam.Values)
+            foreach (var property in unmatchedOptionalProperties)
             {
                 //get the default value..
                 var value = property.GetCustomAttribute<OptionalArgumentAttribute>();
@@ -164,8 +165,10 @@ namespace CommandLine
             return options;
         }
 
-        private static int ParseOptionalParameters<TOptions>(string[] args, int offsetInArray, GroupPropertyInfo parameters, TOptions options, ref int currentLogicalPosition) where TOptions : new()
+        private static List<PropertyInfo> ParseOptionalParameters<TOptions>(string[] args, int offsetInArray, GroupPropertyInfo parameters, TOptions options, ref int currentLogicalPosition) where TOptions : new()
         {
+            // we are going to assume that all optionl parameters are not matched to values in 'args'
+            List<PropertyInfo> unmatched = new List<PropertyInfo>(parameters.optionalParam.Values);
             // process the optional arguments
             while (offsetInArray + currentLogicalPosition < args.Length)
             {
@@ -187,19 +190,20 @@ namespace CommandLine
                 var value = GetValueFromArgsArray(args, offsetInArray, ref currentLogicalPosition, optionalProp);
 
                 optionalProp.SetValue(options, value);
-                parameters.optionalParam.Remove(optionalParamName);
+                unmatched.Remove(optionalProp);
             }
 
-            return currentLogicalPosition;
+            return unmatched;
         }
 
-        private static int ParseRequiredParameters<TOptions>(string[] args, int offsetInArray, GroupPropertyInfo parameters, TOptions options, ref int currentLogicalPosition) where TOptions : new()
+        private static void ParseRequiredParameters<TOptions>(string[] args, int offsetInArray, GroupPropertyInfo parameters, TOptions options, ref int currentLogicalPosition) where TOptions : new()
         {
             if (args.Length == 0)
             {
                 throw new ArgumentException("Required parameters have not been specified");
             }
 
+            int matchedRequiredParameters = 0;
             do
             {
                 //set the required property
@@ -210,19 +214,23 @@ namespace CommandLine
                 }
 
                 int paramPosition = currentLogicalPosition; // GetValue changes the current position
+
+                //make sure that we don't run out of array
+                if (offsetInArray + currentLogicalPosition >= args.Length)
+                {
+                    throw new ArgumentException("Required parameters have not been specified");
+                }
                 var value = GetValueFromArgsArray(args, offsetInArray, ref currentLogicalPosition, propInfo);
 
                 propInfo.SetValue(options, value);
-                parameters.requiredParam.Remove(paramPosition);
+                matchedRequiredParameters++;
             } while (currentLogicalPosition < args.Length);
 
             // no more? do we have any properties that we have not yet set?
-            if (parameters.requiredParam.Count > 0)
+            if (parameters.requiredParam.Count != matchedRequiredParameters)
             {
                 throw new ArgumentException("Not all required arguments have been specified");
             }
-
-            return currentLogicalPosition;
         }
 
         private static void ScanTypeForProperties<TOptions>(out TypePropertyInfo tInfo)
