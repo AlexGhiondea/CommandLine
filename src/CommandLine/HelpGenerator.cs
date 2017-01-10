@@ -9,6 +9,8 @@ namespace CommandLine
 {
     internal class HelpGenerator
     {
+        public const string RequestShortHelpParameter = "-?";
+
         private static int DisplayCommandLine(GroupPropertyInfo parameters)
         {
             int maxStringSize = 0;
@@ -37,19 +39,51 @@ namespace CommandLine
             return maxStringSize;
         }
 
-        public static void DisplayShortHelp(TypePropertyInfo type)
+        internal static void DisplayHelp(string helpFormat, TypePropertyInfo parameters)
         {
-            string exeName = DisplayCommandLine(type);
-
-            Colorizer.WriteLine(string.Empty);
-            Colorizer.WriteLine("For detailed information run [White!{0} --help]", exeName);
+            if (helpFormat == "/?" || helpFormat == "-?")
+            {
+                DisplayShortHelp(parameters);
+                
+            }
+            else if (helpFormat == "--help")
+            {
+                DisplayDetailedHelp(parameters);
+            }
         }
 
-        private static string DisplayCommandLine(TypePropertyInfo type)
+        private static void DisplayShortHelp(TypePropertyInfo type)
         {
             string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
             Colorizer.WriteLine("Usage: ");
 
+            DisplayCommandLine(exeName, type);
+
+            Colorizer.WriteLine(string.Empty);
+            Colorizer.WriteLine("For detailed information run '[White!{0} --help]'.", exeName);
+        }
+
+        private static void DisplayDetailedHelp(TypePropertyInfo type)
+        {
+            string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
+            Colorizer.WriteLine("Usage: ");
+
+            foreach (var item in type.TypeInfo.Keys)
+            {
+                DisplayDetailedParameterHelp(exeName, item, type.TypeInfo[item]);
+            }
+        }
+
+        public static void DisplayHelpForCommmand(string command, GroupPropertyInfo propertyGroup)
+        {
+            string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
+            Colorizer.WriteLine("Usage: ");
+
+            DisplayDetailedParameterHelp(exeName, command, propertyGroup);
+        }
+
+        private static void DisplayCommandLine(string exeName, TypePropertyInfo type)
+        {
             foreach (var group in type.TypeInfo)
             {
                 Colorizer.Write(" [White!{0}.exe] ", exeName);
@@ -59,23 +93,10 @@ namespace CommandLine
                 }
                 DisplayCommandLine(group.Value);
             }
-
-            return exeName;
         }
 
-        public static void DisplayDetailedHelp(TypePropertyInfo type)
+        private static void DisplayDetailedParameterHelp(string exeName, string command, GroupPropertyInfo parameters)
         {
-            Colorizer.WriteLine("Usage: ");
-            foreach (var item in type.TypeInfo.Keys)
-            {
-                DisplayParameterHelpForGroup(item, type.TypeInfo[item]);
-            }
-        }
-
-        public static void DisplayParameterHelpForGroup(string command, GroupPropertyInfo parameters)
-        {
-            string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
-            Colorizer.WriteLine("Usage: ");
             Colorizer.Write(" [White!{0}.exe] ", exeName);
             if (!string.IsNullOrEmpty(command))
             {

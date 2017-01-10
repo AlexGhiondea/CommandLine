@@ -29,18 +29,10 @@ namespace CommandLine
                 ScanTypeForProperties<TOptions>(out parameters);
 
                 // short circuit the request for help!
-                if (args.Length == 1)
+                if (args.Length == 1 && (args[0] == "/?" || args[0] == "-?" || args[0] == "--help"))
                 {
-                    if (args[0] == "/?" || args[0] == "-?")
-                    {
-                        HelpGenerator.DisplayShortHelp(parameters);
-                        return false;
-                    }
-                    else if (args[0] == "--help")
-                    {
-                        HelpGenerator.DisplayDetailedHelp(parameters);
-                        return false;
-                    }
+                    HelpGenerator.DisplayHelp(args[0], parameters);
+                    return false;
                 }
 
                 // we have groups!
@@ -49,6 +41,7 @@ namespace CommandLine
                     return ParseCommandGroups(args, ref options, parameters);
                 }
 
+                // we don't have groups
                 if (parameters.ActionCommandProperty != null)
                 {
                     throw new ArgumentException("Cannot have Command argument unless groups have been specified");
@@ -62,7 +55,7 @@ namespace CommandLine
             {
                 Colorizer.WriteLine($"[Red!Error]: {ex.Message} {Environment.NewLine}");
 
-                HelpGenerator.DisplayShortHelp(parameters);
+                HelpGenerator.DisplayHelp(HelpGenerator.RequestShortHelpParameter, parameters);
 
                 return false;
             }
@@ -82,16 +75,12 @@ namespace CommandLine
             }
 
             // short circuit the request for help!
-            if (args.Length == 2)
+            if (args.Length == 2 && (args[1] == "/?" || args[1] == "-?"))
             {
-                if (args[1] == "/?" || args[1] == "-?")
-                {
-                    HelpGenerator.DisplayParameterHelpForGroup(args[0], parameters.TypeInfo[args[0]]);
-                    return false;
-                }
-
-
+                HelpGenerator.DisplayHelpForCommmand(args[0], parameters.TypeInfo[args[0]]);
+                return false;
             }
+
             options = InternalParse<TOptions>(args, 1, parameters.TypeInfo[args[0]]);
             parameters.ActionCommandProperty.SetValue(options, Convert.ChangeType(GetValueForProperty(args[0], parameters.ActionCommandProperty), parameters.ActionCommandProperty.PropertyType));
             return true;

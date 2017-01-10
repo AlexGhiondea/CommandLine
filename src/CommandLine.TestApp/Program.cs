@@ -12,7 +12,26 @@ namespace CommandLine.TestApp
     {
         static void Main(string[] args)
         {
-            var x = CommandLine.Parser.Parse<Groups1>(args);
+            args = new string[] { "-?" };
+            //var x = CommandLine.Parser.Parse<Groups1>(args);
+            //Console.WriteLine("----------------");
+            //var x1 = CommandLine.Parser.Parse<Options1>(args);
+            //Console.WriteLine("============================");
+            //args = new string[] { "--help" };
+            //var y = CommandLine.Parser.Parse<Groups1>(args);
+            //Console.WriteLine("----------------");
+            //var y2 = CommandLine.Parser.Parse<Options1>(args);
+
+            //args = new string[] { "Command1","-?" };
+            //Console.WriteLine("============================");
+            //var x3 = CommandLine.Parser.Parse<Groups1>(args);
+
+            args = new string[] { "" };
+            //Console.WriteLine("============================");
+            //var x4 = CommandLine.Parser.Parse<Groups1>(args);
+            Console.WriteLine("----------------");
+            var y4 = CommandLine.Parser.Parse<Options1>(args);
+
         }
     }
 
