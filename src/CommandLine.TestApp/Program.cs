@@ -1,4 +1,5 @@
 ﻿using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
 using CommandLine.Tests;
 using System;
 using System.Collections.Generic;
@@ -46,27 +47,27 @@ namespace CommandLine.TestApp
     }
     internal class Groups1
     {
-        [CommandArgument("command", "The command to perform")]
+        [ActionArgument]
         public Command Command { get; set; }
 
-        [CommandGroupArgument(nameof(Command.Command1))]
-        [CommandGroupArgument(nameof(Command.Command2))]
+        [ArgumentGroup(nameof(Command.Command1))]
+        [ArgumentGroup(nameof(Command.Command2))]
         [RequiredArgument(0, "p1", "Required parameter 1")]
         public string p1 { get; set; }
 
-        [CommandGroupArgument(nameof(Command.Command1))]
+        [ArgumentGroup(nameof(Command.Command1))]
         [OptionalArgument(256, "opt1", "Optional parameter 1")]
         public int opt1 { get; set; }
 
-        [CommandGroupArgument(nameof(Command.Command2))]
+        [ArgumentGroup(nameof(Command.Command2))]
         [RequiredArgument(1, "p2", "Required parameter 1")]
         public string p2 { get; set; }
 
-        [CommandGroupArgument(nameof(Command.Command2))]
+        [ArgumentGroup(nameof(Command.Command2))]
         [RequiredArgument(2, "p21212", "Required parameter 1")]
         public string p3 { get; set; }
 
-        [CommandGroupArgument(nameof(Command.Command2))]
+        [ArgumentGroup(nameof(Command.Command2))]
         [OptionalArgument("aa", "opt1", "Optional parameter 1")]
         public int opt2 { get; set; }
     }

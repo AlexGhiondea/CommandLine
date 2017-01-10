@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommandLine.Analysis;
+using System;
 using System.ComponentModel;
 
 namespace CommandLine.Attributes
@@ -14,6 +15,6 @@ namespace CommandLine.Attributes
         {
             IsCollection = isCollection;
         }
-        public abstract object GetArgumentId();
+        internal abstract object GetArgumentId();
     }
 }

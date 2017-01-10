@@ -45,8 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\CommandArgumentAttribute.cs" />
-    <Compile Include="Attributes\CommandGroupArgumentAttribute.cs" />
+    <Compile Include="Analysis\TypeArgumentInfo.cs" />
+    <Compile Include="Analysis\ArgumentGroupInfo.cs" />
+    <Compile Include="Analysis\TypeHelpers.cs" />
+    <Compile Include="Attributes\Advanced\ActionArgumentAttribute.cs" />
+    <Compile Include="Attributes\Advanced\ArgumentGroupAttribute.cs" />
     <Compile Include="Attributes\BaseArgumentAttribute.cs" />
     <Compile Include="Attributes\ActualArgumentAttribute.cs" />
     <Compile Include="Attributes\OptionalArgumentAttribute.cs" />
@@ -54,6 +57,7 @@
     <Compile Include="HelpGenerator.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Analysis\PropertyHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

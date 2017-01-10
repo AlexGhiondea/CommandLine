@@ -1,4 +1,5 @@
 ﻿using System;
+using CommandLine.Analysis;
 
 namespace CommandLine.Attributes
 {
@@ -15,6 +16,6 @@ namespace CommandLine.Attributes
             DefaultValue = defaultValue;
         }
 
-        public override object GetArgumentId() => Name;
+        internal override object GetArgumentId() => Name;
     }
 }

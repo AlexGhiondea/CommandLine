@@ -1,4 +1,5 @@
-﻿using CommandLine.Attributes;
+﻿using CommandLine.Analysis;
+using CommandLine.Attributes;
 using OutputColorizer;
 using System;
 using System.Collections.Generic;
@@ -11,23 +12,23 @@ namespace CommandLine
     {
         public const string RequestShortHelpParameter = "-?";
 
-        private static int DisplayCommandLine(GroupPropertyInfo parameters)
+        private static int DisplayCommandLine(ArgumentGroupInfo arguments)
         {
             int maxStringSize = 0;
-            for (int i = 0; i < parameters.requiredParam.Count; i++)
+            for (int i = 0; i < arguments.RequiredArguments.Count; i++)
             {
-                if (!parameters.requiredParam.ContainsKey(i))
+                if (!arguments.RequiredArguments.ContainsKey(i))
                 {
-                    Colorizer.WriteLine($"{Environment.NewLine}[Red!Error]: Required argument expected at position [Cyan!{i}]. Type declares arguments at position(s) [Cyan!{string.Join(",", parameters.requiredParam.Keys.OrderBy(x => x))}]. [Red!Check type definition].");
+                    Colorizer.WriteLine($"{Environment.NewLine}[Red!Error]: Required argument expected at position [Cyan!{i}]. Type declares arguments at position(s) [Cyan!{string.Join(",", arguments.RequiredArguments.Keys.OrderBy(x => x))}]. [Red!Check type definition].");
                     return -1;
                 }
 
-                var b = parameters.requiredParam[i].GetCustomAttribute<ActualArgumentAttribute>();
+                var b = arguments.RequiredArguments[i].GetCustomAttribute<ActualArgumentAttribute>();
                 maxStringSize = Math.Max(maxStringSize, b.Name.Length);
                 Colorizer.Write("[Cyan!{0}] ", b.Name);
             }
 
-            foreach (var item in parameters.optionalParam.Values)
+            foreach (var item in arguments.OptionalArguments.Values)
             {
                 var b = item.GetCustomAttribute<ActualArgumentAttribute>();
                 maxStringSize = Math.Max(maxStringSize, b.Name.Length);
@@ -39,20 +40,20 @@ namespace CommandLine
             return maxStringSize;
         }
 
-        internal static void DisplayHelp(string helpFormat, TypePropertyInfo parameters)
+        internal static void DisplayHelp(string helpFormat, TypeArgumentInfo arguments)
         {
             if (helpFormat == "/?" || helpFormat == "-?")
             {
-                DisplayShortHelp(parameters);
+                DisplayShortHelp(arguments);
                 
             }
             else if (helpFormat == "--help")
             {
-                DisplayDetailedHelp(parameters);
+                DisplayDetailedHelp(arguments);
             }
         }
 
-        private static void DisplayShortHelp(TypePropertyInfo type)
+        private static void DisplayShortHelp(TypeArgumentInfo type)
         {
             string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
             Colorizer.WriteLine("Usage: ");
@@ -63,28 +64,28 @@ namespace CommandLine
             Colorizer.WriteLine("For detailed information run '[White!{0} --help]'.", exeName);
         }
 
-        private static void DisplayDetailedHelp(TypePropertyInfo type)
+        private static void DisplayDetailedHelp(TypeArgumentInfo type)
         {
             string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
             Colorizer.WriteLine("Usage: ");
 
-            foreach (var item in type.TypeInfo.Keys)
+            foreach (var item in type.ArgumentGroups.Keys)
             {
-                DisplayDetailedParameterHelp(exeName, item, type.TypeInfo[item]);
+                DisplayDetailedArgumentHelp(exeName, item, type.ArgumentGroups[item]);
             }
         }
 
-        public static void DisplayHelpForCommmand(string command, GroupPropertyInfo propertyGroup)
+        public static void DisplayHelpForCommmand(string command, ArgumentGroupInfo propertyGroup)
         {
             string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
             Colorizer.WriteLine("Usage: ");
 
-            DisplayDetailedParameterHelp(exeName, command, propertyGroup);
+            DisplayDetailedArgumentHelp(exeName, command, propertyGroup);
         }
 
-        private static void DisplayCommandLine(string exeName, TypePropertyInfo type)
+        private static void DisplayCommandLine(string exeName, TypeArgumentInfo type)
         {
-            foreach (var group in type.TypeInfo)
+            foreach (var group in type.ArgumentGroups)
             {
                 Colorizer.Write(" [White!{0}.exe] ", exeName);
                 if (!string.IsNullOrEmpty(group.Key))
@@ -95,31 +96,31 @@ namespace CommandLine
             }
         }
 
-        private static void DisplayDetailedParameterHelp(string exeName, string command, GroupPropertyInfo parameters)
+        private static void DisplayDetailedArgumentHelp(string exeName, string command, ArgumentGroupInfo arguments)
         {
             Colorizer.Write(" [White!{0}.exe] ", exeName);
             if (!string.IsNullOrEmpty(command))
             {
                 Colorizer.Write("[Green!{0}] ", command);
             }
-            DisplayDetailedParameterHelp(parameters);
+            DisplayDetailedParameterHelp(arguments);
         }
 
-        private static void DisplayDetailedParameterHelp(GroupPropertyInfo parameters)
+        private static void DisplayDetailedParameterHelp(ArgumentGroupInfo arguments)
         {
-            int maxStringSize = DisplayCommandLine(parameters);
+            int maxStringSize = DisplayCommandLine(arguments);
             if (maxStringSize < 0)
             {
                 return;
             }
 
-            // write out the required parameters
-            for (int i = 0; i < parameters.requiredParam.Count; i++)
+            // write out the required arguments
+            for (int i = 0; i < arguments.RequiredArguments.Count; i++)
             {
-                var b = parameters.requiredParam[i].GetCustomAttribute<ActualArgumentAttribute>();
-                if (parameters.requiredParam[i].PropertyType.IsEnum)
+                var b = arguments.RequiredArguments[i].GetCustomAttribute<ActualArgumentAttribute>();
+                if (arguments.RequiredArguments[i].PropertyType.IsEnum)
                 {
-                    Colorizer.WriteLine("  - [Cyan!{0}] : {1} (one of [Cyan!{2}]) [Magenta!(required)]", b.Name.PadRight(maxStringSize), b.Description, GetEnumValuesAsString(parameters.requiredParam[i].PropertyType));
+                    Colorizer.WriteLine("  - [Cyan!{0}] : {1} (one of [Green!{2}]) [Magenta!(required)]", b.Name.PadRight(maxStringSize), b.Description, GetEnumValuesAsString(arguments.RequiredArguments[i].PropertyType));
                 }
                 else
                 {
@@ -127,8 +128,8 @@ namespace CommandLine
                 }
             }
 
-            // write out the optional parameters
-            foreach (var item in parameters.optionalParam.Values)
+            // write out the optional arguments
+            foreach (var item in arguments.OptionalArguments.Values)
             {
                 var b = item.GetCustomAttribute<OptionalArgumentAttribute>();
                 if (item.PropertyType.IsEnum)

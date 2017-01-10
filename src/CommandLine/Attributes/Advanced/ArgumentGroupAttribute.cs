@@ -1,13 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace CommandLine.Attributes
+namespace CommandLine.Attributes.Advanced
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
-    public class CommandGroupArgumentAttribute : Attribute
+    public class ArgumentGroupAttribute : Attribute
     {
         public string Name { get; private set; }
-        public CommandGroupArgumentAttribute(string name)
+        public ArgumentGroupAttribute(string name)
         {
             Name = name;
         }
