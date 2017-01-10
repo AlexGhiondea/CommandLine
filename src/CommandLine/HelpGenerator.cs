@@ -59,7 +59,7 @@ namespace CommandLine
             }
         }
 
-        public static void DisplayParamterHelpForGroup(string command, GroupPropertyInfo parameters)
+        public static void DisplayParameterHelpForGroup(string command, GroupPropertyInfo parameters)
         {
             string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
             Colorizer.WriteLine("Usage: ");

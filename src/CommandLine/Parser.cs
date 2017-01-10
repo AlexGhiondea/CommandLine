@@ -10,6 +10,13 @@ namespace CommandLine
 {
     public static class Parser
     {
+        public static TOptions Parse<TOptions>(string[] args) where TOptions : new()
+        {
+            TOptions options = default(TOptions);
+            TryParse(args, out options);
+            return options;
+        }
+
         public static bool TryParse<TOptions>(string[] args, out TOptions options) where TOptions : new()
         {
             options = default(TOptions);
@@ -22,43 +29,37 @@ namespace CommandLine
                 ScanTypeForProperties<TOptions>(out parameters);
 
                 // short circuit the request for help!
-                if (args.Length == 1 && (args[0] == "/?" || args[0] == "-?"))
+                if (args.Length == 1)
                 {
-                    HelpGenerator.DisplayHelp(parameters);
-                    return false;
+                    if (args[0] == "/?" || args[0] == "-?")
+                    {
+                        HelpGenerator.DisplayHelp(parameters);
+                        return false;
+                    }
+                    else if (args[0] == "--help")
+                    {
+                        foreach (var item in parameters.TypeInfo.Keys)
+                        {
+                            HelpGenerator.DisplayParameterHelpForGroup(item, parameters.TypeInfo[item]);
+
+                        }
+                        return false;
+                    }
                 }
 
-                if (parameters.TypeInfo.ContainsKey(string.Empty))
+                // we have groups!
+                if (!parameters.TypeInfo.ContainsKey(string.Empty))
                 {
-                    if (parameters.ActionCommandProperty != null)
-                    {
-                        throw new ArgumentException("Cannot have Command argument unless groups have been specified");
-                    }
-
-                    // parse the arguments and build the options object
-                    options = InternalParse<TOptions>(args, parameters.TypeInfo[string.Empty]);
-                    return true;
-                }
-                else
-                {    // we have groups!
-                    if (parameters.ActionCommandProperty == null)
-                    {
-                        throw new ArgumentException("Cannot have groups unless Command argument has been specified");
-                    }
-
-                    string[] remainingArgs = new string[args.Length - 1];
-                    Array.Copy(args, 1, remainingArgs, 0, args.Length - 1);
-
-
-                    // parse based on the command passed in.
-                    if (!parameters.TypeInfo.ContainsKey(args[0]))
-                    {
-                        throw new ArgumentException($"Unknown command [Cyan!{args[0]}]");
-                    }
-                    options = InternalParse<TOptions>(remainingArgs, parameters.TypeInfo[args[0]]);
-                    parameters.ActionCommandProperty.SetValue(options, Convert.ChangeType(GetValueForProperty(args[0], parameters.ActionCommandProperty), parameters.ActionCommandProperty.PropertyType));
+                    return ParseCommandGroups(args, ref options, parameters);
                 }
 
+                if (parameters.ActionCommandProperty != null)
+                {
+                    throw new ArgumentException("Cannot have Command argument unless groups have been specified");
+                }
+
+                // parse the arguments and build the options object
+                options = InternalParse<TOptions>(args, 0, parameters.TypeInfo[string.Empty]);
                 return true;
             }
             catch (Exception ex)
@@ -71,11 +72,33 @@ namespace CommandLine
             }
         }
 
-        public static TOptions Parse<TOptions>(string[] args) where TOptions : new()
+        private static bool ParseCommandGroups<TOptions>(string[] args, ref TOptions options, TypePropertyInfo parameters) where TOptions : new()
         {
-            TOptions options = default(TOptions);
-            TryParse(args, out options);
-            return options;
+            if (parameters.ActionCommandProperty == null)
+            {
+                throw new ArgumentException("Cannot have groups unless Command argument has been specified");
+            }
+
+            // parse based on the command passed in (the first arg).
+            if (!parameters.TypeInfo.ContainsKey(args[0]))
+            {
+                throw new ArgumentException($"Unknown command [Cyan!{args[0]}]");
+            }
+
+            // short circuit the request for help!
+            if (args.Length == 2)
+            {
+                if (args[1] == "/?" || args[1] == "-?")
+                {
+                    HelpGenerator.DisplayParameterHelpForGroup(args[0], parameters.TypeInfo[args[0]]);
+                    return false;
+                }
+
+
+            }
+            options = InternalParse<TOptions>(args, 1, parameters.TypeInfo[args[0]]);
+            parameters.ActionCommandProperty.SetValue(options, Convert.ChangeType(GetValueForProperty(args[0], parameters.ActionCommandProperty), parameters.ActionCommandProperty.PropertyType));
+            return true;
         }
 
         public static object GetValueForProperty(string value, PropertyInfo targetType)
@@ -88,21 +111,21 @@ namespace CommandLine
             return value;
         }
 
-        public static object GetValue(string[] args, ref int currentPosition, PropertyInfo targetType)
+        public static object GetValueFromArgsArray(string[] args, int offsetInArray, ref int currentLogicalPosition, PropertyInfo targetType)
         {
-            var value = targetType.GetCustomAttribute<ActualArgumentAttribute>();
+            ActualArgumentAttribute value = targetType.GetCustomAttribute<ActualArgumentAttribute>();
             object argValue = null;
 
             if (!value.IsCollection)
             {
-                argValue = GetValueForProperty(args[currentPosition], targetType);
-                currentPosition++;
+                argValue = GetValueForProperty(args[offsetInArray + currentLogicalPosition], targetType);
+                currentLogicalPosition++;
             }
             else
             {
                 // we are going to support just string lists.
                 int indexLastEntry = args.Length;
-                for (int i = currentPosition; i < args.Length; i++)
+                for (int i = offsetInArray + currentLogicalPosition; i < args.Length; i++)
                 {
                     if (args[i][0] == '-')
                     {
@@ -113,84 +136,36 @@ namespace CommandLine
                 }
 
                 // create the list
-                string[] list = new string[indexLastEntry - currentPosition];
-                Array.Copy(args, currentPosition, list, 0, indexLastEntry - currentPosition);
+                string[] list = new string[indexLastEntry - currentLogicalPosition - offsetInArray];
+                Array.Copy(args, offsetInArray + currentLogicalPosition, list, 0, indexLastEntry - currentLogicalPosition - offsetInArray);
 
                 argValue = new List<string>(list);
-                currentPosition = indexLastEntry;
+                currentLogicalPosition = indexLastEntry;
             }
 
             return Convert.ChangeType(argValue, targetType.PropertyType);
         }
 
-        private static TOptions InternalParse<TOptions>(string[] args, GroupPropertyInfo parameters) where TOptions : new()
+        private static TOptions InternalParse<TOptions>(string[] args, int offsetInArray, GroupPropertyInfo parameters) where TOptions : new()
         {
             TOptions options = new TOptions();
-            int currentPosition = 0;
-
-            // short circuit the request for help!
-            if (args.Length == 1 && (args[0] == "/?" || args[0] == "-?"))
-            {
-                HelpGenerator.DisplayParamterHelpForGroup("", parameters);
-                return options;
-            }
+            int currentLogicalPosition = 0;
 
             // let's match them to actual required args, in positional
             if (parameters.requiredParam.Count > 0)
             {
-                if (args.Length == 0)
-                {
-                    throw new ArgumentException("Required parameters have not been specified");
-                }
-
-                do
-                {
-                    //set the required property
-                    PropertyInfo propInfo;
-                    if (!parameters.requiredParam.TryGetValue(currentPosition, out propInfo))
-                    {
-                        break;
-                    }
-
-                    int paramPosition = currentPosition; // GetValue changes the current position
-                    var value = GetValue(args, ref currentPosition, propInfo);
-
-                    propInfo.SetValue(options, value);
-                    parameters.requiredParam.Remove(paramPosition);
-                } while (currentPosition < args.Length);
-            }
-
-            // no more? do we have any properties that we have not yet set?
-            if (parameters.requiredParam.Count > 0)
-            {
-                throw new ArgumentException("Not all required arguments have been specified");
+                ParseRequiredParameters(args, offsetInArray, parameters, options, ref currentLogicalPosition);
             }
 
             // at this point, we should have no more required parameters that have not been set
             Debug.Assert(parameters.requiredParam.Count == 0, "All required parameters should have been set.");
 
-            // process the optional arguments
-            while (currentPosition < args.Length)
+            ParseOptionalParameters(args, offsetInArray, parameters, options, ref currentLogicalPosition);
+
+            if (currentLogicalPosition + offsetInArray < args.Length)
             {
-                if (args[currentPosition][0] != '-')
-                {
-                    throw new ArgumentException("Optional parameter name should start with '-'");
-                }
-
-                PropertyInfo optionalProp = null;
-                var optionalParamName = args[currentPosition].Substring(1);
-                if (!parameters.optionalParam.TryGetValue(optionalParamName, out optionalProp))
-                {
-                    throw new ArgumentException($"Could not find argument {args[currentPosition]}");
-                }
-
-                // skip over the parameter name
-                currentPosition++;
-
-                var value = GetValue(args, ref currentPosition, optionalProp);
-
-                optionalProp.SetValue(options, value);
-                parameters.optionalParam.Remove(optionalParamName);
+                //unknown parameters
+                throw new ArgumentException("Unknown extra parameters");
             }
 
             // for all the remaining optional properties, set their default value.
@@ -202,6 +177,67 @@ namespace CommandLine
             }
 
             return options;
+        }
+
+        private static int ParseOptionalParameters<TOptions>(string[] args, int offsetInArray, GroupPropertyInfo parameters, TOptions options, ref int currentLogicalPosition) where TOptions : new()
+        {
+            // process the optional arguments
+            while (offsetInArray + currentLogicalPosition < args.Length)
+            {
+                if (args[offsetInArray + currentLogicalPosition][0] != '-')
+                {
+                    throw new ArgumentException("Optional parameter name should start with '-'");
+                }
+
+                PropertyInfo optionalProp = null;
+                var optionalParamName = args[offsetInArray + currentLogicalPosition].Substring(1);
+                if (!parameters.optionalParam.TryGetValue(optionalParamName, out optionalProp))
+                {
+                    throw new ArgumentException($"Could not find argument {args[currentLogicalPosition]}");
+                }
+
+                // skip over the parameter name
+                currentLogicalPosition++;
+
+                var value = GetValueFromArgsArray(args, offsetInArray, ref currentLogicalPosition, optionalProp);
+
+                optionalProp.SetValue(options, value);
+                parameters.optionalParam.Remove(optionalParamName);
+            }
+
+            return currentLogicalPosition;
+        }
+
+        private static int ParseRequiredParameters<TOptions>(string[] args, int offsetInArray, GroupPropertyInfo parameters, TOptions options, ref int currentLogicalPosition) where TOptions : new()
+        {
+            if (args.Length == 0)
+            {
+                throw new ArgumentException("Required parameters have not been specified");
+            }
+
+            do
+            {
+                //set the required property
+                PropertyInfo propInfo;
+                if (!parameters.requiredParam.TryGetValue(currentLogicalPosition, out propInfo))
+                {
+                    break;
+                }
+
+                int paramPosition = currentLogicalPosition; // GetValue changes the current position
+                var value = GetValueFromArgsArray(args, offsetInArray, ref currentLogicalPosition, propInfo);
+
+                propInfo.SetValue(options, value);
+                parameters.requiredParam.Remove(paramPosition);
+            } while (currentLogicalPosition < args.Length);
+
+            // no more? do we have any properties that we have not yet set?
+            if (parameters.requiredParam.Count > 0)
+            {
+                throw new ArgumentException("Not all required arguments have been specified");
+            }
+
+            return currentLogicalPosition;
         }
 
         private static void ScanTypeForProperties<TOptions>(out TypePropertyInfo tInfo)

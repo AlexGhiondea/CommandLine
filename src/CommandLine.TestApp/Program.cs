@@ -12,7 +12,7 @@ namespace CommandLine.TestApp
     {
         static void Main(string[] args)
         {
-            var x = CommandLine.Parser.Parse<Options3NoRequired>(args);
+            var x = CommandLine.Parser.Parse<Groups1>(args);
         }
     }
 
