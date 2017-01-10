@@ -21,8 +21,43 @@ namespace CommandLine
                 // this will throw for cases where the type is incorrecly annotated with attributes
                 ScanTypeForProperties<TOptions>(out parameters);
 
-                // parse the arguments and build the options object
-                options = InternalParse<TOptions>(args, parameters.TypeInfo[string.Empty]);
+                // short circuit the request for help!
+                if (args.Length == 1 && (args[0] == "/?" || args[0] == "-?"))
+                {
+                    HelpGenerator.DisplayHelp(parameters);
+                    return false;
+                }
+
+                if (parameters.TypeInfo.ContainsKey(string.Empty))
+                {
+                    if (parameters.ActionCommandProperty != null)
+                    {
+                        throw new ArgumentException("Cannot have Command argument unless groups have been specified");
+                    }
+
+                    // parse the arguments and build the options object
+                    options = InternalParse<TOptions>(args, parameters.TypeInfo[string.Empty]);
+                    return true;
+                }
+                else
+                {    // we have groups!
+                    if (parameters.ActionCommandProperty == null)
+                    {
+                        throw new ArgumentException("Cannot have groups unless Command argument has been specified");
+                    }
+
+                    string[] remainingArgs = new string[args.Length - 1];
+                    Array.Copy(args, 1, remainingArgs, 0, args.Length - 1);
+
+
+                    // parse based on the command passed in.
+                    if (!parameters.TypeInfo.ContainsKey(args[0]))
+                    {
+                        throw new ArgumentException($"Unknown command [Cyan!{args[0]}]");
+                    }
+                    options = InternalParse<TOptions>(remainingArgs, parameters.TypeInfo[args[0]]);
+                    parameters.ActionCommandProperty.SetValue(options, Convert.ChangeType(GetValueForProperty(args[0], parameters.ActionCommandProperty), parameters.ActionCommandProperty.PropertyType));
+                }
 
                 return true;
             }
@@ -30,7 +65,7 @@ namespace CommandLine
             {
                 Colorizer.WriteLine($"[Red!Error]: {ex.Message} {Environment.NewLine}");
 
-                HelpGenerator.DisplayHelp<TOptions>(parameters.TypeInfo[string.Empty]);
+                HelpGenerator.DisplayHelp(parameters);
 
                 return false;
             }
@@ -43,6 +78,16 @@ namespace CommandLine
             return options;
         }
 
+        public static object GetValueForProperty(string value, PropertyInfo targetType)
+        {
+            if (targetType.PropertyType.IsEnum)
+            {
+                return Enum.Parse(targetType.PropertyType, value);
+            }
+
+            return value;
+        }
+
         public static object GetValue(string[] args, ref int currentPosition, PropertyInfo targetType)
         {
             var value = targetType.GetCustomAttribute<ActualArgumentAttribute>();
@@ -50,14 +95,7 @@ namespace CommandLine
 
             if (!value.IsCollection)
             {
-                if (targetType.PropertyType.IsEnum)
-                {
-                    argValue = Enum.Parse(targetType.PropertyType, args[currentPosition]);
-                }
-                else
-                {
-                    argValue = args[currentPosition];
-                }
+                argValue = GetValueForProperty(args[currentPosition], targetType);
                 currentPosition++;
             }
             else
@@ -87,15 +125,15 @@ namespace CommandLine
 
         private static TOptions InternalParse<TOptions>(string[] args, GroupPropertyInfo parameters) where TOptions : new()
         {
+            TOptions options = new TOptions();
+            int currentPosition = 0;
+
             // short circuit the request for help!
             if (args.Length == 1 && (args[0] == "/?" || args[0] == "-?"))
             {
-                HelpGenerator.DisplayHelp<TOptions>(parameters);
-                return default(TOptions);
+                HelpGenerator.DisplayParamterHelpForGroup("", parameters);
+                return options;
             }
-
-            TOptions options = new TOptions();
-            int currentPosition = 0;
 
             // let's match them to actual required args, in positional
             if (parameters.requiredParam.Count > 0)
@@ -169,32 +207,21 @@ namespace CommandLine
         private static void ScanTypeForProperties<TOptions>(out TypePropertyInfo tInfo)
         {
             tInfo = new TypePropertyInfo();
+            PropertyInfo[] propertiesOnType = typeof(TOptions).GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
-            GroupPropertyInfo propertyInfo = null;
+            // first of all, find the commandArgument, if any.
+            tInfo.ActionCommandProperty = FindCommandProperty(propertiesOnType);
 
-            // retrieve all the arguments defined on the class
-            var allProps = typeof(TOptions).GetProperties(BindingFlags.Instance | BindingFlags.Public);
-
-            foreach (var property in allProps)
+            // parse the rest of the properties
+            foreach (var property in propertiesOnType)
             {
+                // get the group containing this property
+                GroupPropertyInfo grpPropInfo = GetGroupProperty(tInfo, property);
+
                 var actualAttribs = property.GetCustomAttributes<ActualArgumentAttribute>().ToList();
                 if (actualAttribs.Count > 1)
                 {
                     throw new ArgumentException($"Only one of Required/Optional attribute are allowed per property ({property.Name}). [Red!Help information might be incorrect!]");
-                }
-
-                string propertyGroupName = string.Empty; // if no group is defined (at all!) use empty string
-                var groupAttrib = property.GetCustomAttribute<GroupArgumentAttribute>();
-                if (groupAttrib != null)
-                {
-                    propertyGroupName = groupAttrib.Name;
-                }
-
-                // have we seen this group before?
-                if (!tInfo.TypeInfo.TryGetValue(propertyGroupName, out propertyInfo))
-                {
-                    propertyInfo = new GroupPropertyInfo();
-                    tInfo.TypeInfo[propertyGroupName] = propertyInfo;
                 }
 
                 // if we have no attributes on that property, move on
@@ -206,31 +233,70 @@ namespace CommandLine
 
                 if (baseAttrib is RequiredArgumentAttribute)
                 {
-                    var reqArg = baseAttrib as RequiredArgumentAttribute;
-                    if (propertyInfo.requiredParam.ContainsKey(reqArg.ArgumentPosition))
+                    if (grpPropInfo.requiredParam.ContainsKey((int)baseAttrib.GetArgumentId()))
                     {
                         throw new ArgumentException("Two required arguments share the same position!!");
                     }
 
-                    propertyInfo.requiredParam[reqArg.ArgumentPosition] = property;
+                    grpPropInfo.requiredParam[(int)baseAttrib.GetArgumentId()] = property;
                 }
                 else if (baseAttrib is OptionalArgumentAttribute)
                 {
-                    var optArg = baseAttrib as OptionalArgumentAttribute;
-                    if (propertyInfo.optionalParam.ContainsKey(optArg.Name))
+                    if (grpPropInfo.optionalParam.ContainsKey((string)baseAttrib.GetArgumentId()))
                     {
                         throw new ArgumentException("Two optional arguments share the same name!!");
                     }
 
-                    propertyInfo.optionalParam[optArg.Name] = property;
+                    grpPropInfo.optionalParam[(string)baseAttrib.GetArgumentId()] = property;
                 }
             }
+
+            GroupPropertyInfo grp;
+            // remove the empty one, if empty
+            if (tInfo.TypeInfo.TryGetValue(string.Empty, out grp))
+            {
+                if (grp.optionalParam.Count == 0 && grp.requiredParam.Count == 0)
+                    tInfo.TypeInfo.Remove(string.Empty);
+            }
+        }
+
+        private static GroupPropertyInfo GetGroupProperty(TypePropertyInfo tInfo, PropertyInfo property)
+        {
+            // find the group property for this property
+            string grpPropInfoName = property.GetCustomAttribute<CommandGroupArgumentAttribute>()?.Name ?? string.Empty;
+
+            GroupPropertyInfo grpPropInfo;
+            if (!tInfo.TypeInfo.TryGetValue(grpPropInfoName, out grpPropInfo))
+            {
+                grpPropInfo = new GroupPropertyInfo();
+                tInfo.TypeInfo[grpPropInfoName] = grpPropInfo;
+            }
+
+            return grpPropInfo;
+        }
+
+        private static PropertyInfo FindCommandProperty(PropertyInfo[] propertiesOnType)
+        {
+            PropertyInfo result = null;
+            foreach (var prop in propertiesOnType)
+            {
+                if (prop.GetCustomAttribute<CommandArgumentAttribute>() != null)
+                {
+                    if (result != null)
+                    {
+                        throw new ArgumentException($"You can only define a single property as the command property");
+                    }
+                    result = prop;
+                }
+            }
+            return result;
         }
     }
 
     public class TypePropertyInfo
     {
         public Dictionary<string, GroupPropertyInfo> TypeInfo { get; } = new Dictionary<string, GroupPropertyInfo>(StringComparer.OrdinalIgnoreCase);
+        public PropertyInfo ActionCommandProperty { get; set; }
     }
 
     public class GroupPropertyInfo

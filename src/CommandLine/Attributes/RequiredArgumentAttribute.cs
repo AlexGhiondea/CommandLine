@@ -11,5 +11,7 @@ namespace CommandLine.Attributes
         {
             ArgumentPosition = position;
         }
+
+        public override object GetArgumentId() => ArgumentPosition;
     }
 }

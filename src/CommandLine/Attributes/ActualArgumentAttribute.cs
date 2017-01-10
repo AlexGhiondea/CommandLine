@@ -9,10 +9,11 @@ namespace CommandLine.Attributes
     {
         public bool IsCollection { get; private set; }
 
-        public ActualArgumentAttribute(string name, string description, bool isCollection = false) 
+        public ActualArgumentAttribute(string name, string description, bool isCollection = false)
             : base(name, description)
         {
             IsCollection = isCollection;
         }
+        public abstract object GetArgumentId();
     }
 }

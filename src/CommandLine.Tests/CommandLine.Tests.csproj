@@ -51,9 +51,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Groups.cs" />
     <Compile Include="Functional.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Negative.cs" />
+    <Compile Include="TestObjects\Groups1.cs" />
     <Compile Include="TestObjects\Options1.cs" />
     <Compile Include="TestObjects\Options2.cs" />
     <Compile Include="TestObjects\Options3NoRequired.cs" />

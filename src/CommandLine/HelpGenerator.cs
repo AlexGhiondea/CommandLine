@@ -37,11 +37,38 @@ namespace CommandLine
             return maxStringSize;
         }
 
-        public static void DisplayHelp<TOptions>(GroupPropertyInfo parameters) where TOptions : new()
+        public static void DisplayHelp(TypePropertyInfo type)
         {
             string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
-            Colorizer.Write("Usage: [White!{0}.exe] ", exeName);
+            Colorizer.WriteLine("Usage: ");
 
+            if (type.TypeInfo.ContainsKey(string.Empty))
+            {
+                Colorizer.Write(" [White!{ 0}.exe] ", exeName);
+                DisplayDetailedParameterHelp(type.TypeInfo[string.Empty]);
+            }
+            else
+            {
+                var attrib = type.ActionCommandProperty.GetCustomAttribute<CommandArgumentAttribute>();
+                foreach (var group in type.TypeInfo)
+                {
+                    Colorizer.Write(" [White!{0}.exe]", exeName);
+                    Colorizer.Write($" [Green!{group.Key}] ");
+                    DisplayCommandLine(group.Value);
+                }
+            }
+        }
+
+        public static void DisplayParamterHelpForGroup(string command, GroupPropertyInfo parameters)
+        {
+            string exeName = Assembly.GetEntryAssembly()?.GetName()?.Name;
+            Colorizer.WriteLine("Usage: ");
+            Colorizer.Write(" [White!{0}.exe] [Green!{1}] ", exeName, command);
+            DisplayDetailedParameterHelp(parameters);
+        }
+
+        private static void DisplayDetailedParameterHelp(GroupPropertyInfo parameters)
+        {
             int maxStringSize = DisplayCommandLine(parameters);
             if (maxStringSize < 0)
             {

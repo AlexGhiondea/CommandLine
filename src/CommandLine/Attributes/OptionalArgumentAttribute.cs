@@ -14,5 +14,7 @@ namespace CommandLine.Attributes
 
             DefaultValue = defaultValue;
         }
+
+        public override object GetArgumentId() => Name;
     }
 }

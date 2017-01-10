@@ -4,9 +4,9 @@ using System.ComponentModel;
 namespace CommandLine.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public abstract class GroupArgumentAttribute : BaseArgumentAttribute
+    public class CommandArgumentAttribute : BaseArgumentAttribute
     {
-        public GroupArgumentAttribute(string name, string description) : base(name, description)
+        public CommandArgumentAttribute(string name, string description) : base(name, description)
         {
         }
     }
