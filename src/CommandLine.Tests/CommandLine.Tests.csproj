@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CommandLine.Tests</RootNamespace>
     <AssemblyName>CommandLine.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -51,13 +51,17 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Groups.cs" />
     <Compile Include="Functional.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="Help.cs" />
     <Compile Include="Negative.cs" />
+    <Compile Include="TestObjects\GroupsNegative.cs" />
+    <Compile Include="TestObjects\Groups1.cs" />
     <Compile Include="TestObjects\Options1.cs" />
     <Compile Include="TestObjects\Options2.cs" />
     <Compile Include="TestObjects\Options3NoRequired.cs" />
-    <Compile Include="TestObjects\OptionsNegative1.cs" />
+    <Compile Include="TestObjects\Negative.cs" />
     <Compile Include="TestObjects\OptionsNegative_BadDefaultValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

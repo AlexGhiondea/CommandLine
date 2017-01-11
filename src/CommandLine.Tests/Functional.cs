@@ -120,22 +120,5 @@ namespace CommandLine.Tests
             Assert.AreEqual(options.opt3, Enum1.A);
         }
 
-        [TestMethod]
-        public void HelpTest1()
-        {
-            var options = Helpers.Parse<Options3NoRequired>("-?");
-        }
-        
-        [TestMethod]
-        public void HelpTest2()
-        {
-            var options = Helpers.Parse<Options3NoRequired>("-?");
-        }
-
-        [TestMethod]
-        public void HelpTest3()
-        {
-            var options = Helpers.Parse<OptionsNegative1>("-?");
-        }
     }
 }

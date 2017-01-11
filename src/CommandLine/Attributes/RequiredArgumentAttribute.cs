@@ -3,7 +3,7 @@
 namespace CommandLine.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public sealed class RequiredArgumentAttribute : BaseArgumentAttribute
+    public sealed class RequiredArgumentAttribute : ActualArgumentAttribute
     {
         public int ArgumentPosition { get; private set; }
 
@@ -11,5 +11,7 @@ namespace CommandLine.Attributes
         {
             ArgumentPosition = position;
         }
+
+        internal override object GetArgumentId() => ArgumentPosition;
     }
 }
