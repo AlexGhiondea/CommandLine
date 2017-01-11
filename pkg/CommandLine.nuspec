@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>CommandLine.Net</id>
-        <version>1.0.0-beta-02</version>
+        <version>1.0.0-beta-03</version>
         <authors>Alex Ghiondea</authors>
         <owners>Alex Ghiondea</owners>
         <copyright>Alex Ghiondea (c) 2017</copyright>
