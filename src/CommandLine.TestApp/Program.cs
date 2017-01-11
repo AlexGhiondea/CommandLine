@@ -13,6 +13,10 @@ namespace CommandLine.TestApp
     {
         static void Main(string[] args)
         {
+            args = "a 1 -opt1 3 -opt2 3 -opt3 c -opt4 t".Split(' ');
+            var x111 = CommandLine.Parser.Parse<Options1>(args);
+
+
             args = new string[] { "-?" };
             var x = CommandLine.Parser.Parse<Groups1>(args);
             Console.WriteLine("----------------");

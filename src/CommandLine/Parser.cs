@@ -43,12 +43,6 @@ namespace CommandLine
                     return ParseCommandGroups(args, ref options, arguments);
                 }
 
-                // we don't have groups
-                if (arguments.ActionArgument != null)
-                {
-                    throw new ArgumentException("Cannot have Command argument unless groups have been specified");
-                }
-
                 // parse the arguments and build the options object
                 options = InternalParse<TOptions>(args, 0, arguments.ArgumentGroups[string.Empty]);
                 return true;
@@ -101,12 +95,6 @@ namespace CommandLine
 
             // we are going to keep track of any properties that have not been specified so that we can set their default value.
             var unmatchedOptionalProperties = ParseOptionalParameters(args, offsetInArray, arguments, options, ref currentLogicalPosition);
-
-            if (currentLogicalPosition + offsetInArray < args.Length)
-            {
-                //unknown parameters
-                throw new ArgumentException("Unknown extra parameters");
-            }
 
             // for all the remaining optional properties, set their default value.
             foreach (var property in unmatchedOptionalProperties)
