@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.Props" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" Condition="'$(VSToolsPath)' != ''" />
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>c86fc95f-b3e1-4175-b669-346c1702cdae</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <CLIPath>$(MSBuildThisFileDirectory)..\..\tools\dotnetcli\dotnet.exe</CLIPath>
+    <ProjectJson>$(MSBuildThisFileDirectory)project.json</ProjectJson>
+    <LockFile>$(MSBuildThisFileDirectory)project.lock.json</LockFile>
+    <OutputLocation>$(MSBuildThisFileDirectory)..\..\bin\</OutputLocation>
+  </PropertyGroup>
+
+  <Target Name="Rebuild" DependsOnTargets="Clean;Build" />
+
+  <Target Name="Build" DependsOnTargets="Restore">
+    <Exec Command="$(CLIPath) build $(ProjectJson) --configuration Release -b $(OutputLocation) -f netstandard1.5" />
+  </Target>
+
+  <Target Name="Restore">
+    <Error Condition="!Exists('$(CLIPath)')" Text="The cli is required to build this project. Please run init-tools.cmd command from the root of the repo to get it, and then build the solution again." />
+    <Exec Command="$(CLIPath) restore $(ProjectJson)" />
+    <Error Condition="!Exists('$(LockFile)')" Text="Error when running the restore." />
+  </Target>
+
+  <Target Name="Clean">
+    <RemoveDir Directories="$(OutputLocation)CommandLine.Core" Condition="Exists('$(OutputLocation)CommandLine.Core')" />
+  </Target>
+</Project>

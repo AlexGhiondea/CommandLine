@@ -12,7 +12,7 @@ namespace CommandLine.Analysis
     {
         public static object GetValueForProperty(string value, PropertyInfo targetType)
         {
-            if (targetType.PropertyType.IsEnum)
+            if (TypeHelpers.IsEnum(targetType.PropertyType))
             {
                 return Enum.Parse(targetType.PropertyType, value);
             }

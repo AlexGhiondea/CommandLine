@@ -11,10 +11,14 @@ namespace CommandLine.Analysis
 {
     internal class TypeHelpers
     {
+        public static bool IsEnum(Type type)
+        {
+            return type.GetTypeInfo().BaseType == typeof(Enum);
+        }
         public static void ScanTypeForProperties<TOptions>(out TypeArgumentInfo tInfo)
         {
             tInfo = new TypeArgumentInfo();
-            PropertyInfo[] propertiesOnType = typeof(TOptions).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            PropertyInfo[] propertiesOnType = typeof(TOptions).GetTypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
             // first of all, find the commandArgument, if any.
             tInfo.ActionArgument = FindCommandProperty(propertiesOnType);

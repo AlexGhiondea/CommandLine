@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine.Tests", "Comman
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine.TestApp", "CommandLine.TestApp\CommandLine.TestApp.csproj", "{BFFA03DE-1C64-4059-B011-3BD13A4B18C6}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CommandLine.Core", "CommandLine.Core\CommandLine.Core.xproj", "{C86FC95F-B3E1-4175-B669-346C1702CDAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BFFA03DE-1C64-4059-B011-3BD13A4B18C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFFA03DE-1C64-4059-B011-3BD13A4B18C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFFA03DE-1C64-4059-B011-3BD13A4B18C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C86FC95F-B3E1-4175-B669-346C1702CDAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C86FC95F-B3E1-4175-B669-346C1702CDAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C86FC95F-B3E1-4175-B669-346C1702CDAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C86FC95F-B3E1-4175-B669-346C1702CDAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

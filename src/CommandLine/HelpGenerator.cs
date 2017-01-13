@@ -45,7 +45,7 @@ namespace CommandLine
             if (helpFormat == "/?" || helpFormat == "-?")
             {
                 DisplayShortHelp(arguments);
-                
+
             }
             else if (helpFormat == "--help")
             {
@@ -118,7 +118,7 @@ namespace CommandLine
             for (int i = 0; i < arguments.RequiredArguments.Count; i++)
             {
                 var b = arguments.RequiredArguments[i].GetCustomAttribute<ActualArgumentAttribute>();
-                if (arguments.RequiredArguments[i].PropertyType.IsEnum)
+                if (TypeHelpers.IsEnum(arguments.RequiredArguments[i].PropertyType))
                 {
                     Colorizer.WriteLine("  - [Cyan!{0}] : {1} (one of [Green!{2}]) [Magenta!(required)]", b.Name.PadRight(maxStringSize), b.Description, GetEnumValuesAsString(arguments.RequiredArguments[i].PropertyType));
                 }
@@ -132,7 +132,7 @@ namespace CommandLine
             foreach (var item in arguments.OptionalArguments.Values)
             {
                 var b = item.GetCustomAttribute<OptionalArgumentAttribute>();
-                if (item.PropertyType.IsEnum)
+                if (TypeHelpers.IsEnum(item.PropertyType))
                 {
                     Colorizer.WriteLine("  - [Yellow!{0}] : {1} (one of [Cyan!{2}]) (default=[Green!{3}])", b.Name.PadRight(maxStringSize), b.Description, GetEnumValuesAsString(item.PropertyType), b.DefaultValue);
                 }
