@@ -16,7 +16,6 @@ namespace CommandLine.TestApp
             args = "a 1 -opt1 3 -opt2 3 -opt3 c -opt4 t".Split(' ');
             var x111 = CommandLine.Parser.Parse<Options1>(args);
 
-
             args = new string[] { "-?" };
             var x = CommandLine.Parser.Parse<Groups1>(args);
             Console.WriteLine("----------------");
@@ -31,23 +30,39 @@ namespace CommandLine.TestApp
             Console.WriteLine("============================");
             var x3 = CommandLine.Parser.Parse<Groups1>(args);
 
+            args = new string[] { "NoCommands", "-?" };
+            Console.WriteLine("============================");
+            var x4 = CommandLine.Parser.Parse<Groups1>(args);
+
+            args = new string[] { "NoCommands" };
+            Console.WriteLine("============================");
+            var x44 = CommandLine.Parser.Parse<Groups1>(args);
+
             args = new string[] { "Command1", };
             Console.WriteLine("============================");
             var x32 = CommandLine.Parser.Parse<Groups1>(args);
 
             args = new string[] { "--help" };
             Console.WriteLine("============================");
-            var x4 = CommandLine.Parser.Parse<Groups1>(args);
+            var x5 = CommandLine.Parser.Parse<Groups1>(args);
             Console.WriteLine("----------------");
             var y4 = CommandLine.Parser.Parse<Options1>(args);
 
+
+            args = new string[] { };
+            Console.WriteLine("============================");
+            var x55 = CommandLine.Parser.Parse<Groups1>(args);
+
+            Console.WriteLine("----------------");
+            var y455 = CommandLine.Parser.Parse<Options1>(args);
         }
     }
 
     internal enum Command
     {
         Command1,
-        Command2
+        Command2,
+        NoCommands
     }
     internal class Groups1
     {

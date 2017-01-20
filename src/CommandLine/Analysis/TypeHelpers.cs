@@ -78,6 +78,25 @@ namespace CommandLine.Analysis
                 if (grp.OptionalArguments.Count == 0 && grp.RequiredArguments.Count == 0)
                     tInfo.ArgumentGroups.Remove(string.Empty);
             }
+
+            // we want to be able to support empty groups.
+            if (tInfo.ActionArgument != null)
+            {
+                // if it is an enum, and only then!
+                if (IsEnum(tInfo.ActionArgument.PropertyType))
+                {
+                    // get the values of the enum.
+                    var enumValues = Enum.GetValues(tInfo.ActionArgument.PropertyType);
+
+                    foreach (var val in enumValues)
+                    {
+                        if (!tInfo.ArgumentGroups.ContainsKey(val.ToString()))
+                        {
+                            tInfo.ArgumentGroups.Add(val.ToString(), new ArgumentGroupInfo());
+                        }
+                    }
+                }
+            }
         }
 
         private static List<ArgumentGroupInfo> GetGroupsForProperty(TypeArgumentInfo tInfo, PropertyInfo property)

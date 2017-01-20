@@ -64,6 +64,11 @@ namespace CommandLine
                 throw new ArgumentException("Cannot have groups unless Command argument has been specified");
             }
 
+            if (args.Length == 0)
+            {
+                throw new ArgumentException("Required parameters have not been specified");
+            }
+
             // parse based on the command passed in (the first arg).
             if (!arguments.ArgumentGroups.ContainsKey(args[0]))
             {
