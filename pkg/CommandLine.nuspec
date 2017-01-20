@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>CommandLine.Net</id>
-        <version>1.0.0-beta-03</version>
+        <version>1.0.0-beta-07</version>
         <authors>Alex Ghiondea</authors>
         <owners>Alex Ghiondea</owners>
         <copyright>Alex Ghiondea (c) 2017</copyright>
@@ -13,7 +13,9 @@
         <description>Parse command line arguments into user defined objects</description>
         <tags>CommandLine, Command line, Command, Line, parser, objects, custom</tags>
         <dependencies>
+          <group targetFramework="net461">
             <dependency id="OutputColorizer" version="1.1.0-rc-01" />
+          </group>
         </dependencies>
     </metadata>
     <files>
