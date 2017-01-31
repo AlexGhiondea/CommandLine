@@ -23,6 +23,25 @@ namespace CommandLine.Analysis
             // first of all, find the commandArgument, if any.
             tInfo.ActionArgument = FindCommandProperty(propertiesOnType);
 
+            // we want to be able to support empty groups.
+            if (tInfo.ActionArgument != null && IsEnum(tInfo.ActionArgument.PropertyType))
+            {
+                // get the values of the enum.
+                var enumValues = Enum.GetValues(tInfo.ActionArgument.PropertyType);
+
+                // Sort the enum by the enum values
+                Array.Sort(enumValues);
+
+                // add them to the dictionary now to make sure we preserve the order
+                foreach (var val in enumValues)
+                {
+                    if (!tInfo.ArgumentGroups.ContainsKey(val.ToString()))
+                    {
+                        tInfo.ArgumentGroups.Add(val.ToString(), new ArgumentGroupInfo());
+                    }
+                }   
+            }          
+
             // parse the rest of the properties
             foreach (var property in propertiesOnType)
             {
@@ -77,25 +96,6 @@ namespace CommandLine.Analysis
             {
                 if (grp.OptionalArguments.Count == 0 && grp.RequiredArguments.Count == 0)
                     tInfo.ArgumentGroups.Remove(string.Empty);
-            }
-
-            // we want to be able to support empty groups.
-            if (tInfo.ActionArgument != null)
-            {
-                // if it is an enum, and only then!
-                if (IsEnum(tInfo.ActionArgument.PropertyType))
-                {
-                    // get the values of the enum.
-                    var enumValues = Enum.GetValues(tInfo.ActionArgument.PropertyType);
-
-                    foreach (var val in enumValues)
-                    {
-                        if (!tInfo.ArgumentGroups.ContainsKey(val.ToString()))
-                        {
-                            tInfo.ArgumentGroups.Add(val.ToString(), new ArgumentGroupInfo());
-                        }
-                    }
-                }
             }
         }
 
