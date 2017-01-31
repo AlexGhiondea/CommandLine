@@ -60,9 +60,9 @@ namespace CommandLine.TestApp
 
     internal enum Command
     {
-        Command1,
-        Command2,
-        NoCommands
+        Command2 = 2,
+        Command1 = 1,
+        NoCommands = 3
     }
     internal class Groups1
     {
