@@ -1,61 +1,61 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace CommandLine.Tests
 {
-    [TestClass]
+    
     public class Help
     {
 
-        [TestMethod]
+        [Fact]
         public void HelpTest1()
         {
             var options = Helpers.Parse<Options3NoRequired>("-?");
         }
 
-        [TestMethod]
+        [Fact]
         public void HelpTest4()
         {
             var options = Helpers.Parse<Options3NoRequired>("/?");
         }
 
-        [TestMethod]
+        [Fact]
         public void HelpTest2()
         {
             var options = Helpers.Parse<Options3NoRequired>("-?");
         }
 
-        [TestMethod]
+        [Fact]
         public void HelpTest3()
         {
             var options = Helpers.Parse<OptionsNegative1>("-?");
         }
 
-        [TestMethod]
+        [Fact]
         public void DetailedHelp1()
         {
             var options = Helpers.Parse<Options1>("--help");
         }
 
-        [TestMethod]
+        [Fact]
         public void DetailedHelpForGroups1()
         {
             var options = Helpers.Parse<Groups1>("--help");
         }
 
-        [TestMethod]
+        [Fact]
         public void HelpForCommand()
         {
             var options = Helpers.Parse<Groups1>("Command1 -?");
         }
 
-        [TestMethod]
+        [Fact]
         public void HelpForCommandWithSlashQuestionMark()
         {
             var options = Helpers.Parse<Groups1>("Command1 /?");
         }
 
-        [TestMethod]
+        [Fact]
         public void HelpForTypeWithEnum()
         {
             var options = Helpers.Parse<Options3NoRequired>("/?");

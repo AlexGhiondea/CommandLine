@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +21,11 @@ namespace CommandLine.Tests
 
         public static void CollectionEquals(List<string> actual, params string[] expected)
         {
-            Assert.AreEqual(actual.Count, expected.Length);
+            Assert.Equal(actual.Count, expected.Length);
 
             for (int i = 0; i < expected.Length; i++)
             {
-                Assert.AreEqual(actual[i], expected[i]);
+                Assert.Equal(actual[i], expected[i]);
             }
         }
     }
