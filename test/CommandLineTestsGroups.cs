@@ -1,10 +1,9 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace CommandLine.Tests
 {
-    
-    public class Groups
+
+    public partial class CommandLineTests
     {
         [Fact]
         public void GroupsTest1()

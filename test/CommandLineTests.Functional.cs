@@ -1,9 +1,8 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace CommandLine.Tests
 {
-    public class Functional
+    public partial class CommandLineTests
     {
         [Fact]
         public void BasicTest1()

@@ -1,10 +1,8 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace CommandLine.Tests
 {
-    
-    public class Negative
+    public partial class CommandLineTests
     {
         [Fact]
         public void NegativeTest1()

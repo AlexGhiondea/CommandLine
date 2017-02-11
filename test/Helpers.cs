@@ -1,9 +1,7 @@
 ﻿using Xunit;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OutputColorizer;
 
 namespace CommandLine.Tests
 {
@@ -14,9 +12,13 @@ namespace CommandLine.Tests
             return str.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public static T Parse<T>(string argString) where T : new()
+        public static T Parse<T>(string argString, IOutputWriter writer = null) where T : new()
         {
-            return CommandLine.Parser.Parse<T>(Helpers.SplitString(argString));
+            if (writer == null)
+                writer = new ConsoleWriter();
+
+            Colorizer.SetupWriter(writer);
+            return Parser.Parse<T>(Helpers.SplitString(argString));
         }
 
         public static void CollectionEquals(List<string> actual, params string[] expected)
