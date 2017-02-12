@@ -120,11 +120,11 @@ namespace CommandLine
                 var b = arguments.RequiredArguments[i].GetCustomAttribute<ActualArgumentAttribute>();
                 if (TypeHelpers.IsEnum(arguments.RequiredArguments[i].PropertyType))
                 {
-                    Colorizer.WriteLine("  - [Cyan!{0}] : {1} (one of [Green!{2}]) [Magenta!(required)]", b.Name.PadRight(maxStringSize), b.Description, GetEnumValuesAsString(arguments.RequiredArguments[i].PropertyType));
+                    Colorizer.WriteLine("  - [Cyan!{0}] : {1} (one of [Green!{2}], [Cyan!required])", b.Name.PadRight(maxStringSize), b.Description, GetEnumValuesAsString(arguments.RequiredArguments[i].PropertyType));
                 }
                 else
                 {
-                    Colorizer.WriteLine("  - [Cyan!{0}] : {1} [Magenta!(required)]", b.Name.PadRight(maxStringSize), b.Description);
+                    Colorizer.WriteLine("  - [Cyan!{0}] : {1} ([Green!{2}], [Cyan!required])", b.Name.PadRight(maxStringSize), b.Description, GetFriendlyTypeName(arguments.RequiredArguments[i].PropertyType));
                 }
             }
 
@@ -132,13 +132,14 @@ namespace CommandLine
             foreach (var item in arguments.OptionalArguments.Values)
             {
                 var b = item.GetCustomAttribute<OptionalArgumentAttribute>();
+
                 if (TypeHelpers.IsEnum(item.PropertyType))
                 {
-                    Colorizer.WriteLine("  - [Yellow!{0}] : {1} (one of [Cyan!{2}]) (default=[Green!{3}])", b.Name.PadRight(maxStringSize), b.Description, GetEnumValuesAsString(item.PropertyType), b.DefaultValue);
+                    Colorizer.WriteLine("  - [Yellow!{0}] : {1} (one of [Green!{2}], default=[Yellow!{3}])", b.Name.PadRight(maxStringSize), b.Description, GetEnumValuesAsString(item.PropertyType), b.DefaultValue);
                 }
                 else
                 {
-                    Colorizer.WriteLine("  - [Yellow!{0}] : {1} (default=[Green!{2}])", b.Name.PadRight(maxStringSize), b.Description, b.DefaultValue ?? "");
+                    Colorizer.WriteLine("  - [Yellow!{0}] : {1} ([Green!{3}], default=[Yellow!{2}])", b.Name.PadRight(maxStringSize), b.Description, b.DefaultValue ?? "", GetFriendlyTypeName(item.PropertyType));
                 }
             }
             Colorizer.WriteLine(string.Empty);
@@ -147,6 +148,33 @@ namespace CommandLine
         private static string GetEnumValuesAsString(Type enumType)
         {
             return string.Join(",", Enum.GetNames(enumType));
+        }
+
+        private static string GetFriendlyTypeName(Type propertyType)
+        {
+            if (propertyType == typeof(string))
+                return "string";
+
+            if (propertyType == typeof(int) || propertyType == typeof(uint) ||
+                propertyType == typeof(sbyte) || propertyType == typeof(byte) ||
+                propertyType == typeof(short) || propertyType == typeof(ushort) ||
+                propertyType == typeof(double) || propertyType == typeof(float) ||
+                propertyType == typeof(long) || propertyType == typeof(ulong))
+                return "number";
+
+            if (propertyType == typeof(bool))
+                return "true or false";
+
+            if (propertyType == typeof(char))
+                return "char";
+
+            if (TypeHelpers.IsEnum(propertyType))
+                return "enum";
+
+            if (TypeHelpers.IsList(propertyType))
+                return "list";
+
+            return "";
         }
     }
 }

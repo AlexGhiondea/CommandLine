@@ -15,6 +15,11 @@ namespace CommandLine.Analysis
         {
             return type.GetTypeInfo().BaseType == typeof(Enum);
         }
+
+        internal static bool IsList(Type type)
+        {
+            return type == typeof(List<string>);
+        }
         public static void ScanTypeForProperties<TOptions>(out TypeArgumentInfo tInfo)
         {
             tInfo = new TypeArgumentInfo();
