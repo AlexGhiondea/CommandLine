@@ -2,11 +2,18 @@
 using System;
 using System.Collections.Generic;
 using OutputColorizer;
+using System.IO;
+using System.Reflection;
 
 namespace CommandLine.Tests
 {
     class Helpers
     {
+        public static string GetTestLocation()
+        {
+            return Path.GetDirectoryName(typeof(Helpers).GetTypeInfo().Assembly.Location);
+        }
+
         public static string[] SplitString(string str)
         {
             return str.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);

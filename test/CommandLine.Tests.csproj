@@ -13,9 +13,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170125-04" />
-    <PackageReference Include="xunit" Version="2.2.0-beta5-build3474" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0-beta5-build1225" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170628-02" />
+    <PackageReference Include="xunit" Version="2.3.0-beta3-build3705" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta3-build3705" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,11 +23,36 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="SampleRspFiles\" />
     <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\src\CommandLine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SampleRspFiles\response1.rsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleRspFiles\response2_1.rsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleRspFiles\response2_2.rsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleRspFiles\response3_1.rsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleRspFiles\response3_2.rsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleRspFiles\response4.rsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SampleRspFiles\response5.rsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
