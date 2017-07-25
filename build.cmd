@@ -16,19 +16,29 @@ echo Solution: '%_solution%'
 echo Code: '%_codeProject%'
 echo Test: '%_testProject%'
 
-echo Restoring packages
+echo --------------------------
+echo !!! Restoring packages !!!
+echo --------------------------
 dotnet restore
 
-echo Cleaning solution
+echo -------------------------
+echo !!! Cleaning solution !!!
+echo -------------------------
 dotnet clean %_solution%
 
-echo Building solution
+echo -------------------------
+echo !!! Building solution !!!
+echo -------------------------
 dotnet build %_solution% -c %_config%
 
-echo Running tests
+echo ---------------------
+echo !!! Running tests !!!
+echo ---------------------
 dotnet test --no-build -c %_config% %_testProject%
 
-echo Creating NuGet package
+echo ------------------------------
+echo !!! Creating NuGet package !!!
+echo ------------------------------
 dotnet pack --no-build -c %_config% %_codeProject%
 
 endlocal
