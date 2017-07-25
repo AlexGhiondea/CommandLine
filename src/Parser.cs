@@ -5,6 +5,7 @@ using OutputColorizer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -29,6 +30,9 @@ namespace CommandLine
                 // build a list of properties for the type passed in.
                 // this will throw for cases where the type is incorrecly annotated with attributes
                 TypeHelpers.ScanTypeForProperties<TOptions>(out arguments);
+
+                // before we do anything, let's expand the response files (if any).
+                args = ExpandResponseFiles(args);
 
                 // short circuit the request for help!
                 if (args.Length == 1 && (args[0] == "/?" || args[0] == "-?" || args[0] == "--help"))
@@ -55,6 +59,108 @@ namespace CommandLine
 
                 return false;
             }
+        }
+
+        private static string[] ExpandResponseFiles(string[] args)
+        {
+            // let's do a quick pass and see if any of the args start with @
+
+            bool shouldExpand = false;
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i][0] == '@')
+                {
+                    shouldExpand = true;
+                    break;
+                }
+            }
+
+            if (!shouldExpand)
+                return args;
+
+            // we need to expand the response files
+            List<string> newArgs = new List<string>();
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i][0] == '@')
+                {
+                    string fileName = args[i].Substring(1);
+                    // does the file exist?
+                    if (!File.Exists(fileName))
+                    {
+                        throw new FileNotFoundException($"Could not find response file [Yellow!{args[i]}]");
+                    }
+
+                    foreach (var line in File.ReadAllLines(fileName))
+                    {
+                        // we need to parse the line into a list of strings.
+                        // we are going to split the line on space (except if we have just seen a ")
+                        SplitCommandLineIntoSegments(line, ref newArgs);
+                    }
+                }
+                else
+                {
+                    newArgs.Add(args[i]);
+                }
+            }
+
+            return newArgs.ToArray();
+        }
+
+        private static void SplitCommandLineIntoSegments(string line, ref List<string> newArgs)
+        {
+            int currentPosition = 0;
+            int segmentStart = 0;
+            string segment;
+
+            // skip over leading whitespace
+            while (currentPosition < line.Length && char.IsWhiteSpace(line[currentPosition]))
+            {
+                currentPosition++;
+            }
+
+            segmentStart = currentPosition;
+
+            do
+            {
+                // if the current character is a quote, continue scanning until you find the next quote
+                if (line[currentPosition] == '"')
+                {
+                    currentPosition++;
+                    segmentStart = currentPosition;
+
+                    while (currentPosition < line.Length && line[currentPosition] != '"')
+                        currentPosition++;
+
+                    // do we have a matching quote?
+                    if (currentPosition == line.Length)
+                        throw new InvalidDataException("Could not find closing quote while parsing response file.");
+                }
+                else
+                {
+                    // find the next whitespace character.
+                    while (currentPosition < line.Length && !char.IsWhiteSpace(line[currentPosition]))
+                        currentPosition++;
+                }
+
+                // generate the current segment
+                segment = line.Substring(segmentStart, currentPosition - segmentStart);
+                newArgs.Add(segment);
+
+                // this maps to the trailing quote and needs to be skipped.
+                if (currentPosition < line.Length && line[currentPosition] == '"')
+                {
+                    currentPosition++;
+                }
+
+                // skip whitespace characters
+                while (currentPosition < line.Length && char.IsWhiteSpace(line[currentPosition]))
+                {
+                    currentPosition++;
+                }
+                segmentStart = currentPosition;
+            } while (currentPosition < line.Length);
         }
 
         private static bool ParseCommandGroups<TOptions>(string[] args, ref TOptions options, TypeArgumentInfo arguments) where TOptions : new()

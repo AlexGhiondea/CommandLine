@@ -8,10 +8,10 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/AlexGhiondea/CommandLine/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/AlexGhiondea/CommandLine</PackageProjectUrl>
     <PackageTags>CommandLine, Command line, Command, Line, parser, objects, custom</PackageTags>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
-    <PackageVersion>1.0.0</PackageVersion>
-    <Version>1.0.0</Version>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
+    <PackageVersion>1.2.0</PackageVersion>
+    <Version>1.2.0</Version>
     <PackageOutputPath>..\bin\$(Configuration)\</PackageOutputPath>
     <Description>Parse command line arguments into user defined objects</Description>
   </PropertyGroup>
