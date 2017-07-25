@@ -9,11 +9,11 @@ namespace CommandLine.Tests
         {
             var options = Helpers.Parse<Options1>("p1 2 -opt1 10 -opt2 b");
 
-            Assert.Equal(options.p1, "p1");
-            Assert.Equal(options.p2, 2);
-            Assert.Equal(options.opt1, 10);
-            Assert.Equal(options.opt2, "b");
-            Assert.Equal(options.opt3, null);
+            Assert.Equal("p1", options.p1);
+            Assert.Equal(2, options.p2);
+            Assert.Equal(10, options.opt1);
+            Assert.Equal("b", options.opt2);
+            Assert.Null(options.opt3);
         }
 
         [Fact]
@@ -21,11 +21,11 @@ namespace CommandLine.Tests
         {
             var options = Helpers.Parse<Options1>("p1 2 -opt1 10");
 
-            Assert.Equal(options.p1, "p1");
-            Assert.Equal(options.p2, 2);
-            Assert.Equal(options.opt1, 10);
-            Assert.Equal(options.opt2, "all");
-            Assert.Equal(options.opt3, null);
+            Assert.Equal("p1", options.p1);
+            Assert.Equal(2, options.p2);
+            Assert.Equal(10, options.opt1);
+            Assert.Equal("all", options.opt2);
+            Assert.Null(options.opt3);
         }
 
         [Fact]
@@ -33,11 +33,11 @@ namespace CommandLine.Tests
         {
             var options = Helpers.Parse<Options1>("p1 2");
 
-            Assert.Equal(options.p1, "p1");
-            Assert.Equal(options.p2, 2);
-            Assert.Equal(options.opt1, 256);
-            Assert.Equal(options.opt2, "all");
-            Assert.Equal(options.opt3, null);
+            Assert.Equal("p1", options.p1);
+            Assert.Equal(2, options.p2);
+            Assert.Equal(256, options.opt1);
+            Assert.Equal("all", options.opt2);
+            Assert.Null(options.opt3);
         }
 
         [Fact]
@@ -45,10 +45,10 @@ namespace CommandLine.Tests
         {
             var options = Helpers.Parse<Options1>("p1 2 -opt3 a b c");
 
-            Assert.Equal(options.p1, "p1");
-            Assert.Equal(options.p2, 2);
-            Assert.Equal(options.opt1, 256);
-            Assert.Equal(options.opt2, "all");
+            Assert.Equal("p1", options.p1);
+            Assert.Equal(2, options.p2);
+            Assert.Equal(256, options.opt1);
+            Assert.Equal("all", options.opt2);
             Helpers.CollectionEquals(options.opt3, "a", "b", "c");
         }
 
@@ -57,10 +57,10 @@ namespace CommandLine.Tests
         {
             var options = Helpers.Parse<Options1>("p1 2 -opt1 10 -opt3 a b c");
 
-            Assert.Equal(options.p1, "p1");
-            Assert.Equal(options.p2, 2);
-            Assert.Equal(options.opt1, 10);
-            Assert.Equal(options.opt2, "all");
+            Assert.Equal("p1", options.p1);
+            Assert.Equal(2, options.p2);
+            Assert.Equal(10, options.opt1);
+            Assert.Equal("all", options.opt2);
             Helpers.CollectionEquals(options.opt3, "a", "b", "c");
         }
 
@@ -69,10 +69,10 @@ namespace CommandLine.Tests
         {
             var options = Helpers.Parse<Options1>("p1 2 -opt3 a b c -opt1 10");
 
-            Assert.Equal(options.p1, "p1");
-            Assert.Equal(options.p2, 2);
-            Assert.Equal(options.opt1, 10);
-            Assert.Equal(options.opt2, "all");
+            Assert.Equal("p1", options.p1);
+            Assert.Equal(2, options.p2);
+            Assert.Equal(10, options.opt1);
+            Assert.Equal("all", options.opt2);
             Helpers.CollectionEquals(options.opt3, "a", "b", "c");
         }
 
@@ -81,9 +81,9 @@ namespace CommandLine.Tests
         {
             var options = Helpers.Parse<Options2>("p1 d e fc -opt2 a b c -opt1 10");
 
-            Assert.Equal(options.p1, "p1");
+            Assert.Equal("p1", options.p1);
             Helpers.CollectionEquals(options.p2, "d", "e", "fc");
-            Assert.Equal(options.opt1, 10);
+            Assert.Equal(10, options.opt1);
             Helpers.CollectionEquals(options.opt2, "a", "b", "c");
         }
 
@@ -92,10 +92,10 @@ namespace CommandLine.Tests
         {
             var options = Helpers.Parse<Options2>("p1 d e fc");
 
-            Assert.Equal(options.p1, "p1");
+            Assert.Equal("p1", options.p1);
             Helpers.CollectionEquals(options.p2, "d", "e", "fc");
-            Assert.Equal(options.opt1, 256);
-            Assert.Equal(options.opt2, null);
+            Assert.Equal(256, options.opt1);
+            Assert.Null(options.opt2);
         }
 
         [Fact]
@@ -103,9 +103,9 @@ namespace CommandLine.Tests
         {
             var options = Helpers.Parse<Options3NoRequired>("-opt1 10 -opt2 d e fc");
 
-            Assert.Equal(options.opt1, 10);
+            Assert.Equal(10, options.opt1);
             Helpers.CollectionEquals(options.opt2, "d", "e", "fc");
-            Assert.Equal(options.opt3, Enum1.B);
+            Assert.Equal(Enum1.B, options.opt3);
         }
 
         [Fact]
@@ -113,9 +113,9 @@ namespace CommandLine.Tests
         {
             var options = Helpers.Parse<Options3NoRequired>("-opt1 10 -opt2 d e fc -opt3 A");
 
-            Assert.Equal(options.opt1, 10);
+            Assert.Equal(10, options.opt1);
             Helpers.CollectionEquals(options.opt2, "d", "e", "fc");
-            Assert.Equal(options.opt3, Enum1.A);
+            Assert.Equal(Enum1.A, options.opt3);
         }
 
     }

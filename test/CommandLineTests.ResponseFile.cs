@@ -15,8 +15,8 @@ namespace CommandLine.Tests
 
             var options = Helpers.Parse<Groups1>($"@{responseFile}");
 
-            Assert.Equal(options.p1, "p1");
-            Assert.Equal(options.opt1, 10);
+            Assert.Equal("p1", options.p1);
+            Assert.Equal(10, options.opt1);
         }
 
         [Fact]
@@ -27,10 +27,10 @@ namespace CommandLine.Tests
 
             var options = Helpers.Parse<Options1>($"@{responseFile1} @{responseFile2}");
 
-            Assert.Equal(options.p1, "p1");
-            Assert.Equal(options.p2, 2);
-            Assert.Equal(options.opt1, 10);
-            Assert.Equal(options.opt2, "all");
+            Assert.Equal("p1", options.p1);
+            Assert.Equal(2, options.p2);
+            Assert.Equal(10, options.opt1);
+            Assert.Equal("all", options.opt2);
             Helpers.CollectionEquals(options.opt3, "a", "b", "c");
         }
 
@@ -42,9 +42,9 @@ namespace CommandLine.Tests
 
             var options = Helpers.Parse<Options2>($"@{responseFile1} -opt2 a b c @{responseFile2}");
 
-            Assert.Equal(options.p1, "p1");
+            Assert.Equal("p1", options.p1);
             Helpers.CollectionEquals(options.p2, "d", "e", "fc");
-            Assert.Equal(options.opt1, 10);
+            Assert.Equal(10, options.opt1);
             Helpers.CollectionEquals(options.opt2, "a", "b", "c");
         }
 
@@ -83,9 +83,9 @@ namespace CommandLine.Tests
 
             var options = Helpers.Parse<Options2>($"@{responseFile}");
 
-            Assert.Equal(options.p1, "p1");
+            Assert.Equal("p1", options.p1);
             Helpers.CollectionEquals(options.p2, "this is d", "very", "interesting to see");
-            Assert.Equal(options.opt1, 10);
+            Assert.Equal(10, options.opt1);
             Helpers.CollectionEquals(options.opt2, "a", "b", "c\t d");
         }
     }
