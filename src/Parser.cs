@@ -13,14 +13,33 @@ namespace CommandLine
 {
     public static class Parser
     {
-        public static TOptions Parse<TOptions>(string[] args) where TOptions : new()
+        public static TOptions Parse<TOptions>(string[] args) 
+            where TOptions : new()
         {
             TOptions options = default(TOptions);
             TryParse(args, out options);
             return options;
         }
 
-        public static bool TryParse<TOptions>(string[] args, out TOptions options) where TOptions : new()
+        public static TOptions Parse<TOptions>(string strArgs)
+            where TOptions : new()
+        {
+            List<string> args = new List<string>();
+            SplitCommandLineIntoSegments(strArgs, ref args);
+            TryParse(args.ToArray(), out TOptions options);
+            return options;
+        }
+
+        public static bool TryParse<TOptions>(string strArgs, out TOptions options)
+            where TOptions : new()
+        {
+            List<string> args = new List<string>();
+            SplitCommandLineIntoSegments(strArgs, ref args);
+            return TryParse(args.ToArray(), out options);
+        }
+
+        public static bool TryParse<TOptions>(string[] args, out TOptions options) 
+            where TOptions : new()
         {
             options = default(TOptions);
 
@@ -110,6 +129,9 @@ namespace CommandLine
 
         private static void SplitCommandLineIntoSegments(string line, ref List<string> newArgs)
         {
+            if (string.IsNullOrEmpty(line))
+                return;
+
             int currentPosition = 0;
             int segmentStart = 0;
             string segment;

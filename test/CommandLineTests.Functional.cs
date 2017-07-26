@@ -118,5 +118,43 @@ namespace CommandLine.Tests
             Assert.Equal(Enum1.A, options.opt3);
         }
 
+        [Fact]
+        public void BasicTest11()
+        {
+            var options = Helpers.Parse<Options2>("p1 d e fc -opt2 a b c -opt1 10 -opt3 b");
+
+            Assert.Equal("p1", options.p1);
+            Helpers.CollectionEquals(options.p2, "d", "e", "fc");
+            Assert.Equal(10, options.opt1);
+            Helpers.CollectionEquals(options.opt2, "a", "b", "c");
+            Assert.Equal('b', options.Character);
+        }
+
+        [Fact]
+        public void BasicTest12()
+        {
+            Options2 options;
+            var parsed = Parser.TryParse("p1 d e fc -opt2 a b c -opt1 10 -opt3 b", out options);
+
+            Assert.True(parsed);
+            Assert.Equal("p1", options.p1);
+            Helpers.CollectionEquals(options.p2, "d", "e", "fc");
+            Assert.Equal(10, options.opt1);
+            Helpers.CollectionEquals(options.opt2, "a", "b", "c");
+            Assert.Equal('b', options.Character);
+        }
+
+        [Fact]
+        public void BasicTest13()
+        {
+            Options2 options = Parser.Parse<Options2>("p1 d e fc -opt2 a b c -opt1 10 -opt3 b");
+
+            Assert.NotNull(options);
+            Assert.Equal("p1", options.p1);
+            Helpers.CollectionEquals(options.p2, "d", "e", "fc");
+            Assert.Equal(10, options.opt1);
+            Helpers.CollectionEquals(options.opt2, "a", "b", "c");
+            Assert.Equal('b', options.Character);
+        }
     }
 }
