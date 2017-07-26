@@ -16,5 +16,8 @@ namespace CommandLine.Tests
 
         [OptionalArgument(null, "opt2", "Optional parameter 2", true)]
         public List<string> opt2 { get; set; }
+
+        [OptionalArgument('a', "opt3", "Optional parameter 3")]
+        public char Character { get; set; }
     }
 }

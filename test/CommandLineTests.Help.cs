@@ -143,6 +143,9 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, "[-"),
                 new TextAndColor(ConsoleColor.Yellow, "opt3"),
                 new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt4"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
                 new TextAndColor(ConsoleColor.Black, "  - "),
                 new TextAndColor(ConsoleColor.Cyan, "p1  "),
                 new TextAndColor(ConsoleColor.Black, " : Required parameter 1 ("),
@@ -160,7 +163,7 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, "  - "),
                 new TextAndColor(ConsoleColor.Yellow, "opt1"),
                 new TextAndColor(ConsoleColor.Black, " : Optional parameter 1 ("),
-                new TextAndColor(ConsoleColor.Green,"number"),
+                new TextAndColor(ConsoleColor.Green, "number"),
                 new TextAndColor(ConsoleColor.Black, ", default="),
                 new TextAndColor(ConsoleColor.Yellow, "256"),
                 new TextAndColor(ConsoleColor.Black, ")"),
@@ -176,8 +179,15 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, " : Optional parameter 2 ("),
                 new TextAndColor(ConsoleColor.Green, "list"),
                 new TextAndColor(ConsoleColor.Black, ", default="),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Yellow, "opt4"),
+                new TextAndColor(ConsoleColor.Black, " : Optional parameter 4 ("),
+                new TextAndColor(ConsoleColor.Green, "char"),
+                new TextAndColor(ConsoleColor.Black, ", default="),
+                new TextAndColor(ConsoleColor.Yellow, "z"),
                 new TextAndColor(ConsoleColor.Black, ")")
-            );
+              );
         }
 
         [Fact]

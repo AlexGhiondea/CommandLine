@@ -14,18 +14,13 @@ namespace CommandLine.Tests
             return Path.GetDirectoryName(typeof(Helpers).GetTypeInfo().Assembly.Location);
         }
 
-        public static string[] SplitString(string str)
-        {
-            return str.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-        }
-
         public static T Parse<T>(string argString, IOutputWriter writer = null) where T : new()
         {
             if (writer == null)
                 writer = new ConsoleWriter();
 
             Colorizer.SetupWriter(writer);
-            return Parser.Parse<T>(Helpers.SplitString(argString));
+            return Parser.Parse<T>(argString);
         }
 
         public static void CollectionEquals(List<string> actual, params string[] expected)
