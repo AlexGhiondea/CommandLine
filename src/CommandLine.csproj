@@ -4,7 +4,11 @@
 
   <PropertyGroup>
     <OutputType>library</OutputType>
-    <TargetFrameworks>netstandard1.5;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard1.5</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="Exists('c:\Windows')">
+      <TargetFrameworks>$(TargetFrameworks);net45</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.5|AnyCPU'">
