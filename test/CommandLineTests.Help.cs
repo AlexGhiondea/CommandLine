@@ -350,6 +350,93 @@ namespace CommandLine.Tests
         }
 
         [Fact]
+        public void DetailedHelpForGroups2WithCommonArgs()
+        {
+            TestWriter _printer = new TestWriter();
+
+            var options = Helpers.Parse<Groups2>("--help", _printer);
+
+            Validate(_printer,
+                new TextAndColor(ConsoleColor.Black, "Usage: "),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Green, "Command1"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Cyan, "common1"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Cyan, "common2"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt1"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Cyan, "common1"),
+                new TextAndColor(ConsoleColor.Black, " : Required parameter 1 ("),
+                new TextAndColor(ConsoleColor.Green, "string"),
+                new TextAndColor(ConsoleColor.Black, ", "),
+                new TextAndColor(ConsoleColor.Cyan, "required"),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Cyan, "common2"),
+                new TextAndColor(ConsoleColor.Black, " : Required parameter 2 ("),
+                new TextAndColor(ConsoleColor.Green, "string"),
+                new TextAndColor(ConsoleColor.Black, ", "),
+                new TextAndColor(ConsoleColor.Cyan, "required"),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Yellow, "opt1   "),
+                new TextAndColor(ConsoleColor.Black, " : Optional parameter 1 ("),
+                new TextAndColor(ConsoleColor.Green, "number"),
+                new TextAndColor(ConsoleColor.Black, ", default="),
+                new TextAndColor(ConsoleColor.Yellow, "256"),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Green, "Command2"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Cyan, "common1"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Cyan, "common2"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Cyan, "req3"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt2"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Cyan, "common1"),
+                new TextAndColor(ConsoleColor.Black, " : Required parameter 1 ("),
+                new TextAndColor(ConsoleColor.Green, "string"),
+                new TextAndColor(ConsoleColor.Black, ", "),
+                new TextAndColor(ConsoleColor.Cyan, "required"),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Cyan, "common2"),
+                new TextAndColor(ConsoleColor.Black, " : Required parameter 2 ("),
+                new TextAndColor(ConsoleColor.Green, "string"),
+                new TextAndColor(ConsoleColor.Black, ", "),
+                new TextAndColor(ConsoleColor.Cyan, "required"),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Cyan, "req3   "),
+                new TextAndColor(ConsoleColor.Black, " : Required parameter 3 (specific to command2) (one of "),
+                new TextAndColor(ConsoleColor.Green, "A,B"),
+                new TextAndColor(ConsoleColor.Black, ", "),
+                new TextAndColor(ConsoleColor.Cyan, "required"),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Yellow, "opt2   "),
+                new TextAndColor(ConsoleColor.Black, " : Optional parameter 1 ("),
+                new TextAndColor(ConsoleColor.Green, "number"),
+                new TextAndColor(ConsoleColor.Black, ", default="),
+                new TextAndColor(ConsoleColor.Yellow, "256"),
+                new TextAndColor(ConsoleColor.Black, ")")
+            );
+        }
+
+        [Fact]
         public void HelpForTypeWithRequiredAndOptionalEnumsAndLists()
         {
             TestWriter _printer = new TestWriter();

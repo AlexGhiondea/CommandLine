@@ -4,13 +4,10 @@ using System.ComponentModel;
 namespace CommandLine.Attributes.Advanced
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
-    public class ArgumentGroupAttribute : GroupAttribute
+    public class GroupAttribute : Attribute
     {
-        public string Name { get; private set; }
-
-        public ArgumentGroupAttribute(string name)
+        public GroupAttribute()
         {
-            Name = name;
         }
     }
 }
