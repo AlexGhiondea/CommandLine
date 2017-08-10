@@ -44,8 +44,8 @@ namespace CommandLine.Analysis
                     {
                         tInfo.ArgumentGroups.Add(val.ToString(), new ArgumentGroupInfo());
                     }
-                }   
-            }          
+                }
+            }
 
             // parse the rest of the properties
             foreach (var property in propertiesOnType)
@@ -108,33 +108,53 @@ namespace CommandLine.Analysis
         {
             List<ArgumentGroupInfo> groupsForThisProperty = new List<ArgumentGroupInfo>();
 
-            var customAttributes = property.GetCustomAttributes<ArgumentGroupAttribute>();
+            var customAttributes = property.GetCustomAttributes<GroupAttribute>();
 
             if (!customAttributes.Any())
             {
-                // we have the simple case where we don't have groups defined
-                groupsForThisProperty.Add(GetArgumentInfoForSingleGroup(string.Empty, tInfo));
+                // we need to make sure that we don't add this here is the attribute we are adding is the Action one (which is outside of groups)
+                if (!property.GetCustomAttributes<ActionArgumentAttribute>().Any())
+                {
+                    // we have the simple case where we don't have groups defined
+                    groupsForThisProperty.Add(GetArgumentInfoForSingleGroup(string.Empty, tInfo));
+                }
             }
             else
             {
                 // we have the complex scenario where groups are present
+
+                // there are 2 types of arguments in a group:
+                //  - common ones, flagged with the CommonArgumentAttribute
+                //  - specific to each command group, flagged with ArgumentGroupAttribute
                 groupsForThisProperty.AddRange(GetArgumentInfoForGroups(tInfo, customAttributes));
             }
 
             return groupsForThisProperty;
         }
 
-        private static IEnumerable<ArgumentGroupInfo> GetArgumentInfoForGroups(TypeArgumentInfo tInfo, IEnumerable<ArgumentGroupAttribute> customAttributes)
+        private static IEnumerable<ArgumentGroupInfo> GetArgumentInfoForGroups(TypeArgumentInfo tInfo, IEnumerable<GroupAttribute> customAttributes)
         {
             foreach (var commandGroup in customAttributes)
             {
-                ArgumentGroupInfo grpPropInfo;
-                if (!tInfo.ArgumentGroups.TryGetValue(commandGroup.Name, out grpPropInfo))
+                if (commandGroup is ArgumentGroupAttribute)
                 {
-                    grpPropInfo = new ArgumentGroupInfo();
-                    tInfo.ArgumentGroups[commandGroup.Name] = grpPropInfo;
+                    var argGroupAttribute = commandGroup as ArgumentGroupAttribute;
+                    ArgumentGroupInfo grpPropInfo;
+                    if (!tInfo.ArgumentGroups.TryGetValue(argGroupAttribute.Name, out grpPropInfo))
+                    {
+                        grpPropInfo = new ArgumentGroupInfo();
+                        tInfo.ArgumentGroups[argGroupAttribute.Name] = grpPropInfo;
+                    }
+                    yield return grpPropInfo;
                 }
-                yield return grpPropInfo;
+                else if (commandGroup is CommonArgumentAttribute)
+                {
+                    // return all the groups since this is a commond argument
+                    foreach (var item in tInfo.ArgumentGroups.Values)
+                    {
+                        yield return item;
+                    }
+                }
             }
         }
 
