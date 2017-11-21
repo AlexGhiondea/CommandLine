@@ -1,20 +1,7 @@
 # CommandLine
 CommandLine parser 
 
-## How to define
-
-To use you need to provide a class that is going to hold the options parsed from the command line and use attributes to define the behavior of the parser.
-
-There are 2 kinds of arguments:
- - Required
-   - These must be specified
-   - They have a specific location where they must be specified
- - Optional
-   - They don't have to be specified
-   - They have a name that you need to provide on the command line before you provide the value
-   - If they are not specified, the object parsed will have the default value specified.'
-
-### Basic example
+## Getting started
 
 Here is how you can define a class that can be used with the parser:
 
@@ -60,6 +47,22 @@ Usage:
   - dir     : Directory (string, required)
   - pattern : Search pattern (string, default=*.*)
  ```
+
+
+## Types of arguments 
+
+To use you need to provide a class that is going to hold the options parsed from the command line and use attributes to define the behavior of the parser.
+
+There are 2 kinds of arguments:
+ - Required
+   - These must be specified
+   - They have a specific location where they must be specified
+ - Optional
+   - They don't have to be specified
+   - They have a name that you need to provide on the command line before you provide the value
+   - If they are not specified, the object parsed will have the default value specified.'
+
+
 
 ## Advanced scenarios
 
