@@ -47,7 +47,20 @@ Usage:
   - dir     : Directory (string, required)
   - pattern : Search pattern (string, default=*.*)
  ```
+### Display the help using code
 
+If you want to display the help manually, you can use the `Parser.DisplayHelp()` API to do it:
+```csharp
+Parser.DisplayHelp<Options>();
+```
+
+By default, the API assumes you are using the `HelpFormat.Short` specifier which maps to `/?` or `-?`.
+
+You can ask for the long version of the help by using the `HelpFormat.Long` specifier:
+
+```csharp
+Parser.DisplayHelp<Options>(HelpFormat.Long);
+```
 
 ## Types of arguments 
 
@@ -61,8 +74,6 @@ There are 2 kinds of arguments:
    - They don't have to be specified
    - They have a name that you need to provide on the command line before you provide the value
    - If they are not specified, the object parsed will have the default value specified.'
-
-
 
 ## Advanced scenarios
 
