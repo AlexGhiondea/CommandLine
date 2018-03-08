@@ -95,6 +95,11 @@ namespace CommandLine
         /// <param name="helpFormat">Describes the level of details to generate for the help message.</param>
         public static void DisplayHelp<TOptions>(HelpFormat helpFormat = HelpFormat.Short)
         {
+            if (helpFormat != HelpFormat.Short && helpFormat != HelpFormat.Full)
+            {
+                throw new ArgumentException("Unrecognized help format", nameof(helpFormat));
+            }
+
             try
             {
                 // build a list of properties for the type passed in.
