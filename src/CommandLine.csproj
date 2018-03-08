@@ -5,6 +5,9 @@
   <PropertyGroup>
     <OutputType>library</OutputType>
     <TargetFrameworks>netstandard1.5</TargetFrameworks>
+    <Version>1.4.0</Version>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <FileVersion>1.4.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="Exists('c:\Windows')">

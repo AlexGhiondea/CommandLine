@@ -13,7 +13,7 @@ namespace CommandLine
 {
     public static class Parser
     {
-        public static TOptions Parse<TOptions>(string[] args) 
+        public static TOptions Parse<TOptions>(string[] args)
             where TOptions : new()
         {
             TOptions options = default(TOptions);
@@ -38,7 +38,7 @@ namespace CommandLine
             return TryParse(args.ToArray(), out options);
         }
 
-        public static bool TryParse<TOptions>(string[] args, out TOptions options) 
+        public static bool TryParse<TOptions>(string[] args, out TOptions options)
             where TOptions : new()
         {
             options = default(TOptions);
@@ -54,10 +54,18 @@ namespace CommandLine
                 args = ExpandResponseFiles(args);
 
                 // short circuit the request for help!
-                if (args.Length == 1 && (args[0] == "/?" || args[0] == "-?" || args[0] == "--help"))
+                if (args.Length == 1)
                 {
-                    HelpGenerator.DisplayHelp(args[0], arguments);
-                    return false;
+                    if (args[0] == HelpGenerator.RequestShortHelpParameter || args[0] == "/?")
+                    {
+                        HelpGenerator.DisplayHelp(HelpFormat.Short, arguments);
+                        return false;
+                    }
+                    else if (args[0] == HelpGenerator.RequestLongHelpParameter)
+                    {
+                        HelpGenerator.DisplayHelp(HelpFormat.Full, arguments);
+                        return false;
+                    }
                 }
 
                 // we have groups!
@@ -74,12 +82,41 @@ namespace CommandLine
             {
                 Colorizer.WriteLine($"[Red!Error]: {ex.Message} {Environment.NewLine}");
 
-                HelpGenerator.DisplayHelp(HelpGenerator.RequestShortHelpParameter, arguments);
+                HelpGenerator.DisplayHelp(HelpFormat.Short, arguments);
 
                 return false;
             }
         }
 
+        /// <summary>
+        /// Display the help based on the <typeparamref name="TOptions"/> type provided
+        /// </summary>
+        /// <typeparam name="TOptions">The type for which to generate the help.</typeparam>
+        /// <param name="helpFormat">Describes the level of details to generate for the help message.</param>
+        public static void DisplayHelp<TOptions>(HelpFormat helpFormat = HelpFormat.Short)
+        {
+            if (helpFormat != HelpFormat.Short && helpFormat != HelpFormat.Full)
+            {
+                throw new ArgumentException("Unrecognized help format", nameof(helpFormat));
+            }
+
+            try
+            {
+                // build a list of properties for the type passed in.
+                // this will throw for cases where the type is incorrecly annotated with attributes
+                TypeHelpers.ScanTypeForProperties<TOptions>(out TypeArgumentInfo arguments);
+
+                // If we get here, the options type is well defined, so let's display the help.
+                HelpGenerator.DisplayHelp(helpFormat, arguments);
+            }
+            catch (Exception ex)
+            {
+                // If we were asked to display the help and something went wrong, display the error that went wrong.
+                Colorizer.WriteLine($"[Red!Error]: {ex.Message} {Environment.NewLine}");
+            }
+        }
+
+        #region Private members
         private static string[] ExpandResponseFiles(string[] args)
         {
             // let's do a quick pass and see if any of the args start with @
@@ -307,5 +344,6 @@ namespace CommandLine
                 throw new ArgumentException("Not all required arguments have been specified");
             }
         }
+        #endregion
     }
 }

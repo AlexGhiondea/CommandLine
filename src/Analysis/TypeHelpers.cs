@@ -20,6 +20,7 @@ namespace CommandLine.Analysis
         {
             return type == typeof(List<string>);
         }
+
         public static void ScanTypeForProperties<TOptions>(out TypeArgumentInfo tInfo)
         {
             tInfo = new TypeArgumentInfo();
