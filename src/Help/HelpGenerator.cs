@@ -11,6 +11,7 @@ namespace CommandLine
     internal class HelpGenerator
     {
         public const string RequestShortHelpParameter = "-?";
+        public const string RequestLongHelpParameter = "--help";
 
         private static int DisplayCommandLine(ArgumentGroupInfo arguments)
         {
@@ -40,14 +41,29 @@ namespace CommandLine
             return maxStringSize;
         }
 
-        internal static void DisplayHelp(string helpFormat, TypeArgumentInfo arguments)
+        internal static void DisplayHelp(HelpFormat helpFormat, TypeArgumentInfo arguments)
         {
-            if (helpFormat == "/?" || helpFormat == "-?")
+            switch (helpFormat)
+            {
+                case HelpFormat.Short:
+                    DisplayShortHelp(arguments);
+                    break;
+                case HelpFormat.Full:
+                    DisplayDetailedHelp(arguments);
+                    break;
+                default:
+                    throw new ArgumentException("Unrecognized help format", nameof(helpFormat));
+            }
+        }
+
+        private static void DisplayHelp(string helpFormat, TypeArgumentInfo arguments)
+        {
+            if (helpFormat == RequestShortHelpParameter || helpFormat == "/?")
             {
                 DisplayShortHelp(arguments);
 
             }
-            else if (helpFormat == "--help")
+            else if (helpFormat == RequestLongHelpParameter)
             {
                 DisplayDetailedHelp(arguments);
             }

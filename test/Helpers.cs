@@ -23,6 +23,15 @@ namespace CommandLine.Tests
             return Parser.Parse<T>(argString);
         }
 
+        public static void DisplayHelp<T>(HelpFormat helpFormat, IOutputWriter writer = null) where T : new()
+        {
+            if (writer == null)
+                writer = new ConsoleWriter();
+
+            Colorizer.SetupWriter(writer);
+            Parser.DisplayHelp<T>(helpFormat);
+        }
+
         public static void CollectionEquals(List<string> actual, params string[] expected)
         {
             Assert.Equal(actual.Count, expected.Length);

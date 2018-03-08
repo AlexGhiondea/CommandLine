@@ -43,6 +43,32 @@ namespace CommandLine.Tests
         }
 
         [Fact]
+        public void HelpTestViaApi1()
+        {
+            TestWriter _printer = new TestWriter();
+            Helpers.DisplayHelp<Options3NoRequired>(HelpFormat.Short, _printer);
+
+            Validate(_printer,
+                new TextAndColor(ConsoleColor.Black, "Usage: "),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt1"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt2"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt3"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "For detailed information run '"),
+                new TextAndColor(ConsoleColor.White, "testhost --help"),
+                new TextAndColor(ConsoleColor.Black, "'.")
+            );
+        }
+
+        [Fact]
         public void HelpTest4()
         {
             TestWriter _printer = new TestWriter();
@@ -124,6 +150,77 @@ namespace CommandLine.Tests
         {
             TestWriter _printer = new TestWriter();
             var options = Helpers.Parse<Options1>("--help", _printer);
+
+            Validate(_printer,
+                new TextAndColor(ConsoleColor.Black, "Usage: "),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Cyan, "p1"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Cyan, "p2"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt1"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt2"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt3"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt4"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Cyan, "p1  "),
+                new TextAndColor(ConsoleColor.Black, " : Required parameter 1 ("),
+                new TextAndColor(ConsoleColor.Green, "string"),
+                new TextAndColor(ConsoleColor.Black, ", "),
+                new TextAndColor(ConsoleColor.Cyan, "required"),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Cyan, "p2  "),
+                new TextAndColor(ConsoleColor.Black, " : Required parameter 2 ("),
+                new TextAndColor(ConsoleColor.Green, "number"),
+                new TextAndColor(ConsoleColor.Black, ", "),
+                new TextAndColor(ConsoleColor.Cyan, "required"),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Yellow, "opt1"),
+                new TextAndColor(ConsoleColor.Black, " : Optional parameter 1 ("),
+                new TextAndColor(ConsoleColor.Green, "number"),
+                new TextAndColor(ConsoleColor.Black, ", default="),
+                new TextAndColor(ConsoleColor.Yellow, "256"),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Yellow, "opt2"),
+                new TextAndColor(ConsoleColor.Black, " : Optional parameter 2 ("),
+                new TextAndColor(ConsoleColor.Green, "string"),
+                new TextAndColor(ConsoleColor.Black, ", default="),
+                new TextAndColor(ConsoleColor.Yellow, "all"),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Yellow, "opt3"),
+                new TextAndColor(ConsoleColor.Black, " : Optional parameter 2 ("),
+                new TextAndColor(ConsoleColor.Green, "list"),
+                new TextAndColor(ConsoleColor.Black, ", default="),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Yellow, "opt4"),
+                new TextAndColor(ConsoleColor.Black, " : Optional parameter 4 ("),
+                new TextAndColor(ConsoleColor.Green, "char"),
+                new TextAndColor(ConsoleColor.Black, ", default="),
+                new TextAndColor(ConsoleColor.Yellow, "z"),
+                new TextAndColor(ConsoleColor.Black, ")")
+              );
+        }
+
+        [Fact]
+        public void DetailedHelpViaApi1()
+        {
+            TestWriter _printer = new TestWriter();
+            Helpers.DisplayHelp<Options1>(HelpFormat.Full, _printer);
 
             Validate(_printer,
                 new TextAndColor(ConsoleColor.Black, "Usage: "),
@@ -435,6 +532,13 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, ")")
             );
         }
+
+        [Fact]
+        public void InvalidHelpFormat()
+        {
+            Assert.Throws<ArgumentException>(() => Parser.DisplayHelp<Options1>((HelpFormat)4));
+        }
+
 
         [Fact]
         public void HelpForTypeWithRequiredAndOptionalEnumsAndLists()
