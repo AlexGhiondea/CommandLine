@@ -16,8 +16,8 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
-        // this is relative based on the CommandLine project
-        private const string PathToCommandLineAssemblyToReference = @"..\..\..\..\..\bin\Debug\netstandard1.5\CommandLine.dll";
+        // this is relative based on the CommandLine project. We are using Path.Combine for X-Plat support
+        private static string PathToCommandLineAssemblyToReference = Path.Combine("..","..","..","..","..","bin","Debug","netstandard1.5","CommandLine.dll");
 
         private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
         private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
