@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>CommandLine.Net</id>
+    <version>1.4.0</version>
+    <authors>Alex Ghiondea</authors>
+    <owners>Alex Ghiondea</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.githubusercontent.com/AlexGhiondea/CommandLine/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/AlexGhiondea/CommandLine</projectUrl>
+    <description>Parse command line arguments into user defined objects</description>
+    <copyright>Alex Ghiondea (c) 2017</copyright>
+    <tags>CommandLine, Command line, Command, Line, parser, objects, custom</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="OutputColorizer" version="1.1.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard1.5">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+        <dependency id="OutputColorizer" version="1.1.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\bin\Release\net45\CommandLine.dll" target="lib\net45\CommandLine.dll" />
+    <file src="..\bin\Release\netstandard1.5\CommandLine.dll" target="lib\netstandard1.5\CommandLine.dll" />
+
+    <!-- Analyzer files -->
+    <file src="..\bin\Release\analyzer\netstandard1.3\CommandLine.Analyzer.dll" target="analyzers\dotnet\cs\CommandLine.Analyzer.dll" />
+    
+    <file src="..\analyzer\CommandLine.Analyzer\tools\install.ps1" target="tools\install.ps1" />
+    <file src="..\analyzer\CommandLine.Analyzer\tools\uninstall.ps1" target="tools\uninstall.ps1" />
+  </files>
+</package>
