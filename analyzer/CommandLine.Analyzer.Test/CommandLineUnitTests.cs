@@ -315,6 +315,90 @@ class Options
             VerifyCommandLineDiagnostic(test, expected);
         }
 
+        [TestMethod]
+        public void InvalidCode1()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+class Options
+{
+    [Action    
+    public string Action1 { get; set; }
+
+    [ActionArgument]
+    public string Action2 { get; set; }
+
+    [ArgumentGroup(""test"")]
+    [OptionalArgument(""1"", ""dir"", ""Directory2"")]
+    public string Directory { get; set; }
+
+}";
+
+            VerifyCommandLineDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void InvalidCode2()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+class Options
+{
+    []
+    public string Action1 { get; set; }
+
+    [ActionArgument]
+    public string Action2 { get; set; }
+
+    [ArgumentGroup(""test"")]
+    [OptionalArgument(""1"", ""dir"", ""Directory2"")]
+    public string Directory { get; set; }
+
+}";
+
+            VerifyCommandLineDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void InvalidCode3()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+class Options
+{
+    []
+    public string Action1
+
+    [ActionArgument]
+    public string Action2 { get; set; }
+
+    [ArgumentGroup(""test"")]
+    [OptionalArgument(""1"", ""dir"", ""Directory2"")]
+    public string Directory { get; set; }
+
+}";
+
+            VerifyCommandLineDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void InvalidCode4()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+class Options
+{
+    [OptionalArgument(""1"", ""dir"")]
+    public string Directory { get; set; }
+
+}";
+
+            VerifyCommandLineDiagnostic(test);
+        }
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new CommandLineAnalyzer();
