@@ -48,10 +48,14 @@ namespace CommandLine.Analyzer
             // setup the groups available based on the actionArg
             if (actionArg == null)
             {
+                // If we don't have an Action attribute, we are going to use the empty string
+                // to represent a single common group for all the properties.
                 mapGroupAndProps.Add("", new List<Argument>());
             }
             else
             {
+                // If the action attribute has been set (and we could find all the possible values)
+                // then add those as the group values.
                 foreach (var grp in actionArg.Values)
                 {
                     mapGroupAndProps.Add(grp, new List<Argument>());
@@ -61,15 +65,24 @@ namespace CommandLine.Analyzer
             // traverse the properties again and add them to the groups as needed.
             foreach (var member in typeMembers)
             {
+                // Make sure that we are only looking at properties.
+                if (!(member is IPropertySymbol))
+                {
+                    continue;
+                }
+
                 var attributes = member.GetAttributes();
                 if (!attributes.Any())
                 {
+                    // nothing to do if we don't have any attributes.
                     continue;
                 }
 
                 // we should skip over the action argument.
                 if (actionArg != null && actionArg.Symbol == member)
+                {
                     continue;
+                }
 
                 Argument arg = null;
                 List<string> argGroup = new List<string>();
@@ -78,48 +91,52 @@ namespace CommandLine.Analyzer
 
                 foreach (var attribute in attributes)
                 {
+                    // Do a quick check to make sure the attribute we are looking at is coming from the CommandLine assembly
                     if (!StringComparer.OrdinalIgnoreCase.Equals("CommandLine", attribute.AttributeClass.ContainingAssembly.Name))
                     {
                         continue;
                     }
 
-                    if (attribute.AttributeClass.Name == "RequiredArgumentAttribute" && attribute.ConstructorArguments.Length >= 3)
+                    if (attribute.ConstructorArguments.Length >= 3)
                     {
-                        RequiredArgument ra = new RequiredArgument();
-                        ra.Position = (int)attribute.ConstructorArguments[0].Value; // position
-
-                        ra.Name = attribute.ConstructorArguments[1].Value as string;
-                        ra.Description = attribute.ConstructorArguments[2].Value as string;
-                        if (attribute.ConstructorArguments.Length == 4)
+                        if (attribute.AttributeClass.Name == "RequiredArgumentAttribute")
                         {
-                            ra.IsCollection = (bool)attribute.ConstructorArguments[3].Value;
-                        }
+                            RequiredArgument ra = new RequiredArgument();
+                            ra.Position = (int)attribute.ConstructorArguments[0].Value; // position
 
-                        if (arg != null)
-                        {
-                            // can't have a property be both optional and required
-                            context.ReportDiagnostic(Diagnostic.Create(ConflictingPropertyDeclarationRule, member.Locations.First()));
-                        }
+                            ra.Name = attribute.ConstructorArguments[1].Value as string;
+                            ra.Description = attribute.ConstructorArguments[2].Value as string;
+                            if (attribute.ConstructorArguments.Length == 4)
+                            {
+                                ra.IsCollection = (bool)attribute.ConstructorArguments[3].Value;
+                            }
 
-                        arg = ra;
-                    }
-                    else if (attribute.AttributeClass.Name == "OptionalArgumentAttribute" && attribute.ConstructorArguments.Length >= 3)
-                    {
-                        OptionalArgument oa = new OptionalArgument();
-                        oa.DefaultValue = attribute.ConstructorArguments[0].Value; // default value
-                        oa.Name = attribute.ConstructorArguments[1].Value as string;
-                        oa.Description = attribute.ConstructorArguments[2].Value as string;
-                        if (attribute.ConstructorArguments.Length == 4)
-                        {
-                            oa.IsCollection = (bool)attribute.ConstructorArguments[3].Value;
-                        }
+                            if (arg != null)
+                            {
+                                // can't have a property be both optional and required
+                                context.ReportDiagnostic(Diagnostic.Create(ConflictingPropertyDeclarationRule, member.Locations.First()));
+                            }
 
-                        if (arg != null)
-                        {
-                            // can't have a property be both optional and required
-                            context.ReportDiagnostic(Diagnostic.Create(ConflictingPropertyDeclarationRule, member.Locations.First()));
+                            arg = ra;
                         }
-                        arg = oa;
+                        else if (attribute.AttributeClass.Name == "OptionalArgumentAttribute")
+                        {
+                            OptionalArgument oa = new OptionalArgument();
+                            oa.DefaultValue = attribute.ConstructorArguments[0].Value; // default value
+                            oa.Name = attribute.ConstructorArguments[1].Value as string;
+                            oa.Description = attribute.ConstructorArguments[2].Value as string;
+                            if (attribute.ConstructorArguments.Length == 4)
+                            {
+                                oa.IsCollection = (bool)attribute.ConstructorArguments[3].Value;
+                            }
+
+                            if (arg != null)
+                            {
+                                // can't have a property be both optional and required
+                                context.ReportDiagnostic(Diagnostic.Create(ConflictingPropertyDeclarationRule, member.Locations.First()));
+                            }
+                            arg = oa;
+                        }
                     }
 
                     if (attribute.AttributeClass.Name == "CommonArgumentAttribute")
@@ -177,7 +194,7 @@ namespace CommandLine.Analyzer
                                 args = new List<Argument>();
                                 mapGroupAndProps[item] = args;
                             }
-                            
+
                             args.Add(arg);
                         }
                     }
@@ -197,6 +214,12 @@ namespace CommandLine.Analyzer
             ActionArgument aa = null;
             foreach (var member in typeMembers)
             {
+                // Make sure that we are only looking at properties.
+                if (!(member is IPropertySymbol))
+                {
+                    continue;
+                }
+
                 var attributes = member.GetAttributes();
                 if (!attributes.Any())
                 {
@@ -205,7 +228,8 @@ namespace CommandLine.Analyzer
 
                 foreach (var attribute in attributes)
                 {
-                    if (attribute.AttributeClass.Name == "ActionArgumentAttribute")
+                    if (attribute.AttributeClass.Name == "ActionArgumentAttribute" &&
+                        StringComparer.OrdinalIgnoreCase.Equals("CommandLine", attribute.AttributeClass.ContainingAssembly.Name))
                     {
                         if (aa != null)
                         {
@@ -216,11 +240,6 @@ namespace CommandLine.Analyzer
                         aa.Symbol = member;
 
                         var memberAsProperty = member as IPropertySymbol;
-                        if (memberAsProperty == null)
-                        {
-                            // we don't have a type just yet.
-                            continue;
-                        }
 
                         if (memberAsProperty.Type.BaseType?.SpecialType == SpecialType.System_Enum)
                         {
