@@ -251,3 +251,11 @@ paket-files/
 .idea/
 *.sln.iml
 Tools/*
+src/CommandLine/.DS_Store
+.DS_Store
+.vscode/tasks.json
+analyzer/.DS_Store
+analyzer/.vscode/launch.json
+analyzer/.vscode/tasks.json
+analyzer/CommandLine.Analyzer.Test/.DS_Store
+src/.DS_Store
