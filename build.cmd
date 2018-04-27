@@ -53,7 +53,7 @@ if not "%_config%" == "Release" (
 echo ------------------------------
 echo !!! Creating NuGet package !!!
 echo ------------------------------
-dotnet pack --no-build -c %_config% %_codeProject%
+dotnet pack --no-build -c %_config% %_codeProject% -o ..\bin\package
 
 endlocal
 @echo on
