@@ -2,6 +2,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -80,6 +81,9 @@ namespace TestHelper
                 Assert.IsTrue(false,
                     string.Format("Mismatch between number of diagnostics returned, expected \"{0}\" actual \"{1}\"\r\n\r\nDiagnostics:\r\n{2}\r\n", expectedCount, actualCount, diagnosticsOutput));
             }
+
+            expectedResults = expectedResults.OrderBy(x => x.Id).ToArray();
+            actualResults = actualResults.OrderBy(x => x.Id);
 
             for (int i = 0; i < expectedResults.Length; i++)
             {
