@@ -80,18 +80,29 @@ class Options
     public string Directory2 { get; set; }
 }";
 
-            var expected = new DiagnosticResult
+            var expected1 = new DiagnosticResult
             {
                 Id = "CMDNET01",
                 Message = "The class defines two required properties on the same position ('0').",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
-                            new DiagnosticResultLocation("Test0.cs", 9, 19)
+                            new DiagnosticResultLocation("Test0.cs", 6, 19)
                         }
             };
 
-            VerifyCommandLineDiagnostic(test, expected);
+            var expected2 = new DiagnosticResult
+            {
+                Id = "CMDNET07",
+                Message = "Required argument at position '1' could not be found.",
+                Severity = DiagnosticSeverity.Error,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 3, 7)
+                        }
+            };
+
+            VerifyCommandLineDiagnostic(test, expected2, expected1);
         }
 
         [TestMethod]
@@ -311,6 +322,31 @@ class Options
                 }
             }
             ;
+
+            VerifyCommandLineDiagnostic(test, expected);
+        }
+
+        [TestMethod]
+        public void RequiredPropertyNotStartingAtZero()
+        {
+            var test = @"
+using CommandLine.Attributes;
+class Options
+{
+    [RequiredArgument(1, ""dir"", ""Directory"")]
+    public string Directory { get; set; }
+}";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "CMDNET07",
+                Message = "Required argument at position '0' could not be found.",
+                Severity = DiagnosticSeverity.Error,
+                Locations =
+                    new[] {
+                            new DiagnosticResultLocation("Test0.cs", 3, 7)
+                        }
+            };
 
             VerifyCommandLineDiagnostic(test, expected);
         }
