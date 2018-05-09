@@ -319,7 +319,7 @@ namespace CommandLine.Analyzer
                 {
                     // at this point, we could not find the required positional argument 'i'
                     // we should give the error at the type level.
-                    context.ReportDiagnostic(Diagnostic.Create(RequiredPositionalArgumentNotFound, args.First().Symbol.ContainingType.Locations.First(), checkedPositions));
+                    context.ReportDiagnostic(Diagnostic.Create(RequiredPositionalArgumentNotFound, args.First().Symbol.ContainingType.Locations.First(), numberOfPositionalArgs, checkedPositions));
                     break;
                 }
             }

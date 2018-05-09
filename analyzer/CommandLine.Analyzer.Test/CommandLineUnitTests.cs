@@ -45,6 +45,9 @@ class Options
         {
             var test = @"
 using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+
+internal enum CommandLineActionGroup { add, remove }
 internal class CommandLineOptions
 {
     [ActionArgument]
@@ -87,14 +90,14 @@ class Options
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
-                            new DiagnosticResultLocation("Test0.cs", 6, 19)
+                            new DiagnosticResultLocation("Test0.cs", 9, 19)
                         }
             };
 
             var expected2 = new DiagnosticResult
             {
                 Id = "CMDNET07",
-                Message = "Required argument at position '1' could not be found.",
+                Message = "The type declares '2' properties as required. The property positions are 0-based. Could not find required argument at position '1'.",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
@@ -327,7 +330,7 @@ class Options
         }
 
         [TestMethod]
-        public void RequiredPropertyNotStartingAtZero()
+        public void RequiredPropertyNotStartingAtPositionZero()
         {
             var test = @"
 using CommandLine.Attributes;
@@ -340,12 +343,157 @@ class Options
             var expected = new DiagnosticResult
             {
                 Id = "CMDNET07",
-                Message = "Required argument at position '0' could not be found.",
+                Message = "The type declares '1' properties as required. The property positions are 0-based. Could not find required argument at position '0'.",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                     new[] {
                             new DiagnosticResultLocation("Test0.cs", 3, 7)
                         }
+            };
+
+            VerifyCommandLineDiagnostic(test, expected);
+        }
+
+        [TestMethod]
+        public void PropertiesWithMultipledPositionalRequiredArgsInGroups()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+
+internal enum CommandLineActionGroup { add, remove }
+internal class CommandLineOptions
+{
+    [ActionArgument]
+    public CommandLineActionGroup Action { get; set; }
+
+    [CommonArgument]
+    [RequiredArgumentAttribute(0, ""host"", ""The name of the host"")]
+    public string Host { get; set; }
+
+    #region Add-host Action
+    [RequiredArgument(1, ""mac1"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.add))]
+    public string MAC { get; set; }
+
+    [RequiredArgument(2, ""mac2"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.add))]
+    public string MAC2 { get; set; }
+
+    [RequiredArgument(3, ""mac3"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.add))]
+    public string MAC3 { get; set; }
+    #endregion
+
+    #region remove-host Action
+    [RequiredArgument(1, ""mac1"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.remove))]
+    public string MAC_r { get; set; }
+
+    [RequiredArgument(2, ""mac2"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.remove))]
+    public string MAC2_r { get; set; }
+
+    [RequiredArgument(3, ""mac3"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.remove))]
+    public string MAC3_r { get; set; }
+    #endregion
+}
+    ";
+
+            VerifyCommandLineDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void PropertiesWithMultipledPositionalRequiredArgsInGroups2()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+
+internal enum CommandLineActionGroup { add, remove }
+internal class CommandLineOptions
+{
+    [ActionArgument]
+    public CommandLineActionGroup Action { get; set; }
+
+    [CommonArgument]
+    [RequiredArgumentAttribute(0, ""host"", ""The name of the host"")]
+    public string Host { get; set; }
+
+    [CommonArgument]
+    [RequiredArgumentAttribute(2, ""host2"", ""The name of the host"")]
+    public string Host2 { get; set; }
+
+    #region Add-host Action
+    [RequiredArgument(1, ""mac1"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.add))]
+    public string MAC { get; set; }
+    #endregion
+
+    #region remove-host Action
+    [RequiredArgument(1, ""mac1"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.remove))]
+    public string MAC_r { get; set; }
+    #endregion
+}
+    ";
+
+            VerifyCommandLineDiagnostic(test);
+        }
+
+        [TestMethod]
+        public void InvalidPropertiesWithMultipledPositionalRequiredArgsInGroups()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+
+internal enum CommandLineActionGroup { add, remove }
+internal class CommandLineOptions
+{
+    [ActionArgument]
+    public CommandLineActionGroup Action { get; set; }
+
+    [CommonArgument]
+    [RequiredArgumentAttribute(0, ""host"", ""The name of the host"")]
+    public string Host { get; set; }
+
+    #region Add-host Action
+    [RequiredArgument(1, ""mac1"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.add))]
+    public string MAC { get; set; }
+
+    [RequiredArgument(2, ""mac2"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.add))]
+    public string MAC2 { get; set; }
+
+    [RequiredArgument(3, ""mac3"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.add))]
+    public string MAC3 { get; set; }
+    #endregion
+
+    #region remove-host Action
+    [RequiredArgument(1, ""mac1"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.remove))]
+    public string MAC_r { get; set; }
+
+    [RequiredArgument(3, ""mac2"", ""The MAC address of the host"")]
+    [ArgumentGroup(nameof(CommandLineActionGroup.remove))]
+    public string MAC2_r { get; set; }
+    #endregion
+}
+    ";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "CMDNET07",
+                Message = "The type declares '3' properties as required. The property positions are 0-based. Could not find required argument at position '2'.",
+                Severity = DiagnosticSeverity.Error,
+                Locations =
+                               new[] {
+                            new DiagnosticResultLocation("Test0.cs", 6, 16)
+                                   }
             };
 
             VerifyCommandLineDiagnostic(test, expected);

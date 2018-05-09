@@ -49,7 +49,7 @@ Info
             new DiagnosticDescriptor("CMDNET06", "Only one argument type is allowed per property", "The property cannot be both required and optional.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true);
 
         private static DiagnosticDescriptor RequiredPositionalArgumentNotFound =
-            new DiagnosticDescriptor("CMDNET07", "Required argument not found", "Required argument at position '{0}' could not be found.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true);
+            new DiagnosticDescriptor("CMDNET07", "Required argument not found", "The type declares '{0}' properties as required. The property positions are 0-based. Could not find required argument at position '{1}'.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true);
 
         #endregion
 
