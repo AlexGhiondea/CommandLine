@@ -273,6 +273,7 @@ namespace CommandLine.Analyzer
         {
             HashSet<string> namesOfAllArgs = new HashSet<string>();
             HashSet<int> positionsOrRequiredArgs = new HashSet<int>();
+            int numberOfPositionalArgs = 0;
             foreach (var item in args)
             {
                 if (item is OptionalArgument)
@@ -291,6 +292,7 @@ namespace CommandLine.Analyzer
                 else if (item is RequiredArgument)
                 {
                     RequiredArgument rag = item as RequiredArgument;
+                    numberOfPositionalArgs++;
 
                     // Validate that the same position is not used twice 
                     if (positionsOrRequiredArgs.Contains(rag.Position))
@@ -306,6 +308,19 @@ namespace CommandLine.Analyzer
 
                     namesOfAllArgs.Add(rag.Name);
                     positionsOrRequiredArgs.Add(rag.Position);
+                }
+            }
+
+            int checkedPositions = 0;
+            //validate that the positional arguments are in a continuous sequence, starting at 0
+            for (checkedPositions = 0; checkedPositions < numberOfPositionalArgs; checkedPositions++)
+            {
+                if (!positionsOrRequiredArgs.Contains(checkedPositions))
+                {
+                    // at this point, we could not find the required positional argument 'i'
+                    // we should give the error at the type level.
+                    context.ReportDiagnostic(Diagnostic.Create(RequiredPositionalArgumentNotFound, args.First().Symbol.ContainingType.Locations.First(), numberOfPositionalArgs, checkedPositions));
+                    break;
                 }
             }
         }
