@@ -1,6 +1,12 @@
 # CommandLine
 CommandLine parser 
 
+[![NuGet version](https://badge.fury.io/nu/CommandLine.Net.svg)](https://badge.fury.io/nu/CommandLine.Net)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/AlexGhiondea/CommandLine?branch=master&svg=true)](https://ci.appveyor.com/project/AlexGhiondea/CommandLine)
+[![codecov](https://codecov.io/gh/AlexGhiondea/CommandLine/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexGhiondea/CommandLine)
+[![MIT License](https://img.shields.io/github/license/AlexGhiondea/CommandLine.svg)](https://github.com/AlexGhiondea/CommandLine/blob/master/LICENSE)
+========
+
 ## Getting started
 
 Here is how you can define a class that can be used with the parser:
