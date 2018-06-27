@@ -1,0 +1,19 @@
+version: 1.5.{build}
+image: Visual Studio 2017
+pull_requests:
+  do_not_increment_build_number: true
+branches:
+  only:
+  - master
+configuration: Release
+before_build:
+- cmd: dotnet restore
+build_script:
+- cmd: build.cmd
+after_test:
+- choco install opencover.portable
+- choco install codecov
+- OpenCover.Console.exe -register:user -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test --framework net472 --verbosity q"
+- codecov -f "results.xml" 
+artifacts:
+- path: '**\*.nupkg'

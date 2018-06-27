@@ -1,0 +1,4 @@
+ignore:
+- "test/*"           # Ignore tests
+- "analyzer/*"           # Ignore analyzer
+- "**/*.Designer.cs"  # Ignore generated code
