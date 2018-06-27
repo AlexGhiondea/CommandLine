@@ -9,7 +9,7 @@ configuration: Release
 before_build:
 - cmd: dotnet restore
 build_script:
-- cmd: build.cmd
+- cmd: build.cmd Release
 after_test:
 - choco install opencover.portable
 - choco install codecov
