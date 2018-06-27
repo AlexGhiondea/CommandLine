@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Xunit;
 
@@ -59,7 +60,7 @@ namespace CommandLine.Tests
             Validate(_printer,
                 new TextAndColor(ConsoleColor.Black, "Usage: "),
                 new TextAndColor(ConsoleColor.Black, " "),
-                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.White, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(ConsoleColor.Black, " "),
                 new TextAndColor(ConsoleColor.Black, "[-"),
                 new TextAndColor(ConsoleColor.Yellow, "opt1"),
@@ -71,7 +72,7 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Yellow, "opt3"),
                 new TextAndColor(ConsoleColor.Black, " value] "),
                 new TextAndColor(ConsoleColor.Black, "For detailed information run '"),
-                new TextAndColor(ConsoleColor.White, "testhost --help"),
+                new TextAndColor(ConsoleColor.White, $"{Assembly.GetEntryAssembly()?.GetName()?.Name} --help"),
                 new TextAndColor(ConsoleColor.Black, "'.")
             );
         }
