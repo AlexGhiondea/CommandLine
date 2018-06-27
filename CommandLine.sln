@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine.Tests", "test\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine.Analyzer", "analyzer\CommandLine.Analyzer\CommandLine.Analyzer.csproj", "{6A9A32D3-0D85-41F1-9FBB-B63A34BCC67C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine.Analyzer.Test", "analyzer\CommandLine.Analyzer.Test\CommandLine.Analyzer.Test.csproj", "{DD7DD760-F8BE-4886-9003-6291E7557D17}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{2B7CA3C0-82A2-4147-BFD6-DADA614D1DB4}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
@@ -40,10 +38,6 @@ Global
 		{6A9A32D3-0D85-41F1-9FBB-B63A34BCC67C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A9A32D3-0D85-41F1-9FBB-B63A34BCC67C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A9A32D3-0D85-41F1-9FBB-B63A34BCC67C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD7DD760-F8BE-4886-9003-6291E7557D17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD7DD760-F8BE-4886-9003-6291E7557D17}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD7DD760-F8BE-4886-9003-6291E7557D17}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD7DD760-F8BE-4886-9003-6291E7557D17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
