@@ -11,7 +11,7 @@ namespace CommandLine.Tests
     {
         public static string GetTestLocation()
         {
-            return Path.GetDirectoryName(typeof(Helpers).GetTypeInfo().Assembly.Location);
+            return AppDomain.CurrentDomain.BaseDirectory;
         }
 
         public static T Parse<T>(string argString, IOutputWriter writer = null) where T : new()
