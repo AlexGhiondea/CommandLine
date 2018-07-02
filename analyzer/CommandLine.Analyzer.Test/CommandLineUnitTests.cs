@@ -583,6 +583,37 @@ class Options
 
             VerifyCommandLineDiagnostic(test);
         }
+
+        [TestMethod]
+        public void ArgumentWithNoArgs()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+
+namespace DotNetVersions.Console
+{
+    class Options
+    {
+        [ArgumentGroup(nameof(Action.search))]
+        [RequiredArgument(0, ""version"", ""The file version you are interested in"")]
+        public string Version { get; set; }
+
+        [ActionArgument]
+        public Action Action { get; set; }
+    }
+
+    enum Action
+    {
+        list,
+        search
+    }
+}
+
+";
+            VerifyCommandLineDiagnostic(test);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new CommandLineAnalyzer();
