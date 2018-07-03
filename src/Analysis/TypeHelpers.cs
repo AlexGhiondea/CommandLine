@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CommandLine.Analysis
 {
-    internal class TypeHelpers
+    internal static class TypeHelpers
     {
         public static bool IsEnum(Type type)
         {
