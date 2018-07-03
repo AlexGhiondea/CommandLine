@@ -16,8 +16,7 @@ namespace CommandLine
         public static TOptions Parse<TOptions>(string[] args)
             where TOptions : new()
         {
-            TOptions options = default(TOptions);
-            TryParse(args, out options);
+            TryParse(args, out TOptions options);
             return options;
         }
 
@@ -324,8 +323,6 @@ namespace CommandLine
                 {
                     break;
                 }
-
-                int paramPosition = currentLogicalPosition; // GetValue changes the current position
 
                 //make sure that we don't run out of array
                 if (offsetInArray + currentLogicalPosition >= args.Length)

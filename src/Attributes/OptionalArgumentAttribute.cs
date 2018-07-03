@@ -10,7 +10,7 @@ namespace CommandLine.Attributes
 
         public OptionalArgumentAttribute(object defaultValue, string name, string description, bool isCollection = false) : base(name, description, isCollection)
         {
-            if (isCollection == true && defaultValue != null)
+            if (isCollection && defaultValue != null)
                 throw new ArgumentException("Cannot provide default value for collection parameter");
 
             DefaultValue = defaultValue;

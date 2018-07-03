@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace CommandLine
 {
-    internal class HelpGenerator
+    internal static class HelpGenerator
     {
         public const string RequestShortHelpParameter = "-?";
         public const string RequestLongHelpParameter = "--help";
@@ -53,19 +53,6 @@ namespace CommandLine
                     break;
                 default:
                     throw new ArgumentException("Unrecognized help format", nameof(helpFormat));
-            }
-        }
-
-        private static void DisplayHelp(string helpFormat, TypeArgumentInfo arguments)
-        {
-            if (helpFormat == RequestShortHelpParameter || helpFormat == "/?")
-            {
-                DisplayShortHelp(arguments);
-
-            }
-            else if (helpFormat == RequestLongHelpParameter)
-            {
-                DisplayDetailedHelp(arguments);
             }
         }
 

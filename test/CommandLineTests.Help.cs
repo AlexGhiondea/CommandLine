@@ -218,6 +218,50 @@ namespace CommandLine.Tests
         }
 
         [Fact]
+        public void DetailedHelp2()
+        {
+            TestWriter _printer = new TestWriter();
+            var options = Helpers.Parse<Options3NoRequired>("--help", _printer);
+
+            Validate(_printer,
+                new TextAndColor(ConsoleColor.Black, "Usage: "),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt1"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt2"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt3"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Yellow, "opt1"),
+                new TextAndColor(ConsoleColor.Black, " : Optional parameter 1 ("),
+                new TextAndColor(ConsoleColor.Green, "number"),
+                new TextAndColor(ConsoleColor.Black, ", default="),
+                new TextAndColor(ConsoleColor.Yellow, "256"),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Yellow, "opt2"),
+                new TextAndColor(ConsoleColor.Black, " : Optional parameter 2 ("),
+                new TextAndColor(ConsoleColor.Green, "list"),
+                new TextAndColor(ConsoleColor.Black, ", default="),
+                new TextAndColor(ConsoleColor.Black, ")"),
+                new TextAndColor(ConsoleColor.Black, "  - "),
+                new TextAndColor(ConsoleColor.Yellow, "opt3"),
+                new TextAndColor(ConsoleColor.Black, " : Optional parameter 3 (one of "),
+                new TextAndColor(ConsoleColor.Green, "A,B"),
+                new TextAndColor(ConsoleColor.Black, ", default="),
+                new TextAndColor(ConsoleColor.Yellow, "B"),
+                new TextAndColor(ConsoleColor.Black, ")")
+                );
+        }
+
+
+        [Fact]
         public void DetailedHelpViaApi1()
         {
             TestWriter _printer = new TestWriter();
