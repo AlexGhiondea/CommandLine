@@ -36,8 +36,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\analyzer\CommandLine.Analyzer\bin\$(Configuration)\**\*.Analyzer.dll">
+    <None Include="..\analyzer\CommandLine.Analyzer\bin\$(Configuration)\netstandard1.3\**\*.Analyzer.dll">
       <PackagePath>analyzers/dotnet/cs</PackagePath>
+      <Pack>true</Pack>
+      <Visible>false</Visible>
+    </None>
+    <None Include="..\analyzer\CommandLine.Analyzer\bin\$(Configuration)\netstandard1.3\tools\*.ps1">
+      <PackagePath>tools</PackagePath>
       <Pack>true</Pack>
       <Visible>false</Visible>
     </None>
