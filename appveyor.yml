@@ -10,17 +10,18 @@ test:
   assemblies:
     only:
       - CommandLine.Tests.dll
+      - CommandLine.Analyzer.Test.dll
 
 configuration: Release
 before_build:
 - cmd: dotnet restore
 build_script:
 - cmd: build.cmd Release
+artifacts:
+- path: '**\*.nupkg'
 after_test:
 - choco install opencover.portable
 - choco install dotnetcore-sdk
 - choco install codecov
-- OpenCover.Console.exe -register:user -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:test -oldstyle
-- codecov -f "results.xml" 
-artifacts:
-- path: '**\*.nupkg'
+- OpenCover.Console.exe -register:user -target:"C:\Program Files\dotnet\dotnet.exe" -oldstyle -targetargs:"test -c Release test\CommandLine.Tests.csproj" -output:commandline.xml
+- codecov -f "commandline.xml"
