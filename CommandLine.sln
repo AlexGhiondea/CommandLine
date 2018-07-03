@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{2B7CA3C0-8
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
+		build-and-test.cmd = build-and-test.cmd
 		build.cmd = build.cmd
 		build.sh = build.sh
 		codecov.yml = codecov.yml
