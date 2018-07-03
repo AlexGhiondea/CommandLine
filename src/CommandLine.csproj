@@ -1,36 +1,52 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <!-- Import the NuSpec info about the package -->
-  <Import Project="..\pkg\nuspec.props" />
 
   <PropertyGroup>
-    <OutputType>library</OutputType>
-    <TargetFrameworks>netstandard1.5</TargetFrameworks>
-    <Version>1.4.0</Version>
-    <AssemblyVersion>1.4.0.0</AssemblyVersion>
-    <FileVersion>1.4.0.0</FileVersion>
+    <TargetFrameworks>netstandard1.5;</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net45;</TargetFrameworks>
+    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
 
-  <PropertyGroup Condition="Exists('c:\Windows')">
-      <TargetFrameworks>$(TargetFrameworks);net45</TargetFrameworks>
+  <PropertyGroup>
+    <Version>1.5.0-beta2</Version>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.5|AnyCPU'">
-    <OutputPath>..\bin\Debug\</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.5|AnyCPU'">
-    <OutputPath>..\bin\Release\</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net45|AnyCPU'">
-    <OutputPath>..\bin\Debug\</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
-    <OutputPath>..\bin\Release\</OutputPath>
+  <PropertyGroup>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Authors>Alex Ghiondea</Authors>
+    <Description>Parse command line arguments into user defined objects</Description>
+    <Copyright>Alex Ghiondea (c) 2017</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/AlexGhiondea/CommandLine/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/AlexGhiondea/CommandLine</PackageProjectUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>CommandLine, Command line, Command, Line, parser, objects, custom</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="OutputColorizer" Version="1.1.0" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net45'">
+    <ProjectReference Include="..\analyzer\CommandLine.Analyzer\CommandLine.Analyzer.csproj">
+      <ExcludeAssets>all</ExcludeAssets>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+
+  <!-- This is needed so that the VS build will produce a NuGet package -->
+  <ItemGroup>
+    <None Include="..\analyzer\CommandLine.Analyzer\bin\$(Configuration)\netstandard1.3\**\*.Analyzer.dll">
+      <PackagePath>analyzers/dotnet/cs</PackagePath>
+      <Pack>true</Pack>
+      <Visible>false</Visible>
+    </None>
+    <None Include="..\analyzer\CommandLine.Analyzer\bin\$(Configuration)\netstandard1.3\tools\*.ps1">
+      <PackagePath>tools</PackagePath>
+      <Pack>true</Pack>
+      <Visible>false</Visible>
+    </None>
+  </ItemGroup>
+
 </Project>

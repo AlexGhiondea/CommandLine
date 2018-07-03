@@ -7,40 +7,44 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine", "src\CommandL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine.Tests", "test\CommandLine.Tests.csproj", "{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine.Analyzer", "analyzer\CommandLine.Analyzer\CommandLine.Analyzer.csproj", "{6A9A32D3-0D85-41F1-9FBB-B63A34BCC67C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{2B7CA3C0-82A2-4147-BFD6-DADA614D1DB4}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		appveyor.yml = appveyor.yml
+		build-and-test.cmd = build-and-test.cmd
+		build.cmd = build.cmd
+		build.sh = build.sh
+		codecov.yml = codecov.yml
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine.Analyzer.Test", "analyzer\CommandLine.Analyzer.Test\CommandLine.Analyzer.Test.csproj", "{F1DBF2E1-BF62-4F6E-B01A-C796BD7629E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Debug|x64.Build.0 = Debug|Any CPU
-		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Debug|x86.Build.0 = Debug|Any CPU
 		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Release|Any CPU.Build.0 = Release|Any CPU
-		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Release|x64.ActiveCfg = Release|Any CPU
-		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Release|x64.Build.0 = Release|Any CPU
-		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Release|x86.ActiveCfg = Release|Any CPU
-		{45D20C96-4630-49E9-AFEA-C72CBA265E29}.Release|x86.Build.0 = Release|Any CPU
 		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Debug|x64.Build.0 = Debug|Any CPU
-		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Debug|x86.Build.0 = Debug|Any CPU
 		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Release|x64.ActiveCfg = Release|Any CPU
-		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Release|x64.Build.0 = Release|Any CPU
-		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Release|x86.ActiveCfg = Release|Any CPU
-		{73F500CB-9E72-42FA-BFCA-1E2FC0FBB9A9}.Release|x86.Build.0 = Release|Any CPU
+		{6A9A32D3-0D85-41F1-9FBB-B63A34BCC67C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A9A32D3-0D85-41F1-9FBB-B63A34BCC67C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A9A32D3-0D85-41F1-9FBB-B63A34BCC67C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A9A32D3-0D85-41F1-9FBB-B63A34BCC67C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1DBF2E1-BF62-4F6E-B01A-C796BD7629E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DBF2E1-BF62-4F6E-B01A-C796BD7629E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DBF2E1-BF62-4F6E-B01A-C796BD7629E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DBF2E1-BF62-4F6E-B01A-C796BD7629E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
