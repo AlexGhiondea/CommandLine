@@ -1,3 +1,4 @@
+using CommandLine;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -17,7 +18,7 @@ namespace TestHelper
     public abstract partial class DiagnosticVerifier
     {
         // this is relative based on the CommandLine project. We are using Path.Combine for X-Plat support
-        private static string PathToCommandLineAssemblyToReference = Path.Combine("..","..","..","..","..","bin","Debug","netstandard1.5","CommandLine.dll");
+        private static readonly MetadataReference PathToCommandLineAssemblyToReference = MetadataReference.CreateFromFile(typeof(Parser).Assembly.Location); //Path.Combine("..","..","..","..","..","bin","Debug","netstandard1.5","CommandLine.dll");
 
         private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
         private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
@@ -162,7 +163,7 @@ namespace TestHelper
                 .AddMetadataReference(projectId, CSharpSymbolsReference)
                 .AddMetadataReference(projectId, CodeAnalysisReference)
                 .AddMetadataReferences(projectId, refs)
-                .AddMetadataReference(projectId, MetadataReference.CreateFromFile(PathToCommandLineAssemblyToReference));
+                .AddMetadataReference(projectId, PathToCommandLineAssemblyToReference);
                 //.AddMetadataReference(projectId, MetadataReference.CreateFromFile(@"D:\code\github\alexghiondea\OutputColorizer\bin\Debug\netstandard1.3\OutputColorizer.dll"));
                 
 
