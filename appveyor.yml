@@ -1,10 +1,16 @@
-version: 1.5.{build}
+version: 1.5.0.{build}
 image: Visual Studio 2017
 pull_requests:
   do_not_increment_build_number: true
 branches:
   only:
   - master
+test:
+  # only assemblies to test
+  assemblies:
+    only:
+      - CommandLine.Tests.dll
+
 configuration: Release
 before_build:
 - cmd: dotnet restore
@@ -12,8 +18,9 @@ build_script:
 - cmd: build.cmd Release
 after_test:
 - choco install opencover.portable
+- choco install dotnetcore-sdk
 - choco install codecov
-- OpenCover.Console.exe -register:user -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test --framework net462 --verbosity q"
+- OpenCover.Console.exe -register:user -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:test -oldstyle
 - codecov -f "results.xml" 
 artifacts:
 - path: '**\*.nupkg'
