@@ -12,7 +12,7 @@ namespace CommandLine.Tests
         [Fact]
         public void GroupsTest1_WithResponseFile()
         {
-            string responseFile = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles","response1.rsp"));
+            string responseFile = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles", "response1.rsp"));
 
             var options = Helpers.Parse<Groups1>($"@{responseFile}");
 
@@ -23,8 +23,8 @@ namespace CommandLine.Tests
         [Fact]
         public void BasicTest5_WithResponseFile()
         {
-            string responseFile1 = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles","response2_1.rsp"));
-            string responseFile2 = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles","response2_2.rsp"));
+            string responseFile1 = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles", "response2_1.rsp"));
+            string responseFile2 = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles", "response2_2.rsp"));
 
             var options = Helpers.Parse<Options1>($"@{responseFile1} @{responseFile2}");
 
@@ -38,8 +38,8 @@ namespace CommandLine.Tests
         [Fact]
         public void BasicTest7_WithResponseFile()
         {
-            string responseFile1 = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles","response3_1.rsp"));
-            string responseFile2 = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles","response3_2.rsp"));
+            string responseFile1 = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles", "response3_1.rsp"));
+            string responseFile2 = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles", "response3_2.rsp"));
 
             var options = Helpers.Parse<Options2>($"@{responseFile1} -opt2 a b c @{responseFile2}");
 
@@ -52,7 +52,7 @@ namespace CommandLine.Tests
         [Fact]
         public void HelpTest1_WithResponseFile()
         {
-            string responseFile = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles","response4.rsp"));
+            string responseFile = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles", "response4.rsp"));
 
             TestWriter _printer = new TestWriter();
             var options = Helpers.Parse<Options3NoRequired>($"@{responseFile}", _printer);
@@ -80,7 +80,7 @@ namespace CommandLine.Tests
         [Fact]
         public void ResponseFileEscaping()
         {
-            string responseFile = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles","response5.rsp"));
+            string responseFile = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles", "response5.rsp"));
 
             var options = Helpers.Parse<Options2>($"@{responseFile}");
 
@@ -88,6 +88,14 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.p2, "this is d", "very", "interesting to see");
             Assert.Equal(10, options.opt1);
             Helpers.CollectionEquals(options.opt2, "a", "b", "c\t d");
+        }
+
+        [Fact]
+        public void NotFoundResponseFile()
+        {
+           var options = Helpers.Parse<Options2>("@doesNotExist");
+
+            Assert.Null(options);
         }
     }
 }
