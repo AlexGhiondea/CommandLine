@@ -109,5 +109,12 @@ namespace CommandLine.Tests
             var options = Helpers.Parse<RequiredNegative_InvalidPositionForRequiredArg>("");
             Assert.Null(options);
         }
+
+        [Fact]
+        public void HelpForInvalidType()
+        {
+            var options = Helpers.Parse<object>("");
+            Assert.Null(options);
+        }
     }
 }
