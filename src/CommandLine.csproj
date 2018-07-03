@@ -35,6 +35,7 @@
     </ProjectReference>
   </ItemGroup>
 
+  <!-- This is needed so that the VS build will produce a NuGet package -->
   <ItemGroup>
     <None Include="..\analyzer\CommandLine.Analyzer\bin\$(Configuration)\netstandard1.3\**\*.Analyzer.dll">
       <PackagePath>analyzers/dotnet/cs</PackagePath>
