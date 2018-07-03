@@ -15,7 +15,7 @@ echo !!! Restoring packages !!!
 echo --------------------------
 dotnet restore
 
-call build.cmd
+call build.cmd %_config%
 
 echo ---------------------
 echo !!! Running tests !!!
