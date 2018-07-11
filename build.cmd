@@ -6,6 +6,11 @@ if not defined _config (
   set _config=Debug
 )
 
+echo --------------------------
+echo !!! Restoring packages !!!
+echo --------------------------
+dotnet restore
+
 echo -------------------------
 echo !!! Cleaning solution !!!
 echo -------------------------
@@ -15,6 +20,12 @@ echo -------------------------
 echo !!! Building solution !!!
 echo -------------------------
 dotnet build -c %_config%
+
+echo ---------------------
+echo !!! Running tests !!!
+echo ---------------------
+dotnet test --no-build -c %_config% test\CommandLine.tests.csproj
+dotnet test --no-build -c %_config% analyzer\CommandLine.Analyzer.Test\CommandLine.Analyzer.Test.csproj
 
 if not "%_config%" == "Release" (
 	echo =======================================================

@@ -21,7 +21,7 @@ artifacts:
 - path: '**\*.nupkg'
 after_test:
 - choco install opencover.portable
-- choco install dotnetcore-sdk
+- choco install dotnetcore-sdk --version 2.1.300 --force
 - choco install codecov
 - OpenCover.Console.exe -register:user -target:"C:\Program Files\dotnet\dotnet.exe" -oldstyle -targetargs:"test -c Release test\CommandLine.Tests.csproj" -output:commandline.xml
 - codecov -f "commandline.xml"
