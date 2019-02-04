@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.5;</TargetFrameworks>
-    <!--<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net45;</TargetFrameworks>-->
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net45;</TargetFrameworks>
     <DebugType>full</DebugType>
   </PropertyGroup>
 
