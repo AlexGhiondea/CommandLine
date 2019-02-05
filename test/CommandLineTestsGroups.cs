@@ -63,5 +63,21 @@ namespace CommandLine.Tests
 
             Assert.Null(options);
         }
+
+        [Fact]
+        public void GroupsTest6()
+        {
+            var options = Helpers.Parse<OverridePositionGroup2>("Create Repo1 MileStoneFile");
+           
+            Assert.Equal(Action.Create, options.Action);
+            Assert.Equal("MileStoneFile", options.MilestoneFile);
+            Assert.Equal("Repo1", options.Repository);
+
+            options = Helpers.Parse<OverridePositionGroup2>("List MileStoneFile Repo1");
+
+            Assert.Equal(Action.List, options.Action);
+            Assert.Equal("MileStoneFile", options.MilestoneFile);
+            Assert.Equal("Repo1", options.Repository);
+        }
     }
 }
