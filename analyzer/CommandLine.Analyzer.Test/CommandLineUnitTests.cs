@@ -500,6 +500,43 @@ internal class CommandLineOptions
         }
 
         [TestMethod]
+        public void RedirectRequiredArg()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+
+    internal class CmdLineArgs
+    {
+        [ActionArgument]
+        public Action Action { get; set; }
+
+        [ArgumentGroup(nameof(Action.Create))]
+        [RequiredArgument(0, ""milestoneInputFile"", ""The file containing the list of milestones to create."")]
+        public string MilestoneFile { get; set; }
+
+        [ArgumentGroup(nameof(Action.List), overrideRequiredPosition: 0)]
+        [ArgumentGroup(nameof(Action.Create))]
+        [RequiredArgument(1, ""repos"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
+        public List<string> Repositories { get; set; }
+
+        [ArgumentGroup(nameof(Action.List)1)]
+        [RequiredArgument(1, ""repos2"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
+        public List<string> Repositories2 { get; set; }
+    }
+
+    public enum Action
+    {
+        Create,
+        List
+    }
+
+";
+
+            VerifyCommandLineDiagnostic(test);
+        }
+
+        [TestMethod]
         public void InvalidCode1()
         {
             var test = @"
