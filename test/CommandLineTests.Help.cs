@@ -584,7 +584,6 @@ namespace CommandLine.Tests
             Assert.Throws<ArgumentException>(() => Parser.DisplayHelp<Options1>((HelpFormat)4));
         }
 
-
         [Fact]
         public void HelpForTypeWithRequiredAndOptionalEnumsAndLists()
         {

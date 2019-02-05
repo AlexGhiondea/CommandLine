@@ -8,9 +8,18 @@ namespace CommandLine.Attributes.Advanced
     {
         public string Name { get; private set; }
 
-        public ArgumentGroupAttribute(string name)
+        public int OverrideRequiredPosition { get; private set; }
+
+        public ArgumentGroupAttribute(string name) 
+            : this(name, -1)
         {
             Name = name;
+        }
+
+        public ArgumentGroupAttribute(string name, int overrideRequiredPosition)
+        {
+            Name = name;
+            OverrideRequiredPosition = overrideRequiredPosition;
         }
     }
 }
