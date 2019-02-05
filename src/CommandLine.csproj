@@ -18,6 +18,8 @@
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <Authors>Alex Ghiondea</Authors>
     <Description>Parse command line arguments into user defined objects</Description>
+    <releaseNotes>Improved the analyzer to help catch even more common issues that people can run into while using this analyzer. 
+    It also adds the ability to override the position for required attributes when using groups.</releaseNotes>
     <Copyright>Alex Ghiondea (c) 2019</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/AlexGhiondea/CommandLine/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/AlexGhiondea/CommandLine</PackageProjectUrl>
