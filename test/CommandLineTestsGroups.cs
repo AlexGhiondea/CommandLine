@@ -35,5 +35,49 @@ namespace CommandLine.Tests
             Assert.Equal(200, options.opt2);
         }
 
+        [Fact]
+        public void GroupsTest4()
+        {
+            var options = Helpers.Parse<OverridePositionGroup>("Create MileStoneFile Repo1 Repo2");
+
+            Assert.Equal(Action.Create, options.Action);
+            Assert.Equal("MileStoneFile", options.MilestoneFile);
+            Assert.Equal(2, options.Repositories.Count);
+            Assert.Equal("Repo1", options.Repositories[0]);
+            Assert.Equal("Repo2", options.Repositories[1]);
+
+            options = Helpers.Parse<OverridePositionGroup>("List Repo1 Repo2");
+
+            Assert.NotNull(options);
+            Assert.Equal(Action.List, options.Action);
+            Assert.Equal(2, options.Repositories.Count);
+            Assert.Equal("Repo1", options.Repositories[0]);
+            Assert.Equal("Repo2", options.Repositories[1]);
+        }
+
+        [Fact]
+        public void GroupsTest5()
+        {
+            // this should not return a good parsed object
+            var options = Helpers.Parse<OverridePositionGroup_Conflict>("List MileStoneFile Repo1 Repo2");
+
+            Assert.Null(options);
+        }
+
+        [Fact]
+        public void GroupsTest6()
+        {
+            var options = Helpers.Parse<OverridePositionGroup2>("Create Repo1 MileStoneFile");
+           
+            Assert.Equal(Action.Create, options.Action);
+            Assert.Equal("MileStoneFile", options.MilestoneFile);
+            Assert.Equal("Repo1", options.Repository);
+
+            options = Helpers.Parse<OverridePositionGroup2>("List MileStoneFile Repo1");
+
+            Assert.Equal(Action.List, options.Action);
+            Assert.Equal("MileStoneFile", options.MilestoneFile);
+            Assert.Equal("Repo1", options.Repository);
+        }
     }
 }

@@ -74,12 +74,18 @@ namespace CommandLine.Analysis
                 {
                     foreach (ArgumentGroupInfo grpPropInfo in groupsWhereThePropertyIsParticipating)
                     {
-                        if (grpPropInfo.RequiredArguments.ContainsKey((int)baseAttrib.GetArgumentId()))
+                        // do we have an override for this property? If we do, use that, otherwise use the regular one.
+                        if (!grpPropInfo.OverridePositions.TryGetValue(property, out int requiredPositionIndex))
+                        {
+                            requiredPositionIndex = (int)baseAttrib.GetArgumentId();
+                        }
+
+                        if (grpPropInfo.RequiredArguments.ContainsKey(requiredPositionIndex))
                         {
                             throw new ArgumentException("Two required arguments share the same position!!");
                         }
 
-                        grpPropInfo.RequiredArguments[(int)baseAttrib.GetArgumentId()] = property;
+                        grpPropInfo.RequiredArguments[requiredPositionIndex] = property;
                     }
                 }
                 else if (baseAttrib is OptionalArgumentAttribute)
@@ -127,13 +133,13 @@ namespace CommandLine.Analysis
                 // there are 2 types of arguments in a group:
                 //  - common ones, flagged with the CommonArgumentAttribute
                 //  - specific to each command group, flagged with ArgumentGroupAttribute
-                groupsForThisProperty.AddRange(GetArgumentInfoForGroups(tInfo, customAttributes));
+                groupsForThisProperty.AddRange(GetArgumentInfoForGroups(tInfo, customAttributes, property));
             }
 
             return groupsForThisProperty;
         }
 
-        private static IEnumerable<ArgumentGroupInfo> GetArgumentInfoForGroups(TypeArgumentInfo tInfo, IEnumerable<GroupAttribute> customAttributes)
+        private static IEnumerable<ArgumentGroupInfo> GetArgumentInfoForGroups(TypeArgumentInfo tInfo, IEnumerable<GroupAttribute> customAttributes, PropertyInfo property)
         {
             foreach (var commandGroup in customAttributes)
             {
@@ -146,6 +152,13 @@ namespace CommandLine.Analysis
                         grpPropInfo = new ArgumentGroupInfo();
                         tInfo.ArgumentGroups[argGroupAttribute.Name] = grpPropInfo;
                     }
+
+                    // the list of groups is created eagerly if we have an action that is an enum.
+                    if (argGroupAttribute.OverrideRequiredPosition >= 0)
+                    {
+                        grpPropInfo.OverridePositions[property] = argGroupAttribute.OverrideRequiredPosition;
+                    }
+
                     yield return grpPropInfo;
                 }
                 else if (commandGroup is CommonArgumentAttribute)
