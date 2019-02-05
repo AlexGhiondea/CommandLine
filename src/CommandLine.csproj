@@ -7,15 +7,15 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.5.0</Version>
-    <AssemblyVersion>1.5.0.0</AssemblyVersion>
+    <Version>1.5.1</Version>
+    <AssemblyVersion>1.5.1.0</AssemblyVersion>
     <FileVersion>$(AssemblyVersion)</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageId>CommandLine.Net</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Authors>Alex Ghiondea</Authors>
     <Description>Parse command line arguments into user defined objects</Description>
     <releaseNotes>Improved the analyzer to help catch even more common issues that people can run into while using this analyzer. 

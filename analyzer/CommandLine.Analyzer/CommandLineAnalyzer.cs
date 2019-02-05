@@ -86,6 +86,8 @@ namespace CommandLine.Analyzer
 
                 Argument arg = null;
                 List<string> argGroup = new List<string>();
+                Dictionary<string, Dictionary<ISymbol, int>> mapOfOverridesPerGroup = new Dictionary<string, Dictionary<ISymbol, int>>();
+
                 bool isCommon = false;
                 bool isAttributeGroup = false;
 
@@ -147,7 +149,27 @@ namespace CommandLine.Analyzer
                     if (attribute.AttributeClass.Name == "ArgumentGroupAttribute")
                     {
                         isAttributeGroup = true;
-                        argGroup.Add(attribute.ConstructorArguments[0].Value as string);
+                        string groupName = attribute.ConstructorArguments[0].Value as string;
+                        argGroup.Add(groupName);
+
+                        // does it have an additional constructor?
+                        if (attribute.ConstructorArguments.Length > 1)
+                        {
+                            var overridePosition = (int)attribute.ConstructorArguments[1].Value;
+
+                            if (overridePosition >= 0)
+                            {
+                                // need to map the member to the new position 
+                                Dictionary<ISymbol, int> map;
+                                if (!mapOfOverridesPerGroup.TryGetValue(groupName, out map))
+                                {
+                                    map = new Dictionary<ISymbol, int>();
+                                    mapOfOverridesPerGroup[groupName] = map;
+                                }
+
+                                map[member] = overridePosition;
+                            }
+                        }
                     }
                 }
 
@@ -195,7 +217,30 @@ namespace CommandLine.Analyzer
                                 mapGroupAndProps[item] = args;
                             }
 
-                            args.Add(arg);
+                            // we might need to change the position for this arg based on the override list
+                            if (mapOfOverridesPerGroup.ContainsKey(item))
+                            {
+                                // if the current symbol is the one redirected, then redirect.
+                                if (mapOfOverridesPerGroup[item].ContainsKey(arg.Symbol))
+                                {
+                                    var overridePosition = mapOfOverridesPerGroup[item][arg.Symbol];
+
+                                    // we need to clone the arg.
+
+                                    var reqArg = arg as RequiredArgument;
+                                    var clonedArg = reqArg.Clone();
+                                    clonedArg.Position = overridePosition;
+                                    args.Add(clonedArg);
+                                }
+                                else
+                                {
+                                    args.Add(arg);
+                                }
+                            }
+                            else
+                            {
+                                args.Add(arg);
+                            }
                         }
                     }
                     else

@@ -56,6 +56,25 @@ namespace CommandLine.Tests
         }
 
         [Fact]
+        public void GroupsTest7()
+        {
+            var options = Helpers.Parse<OverridePositionGroupWithMoreArgs>("Create One Two Three");
+
+            Assert.Equal(Action.Create, options.Action);
+            Assert.Equal("One", options.One);
+            Assert.Equal("Two", options.Two);
+            Assert.Equal("Three", options.Three);
+
+            options = Helpers.Parse<OverridePositionGroupWithMoreArgs>("List One Two Three");
+
+            Assert.NotNull(options);
+            Assert.Equal(Action.List, options.Action);
+            Assert.Equal("Two", options.One);
+            Assert.Equal("Two", options.One);
+            Assert.Equal("Three", options.Three);
+        }
+
+        [Fact]
         public void GroupsTest5()
         {
             // this should not return a good parsed object
