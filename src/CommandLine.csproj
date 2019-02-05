@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.5;</TargetFrameworks>
-    <!--<TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net45;</TargetFrameworks>-->
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net45;</TargetFrameworks>
     <DebugType>full</DebugType>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.5.0-beta2</Version>
+    <Version>1.5.0</Version>
     <AssemblyVersion>1.5.0.0</AssemblyVersion>
     <FileVersion>$(AssemblyVersion)</FileVersion>
   </PropertyGroup>
