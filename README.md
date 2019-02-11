@@ -1,7 +1,8 @@
 # CommandLine
 CommandLine parser 
 
-[![NuGet version](https://badge.fury.io/nu/CommandLine.Net.svg)](https://badge.fury.io/nu/CommandLine.Net)
+[![NuGet version](https://img.shields.io/nuget/v/commandline.net.svg?style=flat)](https://img.shields.io/nuget/v/commandline.net.svg?style=flat)
+[![Nuget downloads](https://img.shields.io/nuget/dt/commandline.net.svg?style=flat)](https://img.shields.io/nuget/dt/commandline.net.svg?style=flat)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/AlexGhiondea/CommandLine?branch=master&svg=true)](https://ci.appveyor.com/project/AlexGhiondea/CommandLine)
 [![codecov](https://codecov.io/gh/AlexGhiondea/CommandLine/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexGhiondea/CommandLine)
 [![MIT License](https://img.shields.io/github/license/AlexGhiondea/CommandLine.svg)](https://github.com/AlexGhiondea/CommandLine/blob/master/LICENSE)
