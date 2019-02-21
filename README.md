@@ -113,3 +113,24 @@ internal class CommandLineOptions
     #endregion
 }
 ```
+
+If you have a required argument that is shared between multiple argument groups but use different positions, you can tweak the expected position depending on the group
+
+```csharp
+internal class CommandLineOptions
+{
+    [ActionArgument]
+    public CommandLineActionGroup Action { get; set; }
+
+    // Here the argument 'name' is expected at position 1 in the add group and position 0 in the list group
+    [ArgumentGroup(nameof(CommandLineActionGroup.list), 0)]
+    [ArgumentGroup(nameof(CommandLineActionGroup.add))]
+    [RequiredArgumentAttribute(1, "name", "The name of the host")]
+    public string Host { get; set; }
+
+    [ArgumentGroup(nameof(CommandLineActionGroup.add))]
+    [RequiredArgumentAttribute(0, "host", "The name of the host")]
+    public string Host { get; set; }
+
+}
+```
