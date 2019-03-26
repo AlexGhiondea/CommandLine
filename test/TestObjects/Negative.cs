@@ -51,4 +51,13 @@ namespace CommandLine.Tests
         [RequiredArgument(1, "a", "")]
         public Enum1 p1 { get; set; }
     }
+
+    internal class MorePassedInThanRequired
+    {
+        [RequiredArgument(0, "a", "")]
+        public string p1 { get; set; }
+
+        [RequiredArgument(1, "b", "")]
+        public string p2 { get; set; }
+    }
 }
