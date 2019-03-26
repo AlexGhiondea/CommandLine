@@ -123,7 +123,9 @@ namespace CommandLine
             bool shouldExpand = false;
             for (int i = 0; i < args.Length; i++)
             {
-                if (args[i][0] == '@')
+                // it might be possible that the args[i] value is an empty string.
+                // we should check and make sure we have a valid value here before trying to check the '@' char
+                if (!string.IsNullOrEmpty(args[i]) && args[i][0] == '@')
                 {
                     shouldExpand = true;
                     break;
@@ -138,7 +140,7 @@ namespace CommandLine
 
             for (int i = 0; i < args.Length; i++)
             {
-                if (args[i][0] == '@')
+                if (!string.IsNullOrEmpty(args[i]) && args[i][0] == '@')
                 {
                     string fileName = args[i].Substring(1);
                     // does the file exist?
@@ -278,7 +280,7 @@ namespace CommandLine
 
         private static List<PropertyInfo> ParseOptionalParameters<TOptions>(string[] args, int offsetInArray, ArgumentGroupInfo TypeArgumentInfo, TOptions options, ref int currentLogicalPosition) where TOptions : new()
         {
-            // we are going to assume that all optionl parameters are not matched to values in 'args'
+            // we are going to assume that all optional parameters are not matched to values in 'args'
             List<PropertyInfo> unmatched = new List<PropertyInfo>(TypeArgumentInfo.OptionalArguments.Values);
             // process the optional arguments
             while (offsetInArray + currentLogicalPosition < args.Length)
