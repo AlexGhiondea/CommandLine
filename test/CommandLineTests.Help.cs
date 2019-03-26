@@ -664,22 +664,21 @@ namespace CommandLine.Tests
 
             var options = Helpers.Parse<MorePassedInThanRequired>("this expects 2 args", _printer);
 
-             Validate(_printer,
-                new TextAndColor(ConsoleColor.Red, "Error"), 
-                new TextAndColor(ConsoleColor.Black, @": Optional parameter name should start with '-' 
-"), 
-                new TextAndColor(ConsoleColor.Black, "Usage: "), 
-                new TextAndColor(ConsoleColor.Black, " "), 
-                new TextAndColor(ConsoleColor.White, "testhost.exe"), 
-                new TextAndColor(ConsoleColor.Black, " "), 
-                new TextAndColor(ConsoleColor.Cyan, "a"), 
-                new TextAndColor(ConsoleColor.Black, " "), 
-                new TextAndColor(ConsoleColor.Cyan, "b"), 
-                new TextAndColor(ConsoleColor.Black, " "), 
-                new TextAndColor(ConsoleColor.Black, "For detailed information run '"), 
-                new TextAndColor(ConsoleColor.White, "testhost --help"), 
-                new TextAndColor(ConsoleColor.Black, "'." )
-             );
+            Validate(_printer,
+                new TextAndColor(ConsoleColor.Red, "Error"),
+                new TextAndColor(ConsoleColor.Black, $": Optional parameter name should start with '-' {Environment.NewLine}"),
+                new TextAndColor(ConsoleColor.Black, "Usage: "),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Cyan, "a"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Cyan, "b"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Black, "For detailed information run '"),
+                new TextAndColor(ConsoleColor.White, "testhost --help"),
+                new TextAndColor(ConsoleColor.Black, "'.")
+            );
         }
 
     }
