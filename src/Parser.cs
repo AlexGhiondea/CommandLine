@@ -57,12 +57,12 @@ namespace CommandLine
                 {
                     if (args[0] == HelpGenerator.RequestShortHelpParameter || args[0] == "/?")
                     {
-                        HelpGenerator.DisplayHelp(HelpFormat.Short, arguments);
+                        HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, HelpColors.Default);
                         return false;
                     }
                     else if (args[0] == HelpGenerator.RequestLongHelpParameter)
                     {
-                        HelpGenerator.DisplayHelp(HelpFormat.Full, arguments);
+                        HelpGenerator.DisplayHelp(HelpFormat.Full, arguments, HelpColors.Default);
                         return false;
                     }
                 }
@@ -81,7 +81,7 @@ namespace CommandLine
             {
                 Colorizer.WriteLine($"[Red!Error]: {ex.Message} {Environment.NewLine}");
 
-                HelpGenerator.DisplayHelp(HelpFormat.Short, arguments);
+                HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, HelpColors.Default);
 
                 return false;
             }
@@ -106,7 +106,7 @@ namespace CommandLine
                 TypeHelpers.ScanTypeForProperties<TOptions>(out TypeArgumentInfo arguments);
 
                 // If we get here, the options type is well defined, so let's display the help.
-                HelpGenerator.DisplayHelp(helpFormat, arguments);
+                HelpGenerator.DisplayHelp(helpFormat, arguments, HelpColors.Default);
             }
             catch (Exception ex)
             {
@@ -244,7 +244,7 @@ namespace CommandLine
             // short circuit the request for help!
             if (args.Length == 2 && (args[1] == "/?" || args[1] == "-?"))
             {
-                HelpGenerator.DisplayHelpForCommmand(args[0], arguments.ArgumentGroups[args[0]]);
+                HelpGenerator.DisplayHelpForCommmand(args[0], arguments.ArgumentGroups[args[0]], HelpColors.Default);
                 return false;
             }
 
