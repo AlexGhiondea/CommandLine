@@ -18,6 +18,9 @@ namespace CommandLine
         {
             private static IColors s_helpColors;
             private static object s_lockObj = new object();
+
+            private static Dictionary<ConsoleColor, IColors> s_colorMap;
+
             public static IColors Get()
             {
                 if (s_helpColors == null)
@@ -26,7 +29,7 @@ namespace CommandLine
                     {
                         if (s_helpColors == null)
                         {
-                            s_helpColors = GetDefault();
+                            s_helpColors = GetDefault(Console.BackgroundColor);
                         }
                     }
 
@@ -34,41 +37,37 @@ namespace CommandLine
                 return s_helpColors;
             }
 
-            internal static IColors GetDefault()
+            internal static IColors GetDefault(ConsoleColor backgroundColor)
             {
-                if (Console.BackgroundColor == ConsoleColor.Black)
+                // optimize for black background
+                if (backgroundColor == ConsoleColor.Black)
                 {
                     return new DarkBackgroundColors();
                 }
 
-                if (Console.BackgroundColor == ConsoleColor.Gray)
+                if (s_colorMap == null)
                 {
-                    return new GrayBackgroundColors();
-                }
-                else if (Console.BackgroundColor == ConsoleColor.DarkYellow)
-                {
-                    return new DarkYellowBackgroundColors();
-                }
-                else if (Console.BackgroundColor == ConsoleColor.Green)
-                {
-                    return new GreenBackgroundColors();
-                }
-                else if (Console.BackgroundColor == ConsoleColor.Cyan)
-                {
-                    return new CyanBackgroundColors();
-                }
-                else if (Console.BackgroundColor == ConsoleColor.Red)
-                {
-                    return new RedBackgroundColors();
-                }
-                else if (
-                    Console.BackgroundColor == ConsoleColor.White ||
-                    Console.BackgroundColor == ConsoleColor.Yellow)
-                {
-                    return new LightBackgroundColors();
+                    // initialize the dictionary of colors.
+                    s_colorMap = new Dictionary<ConsoleColor, IColors>();
+                    s_colorMap[ConsoleColor.Black] = new DarkBackgroundColors();
+                    s_colorMap[ConsoleColor.Blue] = new DarkBackgroundColors();
+                    s_colorMap[ConsoleColor.Cyan] = new CyanBackgroundColors();
+                    s_colorMap[ConsoleColor.DarkBlue]= new DarkBackgroundColors();
+                    s_colorMap[ConsoleColor.DarkCyan]= new DarkBackgroundColors();
+                    s_colorMap[ConsoleColor.DarkGray]= new DarkBackgroundColors();
+                    s_colorMap[ConsoleColor.DarkGreen]= new DarkBackgroundColors();
+                    s_colorMap[ConsoleColor.DarkMagenta]= new DarkBackgroundColors();
+                    s_colorMap[ConsoleColor.DarkRed]= new DarkBackgroundColors();
+                    s_colorMap[ConsoleColor.DarkYellow] = new DarkYellowBackgroundColors();
+                    s_colorMap[ConsoleColor.Gray] = new GrayBackgroundColors();
+                    s_colorMap[ConsoleColor.Green] = new GreenBackgroundColors();
+                    s_colorMap[ConsoleColor.Magenta]= new DarkBackgroundColors();
+                    s_colorMap[ConsoleColor.Red] = new RedBackgroundColors();
+                    s_colorMap[ConsoleColor.White] = new LightBackgroundColors();
+                    s_colorMap[ConsoleColor.Yellow] = new LightBackgroundColors();
                 }
 
-                return new DarkBackgroundColors();
+                return s_colorMap[backgroundColor];
             }
             public static void Set(IColors colors)
             {
