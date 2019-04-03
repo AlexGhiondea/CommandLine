@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using OutputColorizer;
 using System.IO;
 using System.Reflection;
+using CommandLine.Colors;
 
 namespace CommandLine.Tests
 {
@@ -14,21 +15,37 @@ namespace CommandLine.Tests
             return AppDomain.CurrentDomain.BaseDirectory;
         }
 
-        public static T Parse<T>(string argString, IOutputWriter writer = null) where T : new()
+        public static T Parse<T>(string argString, IOutputWriter writer = null, IColors colors = null) where T : new()
         {
             if (writer == null)
+            {
                 writer = new ConsoleWriter();
+            }
+
+            if (colors == null)
+            {
+                colors = new DarkBackgroundColors();
+            }
 
             Colorizer.SetupWriter(writer);
+            Parser.Colors.Set(colors);
             return Parser.Parse<T>(argString);
         }
 
-        public static void DisplayHelp<T>(HelpFormat helpFormat, IOutputWriter writer = null) where T : new()
+        public static void DisplayHelp<T>(HelpFormat helpFormat, IOutputWriter writer = null, IColors colors = null) where T : new()
         {
             if (writer == null)
+            {
                 writer = new ConsoleWriter();
+            }
+
+            if (colors == null)
+            {
+                colors = new DarkBackgroundColors();
+            }
 
             Colorizer.SetupWriter(writer);
+            Parser.Colors.Set(colors);
             Parser.DisplayHelp<T>(helpFormat);
         }
 

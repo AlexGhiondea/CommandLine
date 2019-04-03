@@ -142,7 +142,7 @@ namespace CommandLine
             // short circuit the request for help!
             if (args.Length == 2 && (args[1] == "/?" || args[1] == "-?"))
             {
-                HelpGenerator.DisplayHelpForCommmand(args[0], arguments.ArgumentGroups[args[0]], s_helpColors);
+                HelpGenerator.DisplayHelpForCommmand(args[0], arguments.ArgumentGroups[args[0]], Colors.Get());
                 return false;
             }
 

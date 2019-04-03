@@ -61,12 +61,12 @@ namespace CommandLine
                 {
                     if (args[0] == HelpGenerator.RequestShortHelpParameter || args[0] == "/?")
                     {
-                        HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, s_helpColors);
+                        HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, Colors.Get());
                         return false;
                     }
                     else if (args[0] == HelpGenerator.RequestLongHelpParameter)
                     {
-                        HelpGenerator.DisplayHelp(HelpFormat.Full, arguments, s_helpColors);
+                        HelpGenerator.DisplayHelp(HelpFormat.Full, arguments, Colors.Get());
                         return false;
                     }
                 }
@@ -83,10 +83,10 @@ namespace CommandLine
             }
             catch (Exception ex)
             {
-                string errorFormat = $"[{s_helpColors.ErrorColor}!Error]: {{0}} {{1}}";
+                string errorFormat = $"[{Colors.Get().ErrorColor}!Error]: {{0}} {{1}}";
                 Colorizer.WriteLine(errorFormat, ex.Message, Environment.NewLine);
 
-                HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, s_helpColors);
+                HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, Colors.Get());
 
                 return false;
             }
@@ -111,7 +111,7 @@ namespace CommandLine
                 TypeHelpers.ScanTypeForProperties<TOptions>(out TypeArgumentInfo arguments);
 
                 // If we get here, the options type is well defined, so let's display the help.
-                HelpGenerator.DisplayHelp(helpFormat, arguments, s_helpColors);
+                HelpGenerator.DisplayHelp(helpFormat, arguments, Colors.Get());
             }
             catch (Exception ex)
             {

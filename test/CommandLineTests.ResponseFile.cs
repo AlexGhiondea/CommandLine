@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using CommandLine.Colors;
 using Xunit;
 
 namespace CommandLine.Tests
@@ -55,25 +56,26 @@ namespace CommandLine.Tests
             string responseFile = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles", "response4.rsp"));
 
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<Options3NoRequired>($"@{responseFile}", _printer);
+            IColors color = new GrayBackgroundColors();
+            var options = Helpers.Parse<Options3NoRequired>($"@{responseFile}", _printer, color);
 
             Validate(_printer,
-                new TextAndColor(ConsoleColor.Black, "Usage: "),
-                new TextAndColor(ConsoleColor.Black, " "),
-                new TextAndColor(ConsoleColor.White, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
-                new TextAndColor(ConsoleColor.Black, " "),
-                new TextAndColor(ConsoleColor.Black, "[-"),
-                new TextAndColor(ConsoleColor.Yellow, "opt1"),
-                new TextAndColor(ConsoleColor.Black, " value] "),
-                new TextAndColor(ConsoleColor.Black, "[-"),
-                new TextAndColor(ConsoleColor.Yellow, "opt2"),
-                new TextAndColor(ConsoleColor.Black, " value] "),
-                new TextAndColor(ConsoleColor.Black, "[-"),
-                new TextAndColor(ConsoleColor.Yellow, "opt3"),
-                new TextAndColor(ConsoleColor.Black, " value] "),
-                new TextAndColor(ConsoleColor.Black, "For detailed information run '"),
-                new TextAndColor(ConsoleColor.White, $"{Assembly.GetEntryAssembly()?.GetName()?.Name} --help"),
-                new TextAndColor(ConsoleColor.Black, "'.")
+                new TextAndColor(_printer.ForegroundColor, "Usage: "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt1"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt2"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt3"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name} --help"),
+                new TextAndColor(_printer.ForegroundColor, "'.")
             );
         }
 
@@ -93,7 +95,7 @@ namespace CommandLine.Tests
         [Fact]
         public void NotFoundResponseFile()
         {
-           var options = Helpers.Parse<Options2>("@doesNotExist");
+            var options = Helpers.Parse<Options2>("@doesNotExist");
 
             Assert.Null(options);
         }

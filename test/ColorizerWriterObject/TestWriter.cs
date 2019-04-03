@@ -15,6 +15,7 @@ namespace CommandLine.Tests
         {
             get
             {
+                
                 return _currentColor;
             }
 
