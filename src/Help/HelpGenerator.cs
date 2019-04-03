@@ -23,8 +23,6 @@ namespace CommandLine
                 case HelpFormat.Full:
                     DisplayDetailedHelp(arguments, colors);
                     break;
-                default:
-                    throw new ArgumentException("Unrecognized help format", nameof(helpFormat));
             }
         }
 
@@ -192,11 +190,6 @@ namespace CommandLine
             if (propertyType == typeof(char))
             {
                 return "char";
-            }
-
-            if (TypeHelpers.IsEnum(propertyType))
-            {
-                return "enum";
             }
 
             if (TypeHelpers.IsList(propertyType))

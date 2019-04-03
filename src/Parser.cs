@@ -115,8 +115,9 @@ namespace CommandLine
             }
             catch (Exception ex)
             {
+                string errorFormat = $"[{Colors.Get().ErrorColor}!Error]: {{0}} {{1}}";
                 // If we were asked to display the help and something went wrong, display the error that went wrong.
-                Colorizer.WriteLine($"[Red!Error]: {ex.Message} {Environment.NewLine}");
+                Colorizer.WriteLine(errorFormat, ex.Message, Environment.NewLine);
             }
         }
     }
