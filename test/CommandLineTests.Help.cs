@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using CommandLine.Colors;
 using Xunit;
+using Xunit.Extensions;
 
 namespace CommandLine.Tests
 {
@@ -18,11 +20,10 @@ namespace CommandLine.Tests
             }
         }
 
-        [Fact]
-        public void HelpTest1()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpTest1(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            IColors color = new RedBackgroundColors();
             var options = Helpers.Parse<Options3NoRequired>("-?", _printer, color);
 
 
@@ -46,67 +47,63 @@ namespace CommandLine.Tests
             );
         }
 
-        [Fact]
-        public void HelpTestViaApi1()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpTestViaApi1(IColors color)
         {
-            IColors colors = new GrayBackgroundColors();
             TestWriter _printer = new TestWriter();
-            Helpers.DisplayHelp<Options3NoRequired>(HelpFormat.Short, _printer, colors);
+            Helpers.DisplayHelp<Options3NoRequired>(HelpFormat.Short, _printer, color);
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(colors.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(_printer.ForegroundColor, "[-"),
-                new TextAndColor(colors.OptionalArgumentColor, "opt1"),
+                new TextAndColor(color.OptionalArgumentColor, "opt1"),
                 new TextAndColor(_printer.ForegroundColor, " value] "),
                 new TextAndColor(_printer.ForegroundColor, "[-"),
-                new TextAndColor(colors.OptionalArgumentColor, "opt2"),
+                new TextAndColor(color.OptionalArgumentColor, "opt2"),
                 new TextAndColor(_printer.ForegroundColor, " value] "),
                 new TextAndColor(_printer.ForegroundColor, "[-"),
-                new TextAndColor(colors.OptionalArgumentColor, "opt3"),
+                new TextAndColor(color.OptionalArgumentColor, "opt3"),
                 new TextAndColor(_printer.ForegroundColor, " value] "),
                 new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
-                new TextAndColor(colors.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name} --help"),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name} --help"),
                 new TextAndColor(_printer.ForegroundColor, "'.")
             );
         }
 
-        [Fact]
-        public void HelpTest4()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpTest4(IColors color)
         {
             TestWriter _printer = new TestWriter();
 
-            IColors colors = new LightBackgroundColors();
-            var options = Helpers.Parse<Options3NoRequired>("/?", _printer, colors);
+            var options = Helpers.Parse<Options3NoRequired>("/?", _printer, color);
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(colors.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(_printer.ForegroundColor, "[-"),
-                new TextAndColor(colors.OptionalArgumentColor, "opt1"),
+                new TextAndColor(color.OptionalArgumentColor, "opt1"),
                 new TextAndColor(_printer.ForegroundColor, " value] "),
                 new TextAndColor(_printer.ForegroundColor, "[-"),
-                new TextAndColor(colors.OptionalArgumentColor, "opt2"),
+                new TextAndColor(color.OptionalArgumentColor, "opt2"),
                 new TextAndColor(_printer.ForegroundColor, " value] "),
                 new TextAndColor(_printer.ForegroundColor, "[-"),
-                new TextAndColor(colors.OptionalArgumentColor, "opt3"),
+                new TextAndColor(color.OptionalArgumentColor, "opt3"),
                 new TextAndColor(_printer.ForegroundColor, " value] "),
                 new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
-                new TextAndColor(colors.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name} --help"),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name} --help"),
                 new TextAndColor(_printer.ForegroundColor, "'.")
             );
         }
 
-        [Fact]
-        public void HelpTest2()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpTest2(IColors color)
         {
             TestWriter _printer = new TestWriter();
-
-            IColors color = new DarkBackgroundColors();
             var options = Helpers.Parse<Options3NoRequired>("-?", _printer, color);
 
             Validate(_printer,
@@ -130,12 +127,10 @@ namespace CommandLine.Tests
 
         }
 
-        [Fact]
-        public void HelpTest3()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpTest3(IColors color)
         {
             TestWriter _printer = new TestWriter();
-
-            IColors color = new DarkBackgroundColors();
             var options = Helpers.Parse<OptionsNegative1>("-?", _printer, color);
 
             Validate(_printer,
@@ -153,11 +148,10 @@ namespace CommandLine.Tests
             );
         }
 
-        [Fact]
-        public void DetailedHelp1()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void DetailedHelp1(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            IColors color = new CyanBackgroundColors();
             var options = Helpers.Parse<Options1>("--help", _printer, color);
 
             Validate(_printer,
@@ -225,11 +219,10 @@ namespace CommandLine.Tests
               );
         }
 
-        [Fact]
-        public void DetailedHelp2()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void DetailedHelp2(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            IColors color = new GreenBackgroundColors();
             var options = Helpers.Parse<Options3NoRequired>("--help", _printer, color);
 
             Validate(_printer,
@@ -269,12 +262,10 @@ namespace CommandLine.Tests
                 );
         }
 
-
-        [Fact]
-        public void DetailedHelpViaApi1()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void DetailedHelpViaApi1(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            IColors color = new DarkYellowBackgroundColors();
             Helpers.DisplayHelp<Options1>(HelpFormat.Full, _printer, color);
 
             Validate(_printer,
@@ -342,12 +333,10 @@ namespace CommandLine.Tests
               );
         }
 
-        [Fact]
-        public void DetailedHelpForGroups1()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void DetailedHelpForGroups1(IColors color)
         {
             TestWriter _printer = new TestWriter();
-
-            IColors color = new DarkBackgroundColors();
             var options = Helpers.Parse<Groups1>("--help", _printer, color);
 
             Validate(_printer,
@@ -355,7 +344,7 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.ArgumentValueColor, "Command1"),
+                new TextAndColor(color.ArgumentGroupColor, "Command1"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.RequiredArgumentColor, "p1"),
                 new TextAndColor(_printer.ForegroundColor, " "),
@@ -379,7 +368,7 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.ArgumentValueColor, "Command2"),
+                new TextAndColor(color.ArgumentGroupColor, "Command2"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.RequiredArgumentColor, "opt1"),
                 new TextAndColor(_printer.ForegroundColor, " "),
@@ -403,12 +392,10 @@ namespace CommandLine.Tests
                  );
         }
 
-        [Fact]
-        public void HelpForCommand()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpForCommand(IColors color)
         {
             TestWriter _printer = new TestWriter();
-
-            IColors color = new DarkBackgroundColors();
             var options = Helpers.Parse<Groups1>("Command1 -?", _printer, color);
 
             Validate(_printer,
@@ -416,7 +403,7 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.ArgumentValueColor, "Command1"),
+                new TextAndColor(color.ArgumentGroupColor, "Command1"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.RequiredArgumentColor, "p1"),
                 new TextAndColor(_printer.ForegroundColor, " "),
@@ -440,12 +427,10 @@ namespace CommandLine.Tests
             );
         }
 
-        [Fact]
-        public void HelpForCommandWithSlashQuestionMark()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpForCommandWithSlashQuestionMark(IColors color)
         {
             TestWriter _printer = new TestWriter();
-
-            IColors color = new DarkBackgroundColors();
             var options = Helpers.Parse<Groups1>("Command1 /?", _printer, color);
 
             Validate(_printer,
@@ -453,7 +438,7 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.ArgumentValueColor, "Command1"),
+                new TextAndColor(color.ArgumentGroupColor, "Command1"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.RequiredArgumentColor, "p1"),
                 new TextAndColor(_printer.ForegroundColor, " "),
@@ -477,12 +462,10 @@ namespace CommandLine.Tests
             );
         }
 
-        [Fact]
-        public void HelpForTypeWithEnum()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpForTypeWithEnum(IColors color)
         {
             TestWriter _printer = new TestWriter();
-
-            IColors color = new DarkBackgroundColors();
             var options = Helpers.Parse<Options3NoRequired>("/?", _printer, color);
 
             Validate(_printer,
@@ -505,12 +488,10 @@ namespace CommandLine.Tests
             );
         }
 
-        [Fact]
-        public void DetailedHelpForGroups2WithCommonArgs()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void DetailedHelpForGroups2WithCommonArgs(IColors color)
         {
             TestWriter _printer = new TestWriter();
-
-            IColors color = new DarkBackgroundColors();
             var options = Helpers.Parse<Groups2>("--help", _printer, color);
 
             Validate(_printer,
@@ -518,7 +499,7 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.ArgumentValueColor, "Command1"),
+                new TextAndColor(color.ArgumentGroupColor, "Command1"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.RequiredArgumentColor, "common1"),
                 new TextAndColor(_printer.ForegroundColor, " "),
@@ -551,7 +532,7 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.ArgumentValueColor, "Command2"),
+                new TextAndColor(color.ArgumentGroupColor, "Command2"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.RequiredArgumentColor, "common1"),
                 new TextAndColor(_printer.ForegroundColor, " "),
@@ -599,12 +580,10 @@ namespace CommandLine.Tests
             Assert.Throws<ArgumentException>(() => Parser.DisplayHelp<Options1>((HelpFormat)4));
         }
 
-        [Fact]
-        public void HelpForTypeWithRequiredAndOptionalEnumsAndLists()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpForTypeWithRequiredAndOptionalEnumsAndLists(IColors color)
         {
             TestWriter _printer = new TestWriter();
-
-            IColors color = new DarkBackgroundColors();
             var options = Helpers.Parse<HelpGeneratorObject>("--help", _printer, color);
 
             Validate(_printer,
@@ -673,12 +652,10 @@ namespace CommandLine.Tests
             );
         }
 
-        [Fact]
-        public void HelpWhenPassMoreParametersThanExpected()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpWhenPassMoreParametersThanExpected(IColors color)
         {
             TestWriter _printer = new TestWriter();
-
-            IColors color = new DarkBackgroundColors();
             var options = Helpers.Parse<MorePassedInThanRequired>("this expects 2 args", _printer, color);
 
             Validate(_printer,
@@ -707,68 +684,68 @@ namespace CommandLine.Tests
                 #region Dark backgound
                 Console.BackgroundColor = ConsoleColor.Black;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(DarkBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.DarkGray;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(DarkBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.DarkGreen;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(DarkBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.DarkMagenta;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(DarkBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.DarkRed;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(DarkBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.Blue;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(DarkBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.Magenta;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(DarkBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.DarkBlue;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(DarkBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get());
                 #endregion
                 
                 #region Multicolor
                 Console.BackgroundColor = ConsoleColor.Gray;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(GrayBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<GrayBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.DarkYellow;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(DarkYellowBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<DarkYellowBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.Green;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(GreenBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<GreenBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.Cyan;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(CyanBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<CyanBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.Red;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(RedBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<RedBackgroundColors>(Parser.Colors.Get());
 
                 #endregion
 
                 #region Light background
                 Console.BackgroundColor = ConsoleColor.White;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(LightBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<LightBackgroundColors>(Parser.Colors.Get());
 
                 Console.BackgroundColor = ConsoleColor.Yellow;
                 Parser.Colors.Set(null);
-                Assert.Same(typeof(LightBackgroundColors), Parser.Colors.Get().GetType());
+                Assert.IsType<LightBackgroundColors>(Parser.Colors.Get());
                 #endregion
             }
             finally
@@ -776,6 +753,18 @@ namespace CommandLine.Tests
                 Console.BackgroundColor = currentBackgroundColor;
             }
         }
+        
+        public static IEnumerable<object[]> GetBackgroundColors()
+        {
+            yield return new object[] { new DarkBackgroundColors() };
+            yield return new object[] { new LightBackgroundColors() };
+            yield return new object[] { new DarkYellowBackgroundColors() };
+            yield return new object[] { new GreenBackgroundColors() };
+            yield return new object[] { new CyanBackgroundColors() };
+            yield return new object[] { new RedBackgroundColors() };
+            yield return new object[] { new GrayBackgroundColors() };
+        }
+            
         
         [Fact]
         public void EnsureThatRightParameterIsReportedForGroups()

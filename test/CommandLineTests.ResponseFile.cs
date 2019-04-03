@@ -22,6 +22,12 @@ namespace CommandLine.Tests
         }
 
         [Fact]
+        public void TestStringWithMismatchedQuotes()
+        {
+            Assert.Throws<InvalidDataException>(()=>Helpers.Parse<Options2>("\"fooo"));
+        }
+
+        [Fact]
         public void BasicTest5_WithResponseFile()
         {
             string responseFile1 = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles", "response2_1.rsp"));
@@ -50,13 +56,12 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt2, "a", "b", "c");
         }
 
-        [Fact]
-        public void HelpTest1_WithResponseFile()
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpTest1_WithResponseFile(IColors color)
         {
             string responseFile = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles", "response4.rsp"));
 
             TestWriter _printer = new TestWriter();
-            IColors color = new GrayBackgroundColors();
             var options = Helpers.Parse<Options3NoRequired>($"@{responseFile}", _printer, color);
 
             Validate(_printer,
