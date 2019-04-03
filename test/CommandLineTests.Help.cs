@@ -717,6 +717,7 @@ namespace CommandLine.Tests
                 
                 #region Multicolor
                 Console.BackgroundColor = ConsoleColor.Gray;
+                Assert.Equal(ConsoleColor.Gray,Console.BackgroundColor);
                 Parser.Colors.Set(null);
                 Assert.IsType<GrayBackgroundColors>(Parser.Colors.Get());
 
