@@ -730,6 +730,8 @@ namespace CommandLine.Tests
                 Parser.Colors.Set(null);
                 Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkGray));
                 Parser.Colors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkCyan));
+                Parser.Colors.Set(null);
                 Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkGreen));
                 Parser.Colors.Set(null);
                 Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkMagenta));
@@ -762,6 +764,11 @@ namespace CommandLine.Tests
                 Assert.IsType<LightBackgroundColors>(Parser.Colors.Get(ConsoleColor.White));
                 Parser.Colors.Set(null);
                 Assert.IsType<LightBackgroundColors>(Parser.Colors.Get(ConsoleColor.Yellow));
+                #endregion
+
+                #region Unknown color
+                Parser.Colors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get((ConsoleColor)25));
                 #endregion
             }
             finally
