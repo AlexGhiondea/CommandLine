@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.5.2</Version>
-    <AssemblyVersion>1.5.2.0</AssemblyVersion>
+    <Version>1.5.3</Version>
+    <AssemblyVersion>1.5.3.0</AssemblyVersion>
     <FileVersion>$(AssemblyVersion)</FileVersion>
   </PropertyGroup>
 
@@ -18,8 +18,7 @@
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Authors>Alex Ghiondea</Authors>
     <Description>Parse command line arguments into user defined objects</Description>
-    <releaseNotes>Improved the analyzer to help catch even more common issues that people can run into while using this analyzer. 
-    It also adds the ability to override the position for required attributes when using groups.</releaseNotes>
+    <releaseNotes>Fix an issue where the argument name in an exception was the wrong one.</releaseNotes>
     <Copyright>Alex Ghiondea (c) 2019</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/AlexGhiondea/CommandLine/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/AlexGhiondea/CommandLine</PackageProjectUrl>
