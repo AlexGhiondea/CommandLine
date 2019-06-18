@@ -98,5 +98,15 @@ namespace CommandLine.Tests
             Assert.Equal("MileStoneFile", options.MilestoneFile);
             Assert.Equal("Repo1", options.Repository);
         }
+        
+        [Fact]
+        public void GroupsTest8()
+        {
+            // Invalid option should be in exception text
+            var commandLine = "Command1 req1 -opt1=value";
+
+            Groups1 ParsedArgs;
+            Assert.False(Parser.TryParse(commandLine, out ParsedArgs));
+        }
     }
 }
