@@ -192,7 +192,7 @@ namespace CommandLine
                 var optionalParamName = args[offsetInArray + currentLogicalPosition].Substring(1);
                 if (!TypeArgumentInfo.OptionalArguments.TryGetValue(optionalParamName, out optionalProp))
                 {
-                    throw new ArgumentException($"Could not find argument {args[currentLogicalPosition]}");
+                    throw new ArgumentException($"Could not find argument {args[offsetInArray + currentLogicalPosition]}");
                 }
 
                 // skip over the parameter name

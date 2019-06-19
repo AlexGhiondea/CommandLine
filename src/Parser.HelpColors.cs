@@ -19,7 +19,6 @@ namespace CommandLine
             private static IColors s_helpColors;
             private static object s_lockObj = new object();
 
-
             public static IColors Get(ConsoleColor backgroundColor = (ConsoleColor)(-1))
             {
                 if (s_helpColors != null)
