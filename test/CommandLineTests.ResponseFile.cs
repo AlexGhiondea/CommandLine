@@ -24,7 +24,8 @@ namespace CommandLine.Tests
         [Fact]
         public void TestStringWithMismatchedQuotes()
         {
-            Assert.Throws<InvalidDataException>(()=>Helpers.Parse<Options2>("\"fooo"));
+            var obj = Helpers.Parse<object>("@\" foo ");
+            Assert.Null(obj);
         }
 
         [Fact]
