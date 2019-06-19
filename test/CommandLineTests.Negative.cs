@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.IO;
+using Xunit;
 
 namespace CommandLine.Tests
 {
@@ -115,6 +116,12 @@ namespace CommandLine.Tests
         {
             var options = Helpers.Parse<object>("");
             Assert.Null(options);
+        }
+
+        [Fact]
+        public void MismatchedQuotes()
+        {
+            Assert.Throws<InvalidDataException>(() => Helpers.Parse<object>("@\" foo \""));
         }
     }
 }
