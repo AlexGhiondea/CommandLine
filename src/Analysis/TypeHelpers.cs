@@ -59,7 +59,7 @@ namespace CommandLine.Analysis
                 var actualAttribs = property.GetCustomAttributes<ActualArgumentAttribute>().ToList();
                 if (actualAttribs.Count > 1)
                 {
-                    throw new ArgumentException($"Only one of Required/Optional attribute are allowed per property ({property.Name}). [Red!Help information might be incorrect!]");
+                    throw new ArgumentException($"Only one of Required/Optional attribute are allowed per property ({property.Name}). Help information might be incorrect!");
                 }
 
                 // if we have no attributes on that property, move on
