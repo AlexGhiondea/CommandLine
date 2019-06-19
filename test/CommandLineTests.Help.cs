@@ -725,7 +725,7 @@ namespace CommandLine.Tests
         public void ErrorWhenNoRequiredParametersInGroupSpecified()
         {
             // Invalid option should be in exception text
-            var commandLine = "Command1";
+            var commandLine = "";
 
             TestWriter _printer = new TestWriter();
 
