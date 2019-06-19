@@ -50,22 +50,14 @@ namespace CommandLine
                 switch (backgroundColor)
                 {
                     case ConsoleColor.Black:
-                        return new DarkBackgroundColors();
                     case ConsoleColor.Blue:
-                        return new DarkBackgroundColors();
-                    case ConsoleColor.Cyan:
-                        return new CyanBackgroundColors();
                     case ConsoleColor.DarkBlue:
-                        return new DarkBackgroundColors();
                     case ConsoleColor.DarkCyan:
-                        return new DarkBackgroundColors();
                     case ConsoleColor.DarkGray:
-                        return new DarkBackgroundColors();
                     case ConsoleColor.DarkGreen:
-                        return new DarkBackgroundColors();
                     case ConsoleColor.DarkMagenta:
-                        return new DarkBackgroundColors();
                     case ConsoleColor.DarkRed:
+                    case ConsoleColor.Magenta:
                         return new DarkBackgroundColors();
                     case ConsoleColor.DarkYellow:
                         return new DarkYellowBackgroundColors();
@@ -73,12 +65,11 @@ namespace CommandLine
                         return new GrayBackgroundColors();
                     case ConsoleColor.Green:
                         return new GreenBackgroundColors();
-                    case ConsoleColor.Magenta:
-                        return new DarkBackgroundColors();
                     case ConsoleColor.Red:
                         return new RedBackgroundColors();
+                    case ConsoleColor.Cyan:
+                        return new CyanBackgroundColors();
                     case ConsoleColor.White:
-                        return new LightBackgroundColors();
                     case ConsoleColor.Yellow:
                         return new LightBackgroundColors();
                     default:
