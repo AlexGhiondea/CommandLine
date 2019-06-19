@@ -195,7 +195,7 @@ namespace CommandLine
 
                     // do we have a matching quote?
                     if (currentPosition == line.Length)
-                        throw new InvalidDataException("Could not find closing quote while parsing response file.");
+                        break; // if we don't, instead of throw, break from this loop.
                 }
                 else
                 {
