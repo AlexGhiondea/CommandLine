@@ -720,5 +720,45 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, "'.")
                 );
         }
+
+        [Fact]
+        public void ErrorWhenNoRequiredParametersInGroupSpecified()
+        {
+            // Invalid option should be in exception text
+            var commandLine = "Command1";
+
+            TestWriter _printer = new TestWriter();
+
+            var options = Helpers.Parse<Groups1>(commandLine, _printer);
+
+            Validate(_printer,
+                new TextAndColor(ConsoleColor.Red, "Error"),
+                new TextAndColor(ConsoleColor.Black, $": Required parameters have not been specified {Environment.NewLine}"),
+                new TextAndColor(ConsoleColor.Black, "Usage: "),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Green, "Command1"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Cyan, "p1"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt1"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Green, "Command2"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Cyan, "opt1"),
+                new TextAndColor(ConsoleColor.Black, " "),
+                new TextAndColor(ConsoleColor.Black, "[-"),
+                new TextAndColor(ConsoleColor.Yellow, "opt1"),
+                new TextAndColor(ConsoleColor.Black, " value] "),
+                new TextAndColor(ConsoleColor.Black, "For detailed information run '"),
+                new TextAndColor(ConsoleColor.White, "testhost --help"),
+                new TextAndColor(ConsoleColor.Black, "'.")
+                );
+        }
     }
 }
