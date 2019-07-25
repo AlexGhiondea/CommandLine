@@ -3,6 +3,7 @@ using CommandLine.Attributes;
 using CommandLine.Attributes.Advanced;
 using OutputColorizer;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -27,24 +28,20 @@ namespace CommandLine
         public static TOptions Parse<TOptions>(string strArgs)
             where TOptions : new()
         {
-            List<string> args = new List<string>();
-            SplitCommandLineIntoSegments(strArgs, ref args);
-            TryParse(args.ToArray(), out TOptions options);
+            TryParse(strArgs, out TOptions options);
             return options;
         }
 
         public static bool TryParse<TOptions>(string strArgs, out TOptions options)
             where TOptions : new()
         {
-            List<string> args = new List<string>();
-            SplitCommandLineIntoSegments(strArgs, ref args);
-            return TryParse(args.ToArray(), out options);
+            return TryParse(SplitCommandLineIntoSegments(strArgs).ToArray(), out options);
         }
 
         public static bool TryParse<TOptions>(string[] args, out TOptions options)
             where TOptions : new()
         {
-            options = default(TOptions);
+            options = default;
 
             TypeArgumentInfo arguments = null;
             try

@@ -3,6 +3,7 @@ using CommandLine.Attributes;
 using CommandLine.Attributes.Advanced;
 using OutputColorizer;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -51,7 +52,7 @@ namespace CommandLine
                     {
                         // we need to parse the line into a list of strings.
                         // we are going to split the line on space (except if we have just seen a ")
-                        SplitCommandLineIntoSegments(line, ref newArgs);
+                        newArgs.AddRange(SplitCommandLineIntoSegments(line));
                     }
                 }
                 else
@@ -63,13 +64,17 @@ namespace CommandLine
             return newArgs.ToArray();
         }
 
-        private static void SplitCommandLineIntoSegments(string line, ref List<string> newArgs)
+        /// <summary>
+        /// This will parse the string into separate segments. It should not throw
+        /// </summary>
+        /// <param name="line">The line that needs to be split</param>
+        /// <param name="newArgs">The list of arguments it should populate</param>
+        private static IEnumerable<string> SplitCommandLineIntoSegments(string line)
         {
             if (string.IsNullOrEmpty(line))
-                return;
+                yield break;
 
             int currentPosition = 0;
-            int segmentStart = 0;
             string segment;
 
             // skip over leading whitespace
@@ -78,7 +83,7 @@ namespace CommandLine
                 currentPosition++;
             }
 
-            segmentStart = currentPosition;
+            int segmentStart = currentPosition;
 
             do
             {
@@ -104,7 +109,7 @@ namespace CommandLine
 
                 // generate the current segment
                 segment = line.Substring(segmentStart, currentPosition - segmentStart);
-                newArgs.Add(segment);
+                yield return segment;
 
                 // this maps to the trailing quote and needs to be skipped.
                 if (currentPosition < line.Length && line[currentPosition] == '"')
