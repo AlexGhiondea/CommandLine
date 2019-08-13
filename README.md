@@ -63,10 +63,10 @@ Parser.DisplayHelp<Options>();
 
 By default, the API assumes you are using the `HelpFormat.Short` specifier which maps to `/?` or `-?`.
 
-You can ask for the long version of the help by using the `HelpFormat.Long` specifier:
+You can ask for the long version of the help by using the `HelpFormat.Full` specifier:
 
 ```csharp
-Parser.DisplayHelp<Options>(HelpFormat.Long);
+Parser.DisplayHelp<Options>(HelpFormat.Full);
 ```
 
 ## Types of arguments 
