@@ -22,9 +22,16 @@ namespace CommandLine.Tests
         }
 
         [Fact]
-        public void TestStringWithMismatchedQuotes()
+        public void TestResponseFileWithMismatchedQuotes()
         {
             var obj = Helpers.Parse<object>("@\" foo ");
+            Assert.Null(obj);
+        }
+
+        [Fact]
+        public void TestStringWithMismatchedQuotes()
+        {
+            var obj = Helpers.Parse<object>("\" foo ");
             Assert.Null(obj);
         }
 
