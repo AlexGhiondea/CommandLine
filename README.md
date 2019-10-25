@@ -6,6 +6,7 @@ CommandLine parser
 [![Build status](https://ci.appveyor.com/api/projects/status/github/AlexGhiondea/CommandLine?branch=master&svg=true)](https://ci.appveyor.com/project/AlexGhiondea/CommandLine)
 [![codecov](https://codecov.io/gh/AlexGhiondea/CommandLine/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexGhiondea/CommandLine)
 [![MIT License](https://img.shields.io/github/license/AlexGhiondea/CommandLine.svg)](https://github.com/AlexGhiondea/CommandLine/blob/master/LICENSE)
+[![Code Factor](https://www.codefactor.io/repository/github/alexghiondea/commandline/badge)](https://www.codefactor.io/repository/github/alexghiondea/commandline)
 ========
 
 ## Getting started
@@ -63,10 +64,10 @@ Parser.DisplayHelp<Options>();
 
 By default, the API assumes you are using the `HelpFormat.Short` specifier which maps to `/?` or `-?`.
 
-You can ask for the long version of the help by using the `HelpFormat.Long` specifier:
+You can ask for the long version of the help by using the `HelpFormat.Full` specifier:
 
 ```csharp
-Parser.DisplayHelp<Options>(HelpFormat.Long);
+Parser.DisplayHelp<Options>(HelpFormat.Full);
 ```
 
 ## Types of arguments 
