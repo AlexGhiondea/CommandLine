@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace CommandLine.Tests
 {
@@ -77,10 +78,7 @@ namespace CommandLine.Tests
         [Fact]
         public void GroupsTest5()
         {
-            // this should not return a good parsed object
-            var options = Helpers.Parse<OverridePositionGroup_Conflict>("List MileStoneFile Repo1 Repo2");
-
-            Assert.Null(options);
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<OverridePositionGroup_Conflict>("List MileStoneFile Repo1 Repo2"));
         }
 
         [Fact]

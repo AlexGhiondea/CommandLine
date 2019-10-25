@@ -148,7 +148,9 @@ namespace CommandLine
             if (args.Length == 2 && (args[1] == "/?" || args[1] == "-?"))
             {
                 HelpGenerator.DisplayHelpForCommmand(args[0], arguments.ArgumentGroups[args[0]], Colors.Get());
-                return false;
+
+                // if we wanted the help, then we successfully parsed it!
+                return true;
             }
 
             options = InternalParse<TOptions>(args, 1, arguments.ArgumentGroups[args[0]]);

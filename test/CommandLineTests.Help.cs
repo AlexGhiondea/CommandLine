@@ -577,7 +577,8 @@ namespace CommandLine.Tests
         [Fact]
         public void InvalidHelpFormat()
         {
-            Assert.Throws<ArgumentException>(() => Parser.DisplayHelp<Options1>((HelpFormat)4));
+            var exception = Assert.Throws<ParserException>(() => Parser.DisplayHelp<Options1>((HelpFormat)4));
+            Assert.Null(exception.InnerException);
         }
 
         [Theory, MemberData(nameof(GetBackgroundColors))]
@@ -656,7 +657,8 @@ namespace CommandLine.Tests
         public void HelpWhenPassMoreParametersThanExpected(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<MorePassedInThanRequired>("this expects 2 args", _printer, color);
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<MorePassedInThanRequired>("this expects 2 args", _printer, color));
+            Assert.IsType<ArgumentException>(exception.InnerException);
 
             Validate(_printer,
                 new TextAndColor(color.ErrorColor, "Error"),
@@ -679,7 +681,10 @@ namespace CommandLine.Tests
         public void ParseForBadType(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<TestWriter>("this expects 2 args", _printer, color);
+
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<TestWriter>("this expects 2 args", _printer, color));
+            Assert.IsType<ArgumentException>(exception.InnerException);
+
             Validate(_printer,
                 new TextAndColor(color.ErrorColor, "Error"),
                 new TextAndColor(_printer.ForegroundColor, $": Cannot have groups unless Command argument has been specified {Environment.NewLine}"),
@@ -797,7 +802,8 @@ namespace CommandLine.Tests
 
             TestWriter _printer = new TestWriter();
 
-            var options = Helpers.Parse<Groups1>(commandLine, _printer);
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<Groups1>(commandLine, _printer));
+            Assert.IsType<ArgumentException>(exception.InnerException);
 
             Validate(_printer,
                 new TextAndColor(ConsoleColor.Red, "Error"),
@@ -839,7 +845,8 @@ namespace CommandLine.Tests
 
             TestWriter _printer = new TestWriter();
 
-            var options = Helpers.Parse<Groups1>(commandLine, _printer);
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<Groups1>(commandLine, _printer));
+            Assert.IsType<ArgumentException>(exception.InnerException);
 
             Validate(_printer,
                 new TextAndColor(ConsoleColor.Red, "Error"),

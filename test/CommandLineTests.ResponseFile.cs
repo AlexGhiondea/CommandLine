@@ -24,15 +24,14 @@ namespace CommandLine.Tests
         [Fact]
         public void TestResponseFileWithMismatchedQuotes()
         {
-            var obj = Helpers.Parse<object>("@\" foo ");
-            Assert.Null(obj);
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<object>("@\" foo "));
+            Assert.IsType<FileNotFoundException>(exception.InnerException);
         }
 
         [Fact]
         public void TestStringWithMismatchedQuotes()
         {
-            var obj = Helpers.Parse<object>("\" foo ");
-            Assert.Null(obj);
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<object>("\" foo "));
         }
 
         [Fact]
@@ -108,9 +107,8 @@ namespace CommandLine.Tests
         [Fact]
         public void NotFoundResponseFile()
         {
-            var options = Helpers.Parse<Options2>("@doesNotExist");
-
-            Assert.Null(options);
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<Options2>("@doesNotExist"));
+            Assert.IsType<FileNotFoundException>(exception.InnerException);
         }
     }
 }
