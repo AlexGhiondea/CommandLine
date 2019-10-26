@@ -9,7 +9,6 @@ namespace CommandLine
         public ParserException(string message, Exception innerException)
             : base(message, innerException)
         {
-
         }
     }
 }

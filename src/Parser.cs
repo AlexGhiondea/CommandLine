@@ -76,7 +76,6 @@ namespace CommandLine
             }
         }
 
-
         private static bool InternalTryParse<TOptions>(string[] args, out TOptions options, out Exception ex)
             where TOptions : new()
         {
