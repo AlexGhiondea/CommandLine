@@ -117,9 +117,9 @@ namespace CommandLine
                 options = InternalParse<TOptions>(args, 0, arguments.ArgumentGroups[string.Empty]);
                 return true;
             }
-            catch (Exception ex2)
+            catch (Exception innerParserException)
             {
-                ex = new ParserException(ex2.Message, ex2);
+                ex = new ParserException(innerParserException.Message, innerParserException);
                 string errorFormat = $"[{Colors.Get().ErrorColor}!Error]: {{0}} {{1}}";
                 Colorizer.WriteLine(errorFormat, ex.Message, Environment.NewLine);
 
