@@ -180,17 +180,17 @@ namespace CommandLine
                 object defaultValue = value.DefaultValue;
 
                 // If we want to read values from the environment, try to get the value
-                if (Configuration.UseEnvironmentVariables)
+                if (Configuration.UseEnvironmentVariables && !value.IsCollection)
                 {
                     var envVar = Environment.GetEnvironmentVariable($"{Configuration.EnvironmentVariablePrefix}{value.Name}");
 
                     if (!string.IsNullOrEmpty(envVar))
                     {
-                        defaultValue = envVar;
+                        defaultValue = PropertyHelpers.GetValueForProperty(envVar, property);
                     }
                 }
 
-                property.SetValue(options, Convert.ChangeType(value.DefaultValue, property.PropertyType));
+                property.SetValue(options, Convert.ChangeType(defaultValue, property.PropertyType));
             }
 
             return options;
