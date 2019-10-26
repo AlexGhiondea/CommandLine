@@ -15,9 +15,10 @@ namespace CommandLine
     public static partial class Parser
     {
         /// <summary>
-        /// The default IColors object will automatically detect the color of the background and will
-        /// use the appropriate colors when generating the help
+        /// Parse the specified <paramref name="args"/> into the option type <typeparamref name="TOptions"/>
         /// </summary>
+        /// <param name="args">An array of strings containing the arguments and their values</param>
+        /// <typeparam name="TOptions">The type of the argument values to create</typeparam>
         public static TOptions Parse<TOptions>(string[] args)
             where TOptions : new()
         {
@@ -29,18 +30,37 @@ namespace CommandLine
             return options;
         }
 
+        /// <summary>
+        /// Parse the specified <paramref name="strArgs"/> string into the option type <typeparamref name="TOptions"/>
+        /// </summary>
+        /// <param name="strArgs">A string containing the arguments and their values</param>
+        /// <typeparam name="TOptions">The type of the argument values to create</typeparam>
         public static TOptions Parse<TOptions>(string strArgs)
             where TOptions : new()
         {
             return Parse<TOptions>(SplitCommandLineIntoSegments(strArgs).ToArray());
         }
 
+        /// <summary>
+        /// Try to parse the specified <paramref name="strArgs"/> string into the option type <typeparamref name="TOptions"/>
+        /// </summary>
+        /// <typeparam name="TOptions">The type of the argument values to create</typeparam>
+        /// <param name="strArgs">A string containing the arguments and their values</param>
+        /// <param name="options">A variable that will contain the parsed arguments as an object</param>
+        /// <returns>True if the parameters were parsed. False if not.</returns>
         public static bool TryParse<TOptions>(string strArgs, out TOptions options)
             where TOptions : new()
         {
             return TryParse(SplitCommandLineIntoSegments(strArgs).ToArray(), out options);
         }
 
+        /// <summary>
+        /// Try to parse the specified <paramref name="args"/> string into the option type <typeparamref name="TOptions"/>
+        /// </summary>
+        /// <typeparam name="TOptions">The type of the argument values to create</typeparam>
+        /// <param name="args">An array  containing the arguments and their values</param>
+        /// <param name="options">A variable that will contain the parsed arguments as an object</param>
+        /// <returns>True if the parameters were parsed. False if not.</returns>
         public static bool TryParse<TOptions>(string[] args, out TOptions options)
             where TOptions : new()
         {
