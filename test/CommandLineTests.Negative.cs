@@ -6,6 +6,7 @@ namespace CommandLine.Tests
 {
     public partial class CommandLineTests
     {
+        [Trait("Category", "Negative")]
         [Fact]
         public void NegativeTest1()
         {
@@ -13,6 +14,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void NegativeTest2()
         {
@@ -20,6 +22,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void NegativeTest3()
         {
@@ -27,6 +30,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void NegativeTest4()
         {
@@ -34,6 +38,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void NegativeTest5()
         {
@@ -41,6 +46,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void NegativeTest6()
         {
@@ -48,6 +54,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void NegativeTest7()
         {
@@ -55,6 +62,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void ExtraParameters1()
         {
@@ -62,6 +70,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void OptionalParameterDoesNotStartWithMinus()
         {
@@ -69,6 +78,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void TypeHasGroupsButDoesNotDefineCommand()
         {
@@ -76,6 +86,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void NotEnoughRequiredParametersSpecified()
         {
@@ -83,6 +94,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void NotEnoughRequiredParametersSpecifiedForACommand()
         {
@@ -90,6 +102,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void UnknownOptionalArgument()
         {
@@ -97,6 +110,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void ParseUnknownCommand()
         {
@@ -104,6 +118,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void ParseTypeWithWrongRequiredParamPosition()
         {
@@ -111,6 +126,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void HelpForInvalidType()
         {
@@ -118,6 +134,7 @@ namespace CommandLine.Tests
             Assert.IsType<ArgumentException>(exception.InnerException);
         }
 
+        [Trait("Category", "Negative")]
         [Fact]
         public void MismatchedQuotes()
         {

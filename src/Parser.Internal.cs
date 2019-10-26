@@ -14,7 +14,7 @@ namespace CommandLine
 {
     public static partial class Parser
     {
-         #region Private members
+        #region Private members
         private static string[] ExpandResponseFiles(string[] args)
         {
             // let's do a quick pass and see if any of the args start with @
@@ -177,6 +177,19 @@ namespace CommandLine
             {
                 //get the default value..
                 var value = property.GetCustomAttribute<OptionalArgumentAttribute>();
+                object defaultValue = value.DefaultValue;
+
+                // If we want to read values from the environment, try to get the value
+                if (Configuration.UseEnvironmentVariables)
+                {
+                    var envVar = Environment.GetEnvironmentVariable($"{Configuration.EnvironmentVariablePrefix}{value.Name}");
+
+                    if (!string.IsNullOrEmpty(envVar))
+                    {
+                        defaultValue = envVar;
+                    }
+                }
+
                 property.SetValue(options, Convert.ChangeType(value.DefaultValue, property.PropertyType));
             }
 
@@ -195,7 +208,7 @@ namespace CommandLine
                     throw new ArgumentException("Optional parameter name should start with '-'");
                 }
 
-                PropertyInfo optionalProp = null;
+                PropertyInfo optionalProp;
                 var optionalParamName = args[offsetInArray + currentLogicalPosition].Substring(1);
                 if (!TypeArgumentInfo.OptionalArguments.TryGetValue(optionalParamName, out optionalProp))
                 {

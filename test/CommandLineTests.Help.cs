@@ -20,6 +20,7 @@ namespace CommandLine.Tests
             }
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpTest1(IColors color)
         {
@@ -47,6 +48,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpTestViaApi1(IColors color)
         {
@@ -73,6 +75,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpTest4(IColors color)
         {
@@ -100,6 +103,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpTest2(IColors color)
         {
@@ -127,6 +131,7 @@ namespace CommandLine.Tests
 
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpTest3(IColors color)
         {
@@ -148,6 +153,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void DetailedHelp1(IColors color)
         {
@@ -219,6 +225,7 @@ namespace CommandLine.Tests
               );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void DetailedHelp2(IColors color)
         {
@@ -262,6 +269,7 @@ namespace CommandLine.Tests
                 );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void DetailedHelpViaApi1(IColors color)
         {
@@ -333,6 +341,7 @@ namespace CommandLine.Tests
               );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void DetailedHelpForGroups1(IColors color)
         {
@@ -392,6 +401,7 @@ namespace CommandLine.Tests
                  );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpForCommand(IColors color)
         {
@@ -427,6 +437,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpForCommandWithSlashQuestionMark(IColors color)
         {
@@ -462,6 +473,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpForTypeWithEnum(IColors color)
         {
@@ -488,6 +500,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpForTypeWithEnumWithNoHelpSettingSet(IColors color)
         {
@@ -505,6 +518,7 @@ namespace CommandLine.Tests
             }
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void DetailedHelpForGroups2WithCommonArgs(IColors color)
         {
@@ -591,6 +605,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Help")]
         [Fact]
         public void InvalidHelpFormat()
         {
@@ -598,6 +613,7 @@ namespace CommandLine.Tests
             Assert.Null(exception.InnerException);
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpForTypeWithRequiredAndOptionalEnumsAndLists(IColors color)
         {
@@ -670,6 +686,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpWhenPassMoreParametersThanExpected(IColors color)
         {
@@ -694,6 +711,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void ParseForBadType(IColors color)
         {
@@ -712,7 +730,7 @@ namespace CommandLine.Tests
                 );
         }
 
-
+        [Trait("Category", "Help")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpForBadType(IColors color)
         {
@@ -724,6 +742,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Color")]
         [Fact]
         public void GetColorScheme()
         {
@@ -740,6 +759,7 @@ namespace CommandLine.Tests
             }
         }
 
+        [Trait("Category", "Color")]
         [Fact]
         public void ValidateBackgroundColorScheme()
         {
@@ -810,7 +830,7 @@ namespace CommandLine.Tests
             yield return new object[] { new GrayBackgroundColors() };
         }
 
-
+        [Trait("Category", "Help")]
         [Fact]
         public void EnsureThatRightParameterIsReportedForGroups()
         {
@@ -853,7 +873,8 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, "'.")
                 );
         }
-
+        
+        [Trait("Category", "Help")]
         [Fact]
         public void ErrorWhenNoRequiredParametersInGroupSpecified()
         {

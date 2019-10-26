@@ -18,6 +18,10 @@ namespace CommandLine
         {
             public static bool DisplayErrorMessageOnError { get; set; } = true;
 
+            public static string EnvironmentVariablePrefix { get; set; } = "Commandline_";
+
+            public static bool UseEnvironmentVariables { get; set; } = true;
+
             public static class DisplayColors
             {
                 private static IColors s_helpColors;
