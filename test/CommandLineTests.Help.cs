@@ -493,7 +493,7 @@ namespace CommandLine.Tests
         {
             try
             {
-                Parser.Options.DisplayErrorMessageOnError = false;
+                Parser.Configuration.DisplayErrorMessageOnError = false;
                 TestWriter _printer = new TestWriter();
                 var options = Helpers.Parse<Options3NoRequired>("/?", _printer, color);
 
@@ -501,7 +501,7 @@ namespace CommandLine.Tests
             }
             catch
             {
-                Parser.Options.DisplayErrorMessageOnError = true;
+                Parser.Configuration.DisplayErrorMessageOnError = true;
             }
         }
 
@@ -731,8 +731,8 @@ namespace CommandLine.Tests
             try
             {
                 Console.BackgroundColor = ConsoleColor.Black;
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get());
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get());
             }
             finally
             {
@@ -747,50 +747,50 @@ namespace CommandLine.Tests
             try
             {
                 #region Dark backgound
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.Black));
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkGray));
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkCyan));
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkGreen));
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkMagenta));
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkRed));
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.Blue));
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.Magenta));
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkBlue));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Black));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkGray));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkCyan));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkGreen));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkMagenta));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkRed));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Blue));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Magenta));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkBlue));
                 #endregion
 
                 #region Multicolor
-                Parser.Colors.Set(null);
-                Assert.IsType<GrayBackgroundColors>(Parser.Colors.Get(ConsoleColor.Gray));
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkYellowBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkYellow));
-                Parser.Colors.Set(null);
-                Assert.IsType<GreenBackgroundColors>(Parser.Colors.Get(ConsoleColor.Green));
-                Parser.Colors.Set(null);
-                Assert.IsType<CyanBackgroundColors>(Parser.Colors.Get(ConsoleColor.Cyan));
-                Parser.Colors.Set(null);
-                Assert.IsType<RedBackgroundColors>(Parser.Colors.Get(ConsoleColor.Red));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<GrayBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Gray));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkYellowBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkYellow));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<GreenBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Green));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<CyanBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Cyan));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<RedBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Red));
 
                 #endregion
 
                 #region Light background
-                Parser.Colors.Set(null);
-                Assert.IsType<LightBackgroundColors>(Parser.Colors.Get(ConsoleColor.White));
-                Parser.Colors.Set(null);
-                Assert.IsType<LightBackgroundColors>(Parser.Colors.Get(ConsoleColor.Yellow));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<LightBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.White));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<LightBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Yellow));
                 #endregion
 
                 #region Unknown color
-                Parser.Colors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get((ConsoleColor)25));
+                Parser.Configuration.DisplayColors.Set(null);
+                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get((ConsoleColor)25));
                 #endregion
             }
             finally
