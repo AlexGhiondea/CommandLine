@@ -16,7 +16,7 @@ namespace CommandLine
     {
         public static class Options
         {
-            public static bool WriteHelpOnError { get; set; } = true;
+            public static bool DisplayErrorMessageOnError { get; set; } = true;
         }
     }
 }

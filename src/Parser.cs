@@ -120,11 +120,13 @@ namespace CommandLine
             catch (Exception innerParserException)
             {
                 ex = new ParserException(innerParserException.Message, innerParserException);
-                string errorFormat = $"[{Colors.Get().ErrorColor}!Error]: {{0}} {{1}}";
-                Colorizer.WriteLine(errorFormat, ex.Message, Environment.NewLine);
+                if (Options.DisplayErrorMessageOnError)
+                {
+                    string errorFormat = $"[{Colors.Get().ErrorColor}!Error]: {{0}} {{1}}";
+                    Colorizer.WriteLine(errorFormat, ex.Message, Environment.NewLine);
 
-                HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, Colors.Get());
-
+                    HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, Colors.Get());
+                }
                 return false;
             }
         }
