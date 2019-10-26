@@ -489,6 +489,23 @@ namespace CommandLine.Tests
         }
 
         [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void HelpForTypeWithEnumWithNoHelpSettingSet(IColors color)
+        {
+            try
+            {
+                Parser.Options.DisplayErrorMessageOnError = false;
+                TestWriter _printer = new TestWriter();
+                var options = Helpers.Parse<Options3NoRequired>("/?", _printer, color);
+
+                Validate(_printer);
+            }
+            catch
+            {
+                Parser.Options.DisplayErrorMessageOnError = true;
+            }
+        }
+
+        [Theory, MemberData(nameof(GetBackgroundColors))]
         public void DetailedHelpForGroups2WithCommonArgs(IColors color)
         {
             TestWriter _printer = new TestWriter();
@@ -749,7 +766,7 @@ namespace CommandLine.Tests
                 Parser.Colors.Set(null);
                 Assert.IsType<DarkBackgroundColors>(Parser.Colors.Get(ConsoleColor.DarkBlue));
                 #endregion
-                
+
                 #region Multicolor
                 Parser.Colors.Set(null);
                 Assert.IsType<GrayBackgroundColors>(Parser.Colors.Get(ConsoleColor.Gray));
@@ -781,7 +798,7 @@ namespace CommandLine.Tests
                 Console.BackgroundColor = currentBackgroundColor;
             }
         }
-        
+
         public static IEnumerable<object[]> GetBackgroundColors()
         {
             yield return new object[] { new DarkBackgroundColors() };
@@ -792,8 +809,8 @@ namespace CommandLine.Tests
             yield return new object[] { new RedBackgroundColors() };
             yield return new object[] { new GrayBackgroundColors() };
         }
-            
-        
+
+
         [Fact]
         public void EnsureThatRightParameterIsReportedForGroups()
         {
@@ -807,7 +824,7 @@ namespace CommandLine.Tests
 
             Validate(_printer,
                 new TextAndColor(ConsoleColor.Red, "Error"),
-                new TextAndColor(ConsoleColor.Black, $": Could not find argument -opt1=value {Environment.NewLine}"), 
+                new TextAndColor(ConsoleColor.Black, $": Could not find argument -opt1=value {Environment.NewLine}"),
                 new TextAndColor(ConsoleColor.Black, "Usage: "),
                 new TextAndColor(ConsoleColor.Black, " "),
                 new TextAndColor(ConsoleColor.White, "testhost.exe"),
