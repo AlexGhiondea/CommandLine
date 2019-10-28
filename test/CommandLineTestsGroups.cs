@@ -1,10 +1,12 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace CommandLine.Tests
 {
 
     public partial class CommandLineTests
     {
+        [Trait("Category", "Groups")]
         [Fact]
         public void GroupsTest1()
         {
@@ -14,6 +16,7 @@ namespace CommandLine.Tests
             Assert.Equal(10, options.opt1);
         }
 
+        [Trait("Category", "Groups")]
         [Fact]
         public void GroupsTest2()
         {
@@ -24,6 +27,7 @@ namespace CommandLine.Tests
             Assert.Equal(10, options.opt1);
         }
 
+        [Trait("Category", "Groups")]
         [Fact]
         public void GroupsTest3()
         {
@@ -35,6 +39,7 @@ namespace CommandLine.Tests
             Assert.Equal(200, options.opt2);
         }
 
+        [Trait("Category", "Groups")]
         [Fact]
         public void GroupsTest4()
         {
@@ -55,6 +60,7 @@ namespace CommandLine.Tests
             Assert.Equal("Repo2", options.Repositories[1]);
         }
 
+        [Trait("Category", "Groups")]
         [Fact]
         public void GroupsTest7()
         {
@@ -74,15 +80,14 @@ namespace CommandLine.Tests
             Assert.Equal("Three", options.Three);
         }
 
+        [Trait("Category", "Groups")]
         [Fact]
         public void GroupsTest5()
         {
-            // this should not return a good parsed object
-            var options = Helpers.Parse<OverridePositionGroup_Conflict>("List MileStoneFile Repo1 Repo2");
-
-            Assert.Null(options);
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<OverridePositionGroup_Conflict>("List MileStoneFile Repo1 Repo2"));
         }
 
+        [Trait("Category", "Groups")]
         [Fact]
         public void GroupsTest6()
         {
@@ -98,7 +103,8 @@ namespace CommandLine.Tests
             Assert.Equal("MileStoneFile", options.MilestoneFile);
             Assert.Equal("Repo1", options.Repository);
         }
-        
+
+        [Trait("Category", "Groups")]
         [Fact]
         public void GroupsTest8()
         {

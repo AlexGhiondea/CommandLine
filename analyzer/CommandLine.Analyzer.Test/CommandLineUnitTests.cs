@@ -12,6 +12,7 @@ namespace CommandLine.Test
     [TestClass]
     public class UnitTest : DiagnosticVerifier
     {
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void NoErrorExpectedForNoCode()
         {
@@ -69,6 +70,7 @@ internal class CommandLineOptions
             VerifyCommandLineDiagnostic(test);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void TwoPropertiesOnTheSamePosition()
         {
@@ -108,6 +110,7 @@ class Options
             VerifyCommandLineDiagnostic(test, expected2, expected1);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void TwoPropertiesWithTheSameName_BothRequired()
         {
@@ -136,6 +139,7 @@ class Options
             VerifyCommandLineDiagnostic(test, expected);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void TwoPropertiesWithTheSameName_BothOptional()
         {
@@ -164,6 +168,7 @@ class Options
             VerifyCommandLineDiagnostic(test, expected);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void TwoPropertiesWithTheSameName_RequiredAndOptional()
         {
@@ -192,6 +197,7 @@ class Options
             VerifyCommandLineDiagnostic(test, expected);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void RequiredAndOptionalArgumentOnProperty()
         {
@@ -218,6 +224,7 @@ class Options
             VerifyCommandLineDiagnostic(test, expected);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void MultipleActionArgumentsOnType()
         {
@@ -252,6 +259,7 @@ class Options
             VerifyCommandLineDiagnostic(test, expected);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void ArgumentGroupSpecifiedOnNonProperty()
         {
@@ -286,6 +294,7 @@ class Options
             VerifyCommandLineDiagnostic(test, expected);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void CommonArgumentSpecifiedOnStringActionField()
         {
@@ -329,6 +338,7 @@ class Options
             VerifyCommandLineDiagnostic(test, expected);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void RequiredPropertyNotStartingAtPositionZero()
         {
@@ -354,6 +364,7 @@ class Options
             VerifyCommandLineDiagnostic(test, expected);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void PropertiesWithMultipledPositionalRequiredArgsInGroups()
         {
@@ -404,6 +415,7 @@ internal class CommandLineOptions
             VerifyCommandLineDiagnostic(test);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void PropertiesWithMultipledPositionalRequiredArgsInGroups2()
         {
@@ -442,6 +454,7 @@ internal class CommandLineOptions
             VerifyCommandLineDiagnostic(test);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void InvalidPropertiesWithMultipledPositionalRequiredArgsInGroups()
         {
@@ -499,6 +512,7 @@ internal class CommandLineOptions
             VerifyCommandLineDiagnostic(test, expected);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void RedirectRequiredArg()
         {
@@ -536,6 +550,7 @@ using CommandLine.Attributes.Advanced;
             VerifyCommandLineDiagnostic(test);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void InvalidCode1()
         {
@@ -559,6 +574,7 @@ class Options
             VerifyCommandLineDiagnostic(test);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void InvalidCode2()
         {
@@ -582,6 +598,7 @@ class Options
             VerifyCommandLineDiagnostic(test);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void InvalidCode3()
         {
@@ -604,7 +621,8 @@ class Options
 
             VerifyCommandLineDiagnostic(test);
         }
-
+        
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void InvalidCode4()
         {
@@ -621,6 +639,7 @@ class Options
             VerifyCommandLineDiagnostic(test);
         }
 
+        [TestCategory("Analyzer")]
         [TestMethod]
         public void ArgumentWithNoArgs()
         {

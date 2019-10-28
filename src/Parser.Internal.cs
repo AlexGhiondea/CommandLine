@@ -14,7 +14,7 @@ namespace CommandLine
 {
     public static partial class Parser
     {
-         #region Private members
+        #region Private members
         private static string[] ExpandResponseFiles(string[] args)
         {
             // let's do a quick pass and see if any of the args start with @
@@ -147,8 +147,10 @@ namespace CommandLine
             // short circuit the request for help!
             if (args.Length == 2 && (args[1] == "/?" || args[1] == "-?"))
             {
-                HelpGenerator.DisplayHelpForCommmand(args[0], arguments.ArgumentGroups[args[0]], Colors.Get());
-                return false;
+                HelpGenerator.DisplayHelpForCommmand(args[0], arguments.ArgumentGroups[args[0]], Configuration.DisplayColors.Get());
+
+                // if we wanted the help, then we successfully parsed it!
+                return true;
             }
 
             options = InternalParse<TOptions>(args, 1, arguments.ArgumentGroups[args[0]]);
@@ -175,7 +177,20 @@ namespace CommandLine
             {
                 //get the default value..
                 var value = property.GetCustomAttribute<OptionalArgumentAttribute>();
-                property.SetValue(options, Convert.ChangeType(value.DefaultValue, property.PropertyType));
+                object defaultValue = value.DefaultValue;
+
+                // If we want to read values from the environment, try to get the value
+                if (Configuration.UseEnvironmentVariables && !value.IsCollection)
+                {
+                    var envVar = Environment.GetEnvironmentVariable($"{Configuration.EnvironmentVariablePrefix}{value.Name}");
+
+                    if (!string.IsNullOrEmpty(envVar))
+                    {
+                        defaultValue = PropertyHelpers.GetValueForProperty(envVar, property);
+                    }
+                }
+
+                property.SetValue(options, Convert.ChangeType(defaultValue, property.PropertyType));
             }
 
             return options;
@@ -193,7 +208,7 @@ namespace CommandLine
                     throw new ArgumentException("Optional parameter name should start with '-'");
                 }
 
-                PropertyInfo optionalProp = null;
+                PropertyInfo optionalProp;
                 var optionalParamName = args[offsetInArray + currentLogicalPosition].Substring(1);
                 if (!TypeArgumentInfo.OptionalArguments.TryGetValue(optionalParamName, out optionalProp))
                 {

@@ -4,6 +4,7 @@ namespace CommandLine.Tests
 {
     public partial class CommandLineTests
     {
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest1()
         {
@@ -16,6 +17,7 @@ namespace CommandLine.Tests
             Assert.Null(options.opt3);
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest2()
         {
@@ -28,6 +30,7 @@ namespace CommandLine.Tests
             Assert.Null(options.opt3);
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest3()
         {
@@ -40,6 +43,7 @@ namespace CommandLine.Tests
             Assert.Null(options.opt3);
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest4()
         {
@@ -52,6 +56,7 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt3, "a", "b", "c");
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest5()
         {
@@ -64,6 +69,7 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt3, "a", "b", "c");
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest6()
         {
@@ -76,6 +82,7 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt3, "a", "b", "c");
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest7()
         {
@@ -87,6 +94,7 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt2, "a", "b", "c");
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest8()
         {
@@ -98,6 +106,7 @@ namespace CommandLine.Tests
             Assert.Null(options.opt2);
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest9()
         {
@@ -108,6 +117,7 @@ namespace CommandLine.Tests
             Assert.Equal(Enum1.B, options.opt3);
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest10()
         {
@@ -118,6 +128,7 @@ namespace CommandLine.Tests
             Assert.Equal(Enum1.A, options.opt3);
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest11()
         {
@@ -130,6 +141,7 @@ namespace CommandLine.Tests
             Assert.Equal('b', options.Character);
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest12()
         {
@@ -144,6 +156,7 @@ namespace CommandLine.Tests
             Assert.Equal('b', options.Character);
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest13()
         {
@@ -157,6 +170,7 @@ namespace CommandLine.Tests
             Assert.Equal('b', options.Character);
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest14()
         {
@@ -171,6 +185,7 @@ namespace CommandLine.Tests
             Assert.Equal('b', options.Character);
         }
 
+        [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest15()
         {

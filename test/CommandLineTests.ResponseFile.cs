@@ -10,6 +10,7 @@ namespace CommandLine.Tests
 {
     public partial class CommandLineTests
     {
+        [Trait("Category", "Response file")]
         [Fact]
         public void GroupsTest1_WithResponseFile()
         {
@@ -21,20 +22,22 @@ namespace CommandLine.Tests
             Assert.Equal(10, options.opt1);
         }
 
+        [Trait("Category", "Response file")]
         [Fact]
         public void TestResponseFileWithMismatchedQuotes()
         {
-            var obj = Helpers.Parse<object>("@\" foo ");
-            Assert.Null(obj);
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<object>("@\" foo "));
+            Assert.IsType<FileNotFoundException>(exception.InnerException);
         }
 
+        [Trait("Category", "Response file")]
         [Fact]
         public void TestStringWithMismatchedQuotes()
         {
-            var obj = Helpers.Parse<object>("\" foo ");
-            Assert.Null(obj);
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<object>("\" foo "));
         }
 
+        [Trait("Category", "Response file")]
         [Fact]
         public void BasicTest5_WithResponseFile()
         {
@@ -50,6 +53,7 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt3, "a", "b", "c");
         }
 
+        [Trait("Category", "Response file")]
         [Fact]
         public void BasicTest7_WithResponseFile()
         {
@@ -64,6 +68,7 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt2, "a", "b", "c");
         }
 
+        [Trait("Category", "Response file")]
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpTest1_WithResponseFile(IColors color)
         {
@@ -92,6 +97,7 @@ namespace CommandLine.Tests
             );
         }
 
+        [Trait("Category", "Response file")]
         [Fact]
         public void ResponseFileEscaping()
         {
@@ -105,12 +111,12 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt2, "a", "b", "c\t d");
         }
 
+        [Trait("Category", "Response file")]
         [Fact]
         public void NotFoundResponseFile()
         {
-            var options = Helpers.Parse<Options2>("@doesNotExist");
-
-            Assert.Null(options);
+            var exception = Assert.Throws<ParserException>(() => Helpers.Parse<Options2>("@doesNotExist"));
+            Assert.IsType<FileNotFoundException>(exception.InnerException);
         }
     }
 }
