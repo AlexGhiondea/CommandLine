@@ -85,6 +85,7 @@ There are 2 kinds of arguments:
 
 ## Advanced scenarios
 
+### Argument grouping
 There are cases when you want to have different sets of arguments depending on one of the arguments.
 
 The argument that will be used as the differentiator will be marked with the `ActionArgument` attribute. That argument must be specified.
@@ -94,7 +95,6 @@ You will specify the argument group for a property using the `ArgumentGroup` att
 A single property in a class can take part in many argument groups.
 
 If a property will be common to all groups, you can use the `CommonArgument' attribute
-
 
 ```csharp
 internal class CommandLineOptions
@@ -134,4 +134,79 @@ internal class CommandLineOptions
     public string Host { get; set; }
 
 }
+```
+
+### Argument position override
+
+Sometimes you want to have a common parameter shared across multiple commands, but you want the position of it to be different in those two groups.
+
+To do that, you use the constructor for the `ArgumentGroup` attribute that takes as the second argument the override position for that argument group.
+
+In the example below, the common parameter `repos` is defined as required in position `1`.
+For the group `Create` where no override position is specified, the parameter will be required at position `1`.
+For the group `List` where the override position is specified, the parameter will be required at position `0`.
+
+```csharp
+class OverridePositionGroup
+{
+    [ActionArgument]
+    public Action Action { get; set; }
+
+    [ArgumentGroup(nameof(Action.Create))]
+    [RequiredArgument(0, "milestoneInputFile", "The file containing the list of milestones to create.")]
+    public string MilestoneFile { get; set; }
+
+    [ArgumentGroup(nameof(Action.List), 0)]
+    [ArgumentGroup(nameof(Action.Create))]
+    [RequiredArgument(1, "repos", "The list of repositories where to add the milestones to. The format is: owner\\repoName.", true)]
+    public List<string> Repositories { get; set; }
+}
+```
+
+### Background color
+
+The parser will automatically detect the color to use when displaying help in a command prompt. There are a set of colors that are predefined depending on the console color.
+
+You can specify different colors to be used by implementing the `IColor` interface and configuring the parser:
+
+```csharp
+public class CustomColors : IColors
+{
+    public ConsoleColor ErrorColor => ConsoleColor.Red;
+    public ConsoleColor AssemblyNameColor => ConsoleColor.DarkGray;
+    public ConsoleColor ArgumentGroupColor => ConsoleColor.DarkGreen;
+    public ConsoleColor RequiredArgumentColor => ConsoleColor.Magenta;
+    public ConsoleColor ArgumentValueColor => ConsoleColor.DarkGreen;
+    public ConsoleColor OptionalArgumentColor => ConsoleColor.DarkBlue;
+}
+
+// Configure the parser to use the new colors
+Parser.Configuration.DisplayColors.Set(new CustomColors());
+```
+
+### Environment variable parsing
+
+By default, the parser will try and infer optional parameters from the environment variables if they are not specified in the command line.
+
+The order of precedence is going to be (from most specific to least specific):
+1. Values passed in via the command line
+2. Values specified in the environment
+3. Default value specified in the argument type
+
+By default, the Parser will look for environment variables with this name:
+
+```
+CommandLine_<name>
+```
+
+The `<name>` represents the optional parameter name as defined in the type declaration.
+
+You can change the prefix for the Parser:
+```csharp
+Parser.Configuration.EnvironmentVariablePrefix = "myPrefix";
+```
+
+You can also disable the feature completely:
+```csharp
+Parser.Configuration.UseEnvironmentVariables = false;
 ```
