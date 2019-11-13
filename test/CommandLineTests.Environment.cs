@@ -8,7 +8,7 @@ namespace CommandLine.Tests
         [Fact]
         public void EnvironmentTest1()
         {
-            Parser.Configuration.EnvironmentVariablePrefix = nameof(EnvironmentTest1);
+            Parser.Configuration.Environment.VariableNamePrefix = nameof(EnvironmentTest1);
 
             Environment.SetEnvironmentVariable($"{nameof(EnvironmentTest1)}opt1", "10", EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable($"{nameof(EnvironmentTest1)}opt3", "A", EnvironmentVariableTarget.Process);

@@ -147,7 +147,7 @@ namespace CommandLine
             // short circuit the request for help!
             if (args.Length == 2 && (args[1] == "/?" || args[1] == "-?"))
             {
-                HelpGenerator.DisplayHelpForCommmand(args[0], arguments.ArgumentGroups[args[0]], Configuration.DisplayColors.Get());
+                HelpGenerator.DisplayHelpForCommmand(args[0], arguments.ArgumentGroups[args[0]], Configuration.ColorScheme.Get());
 
                 // if we wanted the help, then we successfully parsed it!
                 return true;
@@ -180,9 +180,9 @@ namespace CommandLine
                 object defaultValue = value.DefaultValue;
 
                 // If we want to read values from the environment, try to get the value
-                if (Configuration.UseEnvironmentVariables && !value.IsCollection)
+                if (Configuration.Environment.UseEnvironmentVariables && !value.IsCollection)
                 {
-                    var envVar = Environment.GetEnvironmentVariable($"{Configuration.EnvironmentVariablePrefix}{value.Name}");
+                    var envVar = Environment.GetEnvironmentVariable($"{Configuration.Environment.VariableNamePrefix}{value.Name}");
 
                     if (!string.IsNullOrEmpty(envVar))
                     {

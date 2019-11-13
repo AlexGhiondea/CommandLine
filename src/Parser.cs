@@ -86,11 +86,11 @@ namespace CommandLine
                 TypeHelpers.ScanTypeForProperties<TOptions>(out TypeArgumentInfo arguments);
 
                 // If we get here, the options type is well defined, so let's display the help.
-                HelpGenerator.DisplayHelp(helpFormat, arguments, Configuration.DisplayColors.Get());
+                HelpGenerator.DisplayHelp(helpFormat, arguments, Configuration.ColorScheme.Get());
             }
             catch (Exception ex)
             {
-                string errorFormat = $"[{Configuration.DisplayColors.Get().ErrorColor}!Error]: {{0}} {{1}}";
+                string errorFormat = $"[{Configuration.ColorScheme.Get().ErrorColor}!Error]: {{0}} {{1}}";
                 // If we were asked to display the help and something went wrong, display the error that went wrong.
                 Colorizer.WriteLine(errorFormat, ex.Message, Environment.NewLine);
             }
@@ -117,12 +117,12 @@ namespace CommandLine
                 {
                     if (args[0] == HelpGenerator.RequestShortHelpParameter || args[0] == "/?")
                     {
-                        HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, Configuration.DisplayColors.Get());
+                        HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, Configuration.ColorScheme.Get());
                         return true;
                     }
                     else if (args[0] == HelpGenerator.RequestLongHelpParameter)
                     {
-                        HelpGenerator.DisplayHelp(HelpFormat.Full, arguments, Configuration.DisplayColors.Get());
+                        HelpGenerator.DisplayHelp(HelpFormat.Full, arguments, Configuration.ColorScheme.Get());
                         return true;
                     }
                 }
@@ -142,10 +142,10 @@ namespace CommandLine
                 ex = new ParserException(innerParserException.Message, innerParserException);
                 if (Configuration.DisplayErrorMessageOnError)
                 {
-                    string errorFormat = $"[{Configuration.DisplayColors.Get().ErrorColor}!Error]: {{0}} {{1}}";
+                    string errorFormat = $"[{Configuration.ColorScheme.Get().ErrorColor}!Error]: {{0}} {{1}}";
                     Colorizer.WriteLine(errorFormat, ex.Message, Environment.NewLine);
 
-                    HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, Configuration.DisplayColors.Get());
+                    HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, Configuration.ColorScheme.Get());
                 }
                 return false;
             }

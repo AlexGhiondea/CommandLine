@@ -1,6 +1,6 @@
 using System;
 
-namespace CommandLine.Colors
+namespace CommandLine.ColorScheme
 {
     public interface IColors
     {

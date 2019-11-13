@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using CommandLine.Colors;
+using CommandLine.ColorScheme;
 
 namespace CommandLine
 {
@@ -18,11 +18,14 @@ namespace CommandLine
         {
             public static bool DisplayErrorMessageOnError { get; set; } = true;
 
-            public static string EnvironmentVariablePrefix { get; set; } = "Commandline_";
+            public static class Environment
+            {
+                public static string VariableNamePrefix { get; set; } = "Commandline_";
 
-            public static bool UseEnvironmentVariables { get; set; } = true;
+                public static bool UseEnvironmentVariables { get; set; } = true;
+            }
 
-            public static class DisplayColors
+            public static class ColorScheme
             {
                 private static IColors s_helpColors;
                 private static object s_lockObj = new object();
@@ -65,22 +68,22 @@ namespace CommandLine
                         case ConsoleColor.DarkMagenta:
                         case ConsoleColor.DarkRed:
                         case ConsoleColor.Magenta:
-                            return new DarkBackgroundColors();
+                            return new DarkBackground();
                         case ConsoleColor.DarkYellow:
-                            return new DarkYellowBackgroundColors();
+                            return new DarkYellowBackground();
                         case ConsoleColor.Gray:
-                            return new GrayBackgroundColors();
+                            return new GrayBackground();
                         case ConsoleColor.Green:
-                            return new GreenBackgroundColors();
+                            return new GreenBackground();
                         case ConsoleColor.Red:
-                            return new RedBackgroundColors();
+                            return new RedBackground();
                         case ConsoleColor.Cyan:
-                            return new CyanBackgroundColors();
+                            return new CyanBackground();
                         case ConsoleColor.White:
                         case ConsoleColor.Yellow:
-                            return new LightBackgroundColors();
+                            return new LightBackground();
                         default:
-                            return new DarkBackgroundColors();
+                            return new DarkBackground();
                     }
                 }
 
