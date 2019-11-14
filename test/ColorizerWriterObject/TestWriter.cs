@@ -55,7 +55,7 @@ namespace CommandLine.Tests
 
         private string GetColorPropertyNameForColor()
         {
-            IColors currentColorScheme = Parser.Configuration.ColorScheme.Get();
+            IColors currentColorScheme = Parser.ColorScheme.Get();
             string propertyName = "";
             // check which color matches the current ForegroundColor.
             if (currentColorScheme.ArgumentGroupColor == ForegroundColor) propertyName = nameof(currentColorScheme.ArgumentGroupColor);

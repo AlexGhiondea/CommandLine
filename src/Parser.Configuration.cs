@@ -14,76 +14,73 @@ namespace CommandLine
 {
     public static partial class Parser
     {
-        public static class Configuration
+        public static class ColorScheme
         {
-            public static class ColorScheme
+            private static IColors s_helpColors;
+            private static object s_lockObj = new object();
+
+            public static IColors Get(ConsoleColor backgroundColor = (ConsoleColor)(-1))
             {
-                private static IColors s_helpColors;
-                private static object s_lockObj = new object();
-
-                public static IColors Get(ConsoleColor backgroundColor = (ConsoleColor)(-1))
+                if (s_helpColors != null)
                 {
-                    if (s_helpColors != null)
-                    {
-                        return s_helpColors;
-                    }
-
-                    // if the color is not specified, default to the current console's background color.
-                    if (backgroundColor == (ConsoleColor)(-1))
-                    {
-                        backgroundColor = Console.BackgroundColor;
-                    }
-
-                    // Get the color scheme.
-                    lock (s_lockObj)
-                    {
-                        if (s_helpColors == null)
-                        {
-                            s_helpColors = GetDefault(backgroundColor);
-                        }
-                    }
-
                     return s_helpColors;
                 }
 
-                private static IColors GetDefault(ConsoleColor backgroundColor)
+                // if the color is not specified, default to the current console's background color.
+                if (backgroundColor == (ConsoleColor)(-1))
                 {
-                    switch (backgroundColor)
+                    backgroundColor = Console.BackgroundColor;
+                }
+
+                // Get the color scheme.
+                lock (s_lockObj)
+                {
+                    if (s_helpColors == null)
                     {
-                        case ConsoleColor.Black:
-                        case ConsoleColor.Blue:
-                        case ConsoleColor.DarkBlue:
-                        case ConsoleColor.DarkCyan:
-                        case ConsoleColor.DarkGray:
-                        case ConsoleColor.DarkGreen:
-                        case ConsoleColor.DarkMagenta:
-                        case ConsoleColor.DarkRed:
-                        case ConsoleColor.Magenta:
-                            return new DarkBackground();
-                        case ConsoleColor.DarkYellow:
-                            return new DarkYellowBackground();
-                        case ConsoleColor.Gray:
-                            return new GrayBackground();
-                        case ConsoleColor.Green:
-                            return new GreenBackground();
-                        case ConsoleColor.Red:
-                            return new RedBackground();
-                        case ConsoleColor.Cyan:
-                            return new CyanBackground();
-                        case ConsoleColor.White:
-                        case ConsoleColor.Yellow:
-                            return new LightBackground();
-                        default:
-                            return new DarkBackground();
+                        s_helpColors = GetDefault(backgroundColor);
                     }
                 }
 
-                public static void Set(IColors colors)
+                return s_helpColors;
+            }
+
+            private static IColors GetDefault(ConsoleColor backgroundColor)
+            {
+                switch (backgroundColor)
                 {
-                    lock (s_lockObj)
-                    {
-                        s_helpColors = colors;
-                    }
+                    case ConsoleColor.Black:
+                    case ConsoleColor.Blue:
+                    case ConsoleColor.DarkBlue:
+                    case ConsoleColor.DarkCyan:
+                    case ConsoleColor.DarkGray:
+                    case ConsoleColor.DarkGreen:
+                    case ConsoleColor.DarkMagenta:
+                    case ConsoleColor.DarkRed:
+                    case ConsoleColor.Magenta:
+                        return new DarkBackground();
+                    case ConsoleColor.DarkYellow:
+                        return new DarkYellowBackground();
+                    case ConsoleColor.Gray:
+                        return new GrayBackground();
+                    case ConsoleColor.Green:
+                        return new GreenBackground();
+                    case ConsoleColor.Red:
+                        return new RedBackground();
+                    case ConsoleColor.Cyan:
+                        return new CyanBackground();
+                    case ConsoleColor.White:
+                    case ConsoleColor.Yellow:
+                        return new LightBackground();
+                    default:
+                        return new DarkBackground();
+                }
+            }
+
+            public static void Set(IColors colors)
+            {
+                lock (s_lockObj)
+                {
+                    s_helpColors = colors;
                 }
             }
         }

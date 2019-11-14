@@ -29,7 +29,7 @@ namespace CommandLine.Tests
             }
 
             Colorizer.SetupWriter(writer);
-            Parser.Configuration.ColorScheme.Set(colors);
+            Parser.ColorScheme.Set(colors);
             return Parser.Parse<T>(argString, parserOptions);
         }
 
@@ -46,7 +46,7 @@ namespace CommandLine.Tests
             }
 
             Colorizer.SetupWriter(writer);
-            Parser.Configuration.ColorScheme.Set(colors);
+            Parser.ColorScheme.Set(colors);
             Parser.DisplayHelp<T>(helpFormat);
         }
 
