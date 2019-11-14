@@ -16,15 +16,6 @@ namespace CommandLine
     {
         public static class Configuration
         {
-            public static bool DisplayErrorMessageOnError { get; set; } = true;
-
-            public static class Environment
-            {
-                public static string VariableNamePrefix { get; set; } = "Commandline_";
-
-                public static bool UseEnvironmentVariables { get; set; } = true;
-            }
-
             public static class ColorScheme
             {
                 private static IColors s_helpColors;

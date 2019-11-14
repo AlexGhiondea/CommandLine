@@ -15,7 +15,8 @@ namespace CommandLine.Tests
             return AppDomain.CurrentDomain.BaseDirectory;
         }
 
-        public static T Parse<T>(string argString, IOutputWriter writer = null, IColors colors = null) where T : new()
+        public static T Parse<T>(string argString, IOutputWriter writer = null, IColors colors = null, ParserOptions parserOptions = null)
+            where T : new()
         {
             if (writer == null)
             {
@@ -29,7 +30,7 @@ namespace CommandLine.Tests
 
             Colorizer.SetupWriter(writer);
             Parser.Configuration.ColorScheme.Set(colors);
-            return Parser.Parse<T>(argString);
+            return Parser.Parse<T>(argString, parserOptions);
         }
 
         public static void DisplayHelp<T>(HelpFormat helpFormat, IOutputWriter writer = null, IColors colors = null) where T : new()

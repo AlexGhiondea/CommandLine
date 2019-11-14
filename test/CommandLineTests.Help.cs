@@ -503,18 +503,49 @@ namespace CommandLine.Tests
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpForTypeWithEnumWithNoHelpSettingSet(IColors color)
         {
-            try
-            {
-                Parser.Configuration.DisplayErrorMessageOnError = false;
-                TestWriter _printer = new TestWriter();
-                var options = Helpers.Parse<Options3NoRequired>("/?", _printer, color);
+            // the help is not covered by the error flag.
+            ParserOptions po = new ParserOptions() { LogParseErrorToConsole = false };
+            TestWriter _printer = new TestWriter();
+            var options = Helpers.Parse<Options3NoRequired>("/?", _printer, color, po);
 
-                Validate(_printer);
-            }
-            catch
-            {
-                Parser.Configuration.DisplayErrorMessageOnError = true;
-            }
+            Validate(_printer,
+                new TextAndColor(_printer.ForegroundColor, "Usage: "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt1"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt2"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt3"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
+                new TextAndColor(color.AssemblyNameColor, "testhost --help"),
+                new TextAndColor(_printer.ForegroundColor, "'.")
+            );
+
+            /*
+             ,
+                new TextAndColor(_printer.ForegroundColor, "Usage: "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt1"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt2"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt3"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name} --help"),
+                new TextAndColor(_printer.ForegroundColor, "'."
+             */
         }
 
         [Trait("Category", "Help")]
@@ -872,7 +903,7 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, "'.")
                 );
         }
-        
+
         [Trait("Category", "Help")]
         [Fact]
         public void ErrorWhenNoRequiredParametersInGroupSpecified()

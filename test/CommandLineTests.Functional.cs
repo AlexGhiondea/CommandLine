@@ -1,14 +1,15 @@
-﻿using Xunit;
+﻿using System.Collections.Generic;
+using Xunit;
 
 namespace CommandLine.Tests
 {
     public partial class CommandLineTests
     {
         [Trait("Category", "Basic")]
-        [Fact]
-        public void BasicTest1()
+        [Theory(DisplayName = "Basic1"), MemberData(nameof(GetParserOptions))]
+        public void BasicTest1(ParserOptions parserOptions)
         {
-            var options = Helpers.Parse<Options1>("p1 2 -opt1 10 -opt2 b");
+            var options = Helpers.Parse<Options1>("p1 2 -opt1 10 -opt2 b", null, null, parserOptions);
 
             Assert.Equal("p1", options.p1);
             Assert.Equal(2, options.p2);
@@ -198,5 +199,15 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt2, "a", "b", "c");
             Assert.Equal('b', options.Character);
         }
+
+        public static IEnumerable<object[]> GetParserOptions()
+        {
+            yield return new object[] { (ParserOptions)null };
+            yield return new object[] { new ParserOptions() };
+            yield return new object[] { new ParserOptions() { LogParseErrorToConsole = false, ReadFromEnvironment = false, VariableNamePrefix = null } };
+            yield return new object[] { new ParserOptions() { LogParseErrorToConsole = true, ReadFromEnvironment = false, VariableNamePrefix = "test" } };
+            yield return new object[] { new ParserOptions() { LogParseErrorToConsole = false, ReadFromEnvironment = true, VariableNamePrefix = "test" } };
+        }
+
     }
 }

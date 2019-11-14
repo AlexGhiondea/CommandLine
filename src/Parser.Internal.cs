@@ -153,12 +153,13 @@ namespace CommandLine
                 return true;
             }
 
-            options = InternalParse<TOptions>(args, 1, arguments.ArgumentGroups[args[0]]);
+            options = InternalParse<TOptions>(args, 1, arguments.ArgumentGroups[args[0]], s_defaultParseOptions);
             arguments.ActionArgument.SetValue(options, PropertyHelpers.GetValueAsType(args[0], arguments.ActionArgument));
             return true;
         }
 
-        private static TOptions InternalParse<TOptions>(string[] args, int offsetInArray, ArgumentGroupInfo arguments) where TOptions : new()
+        private static TOptions InternalParse<TOptions>(string[] args, int offsetInArray, ArgumentGroupInfo arguments, ParserOptions parseOptions)
+            where TOptions : new()
         {
             TOptions options = new TOptions();
             int currentLogicalPosition = 0;
@@ -180,9 +181,9 @@ namespace CommandLine
                 object defaultValue = value.DefaultValue;
 
                 // If we want to read values from the environment, try to get the value
-                if (Configuration.Environment.UseEnvironmentVariables && !value.IsCollection)
+                if (parseOptions.ReadFromEnvironment && !value.IsCollection && parseOptions.VariableNamePrefix != null)
                 {
-                    var envVar = Environment.GetEnvironmentVariable($"{Configuration.Environment.VariableNamePrefix}{value.Name}");
+                    var envVar = Environment.GetEnvironmentVariable($"{parseOptions.VariableNamePrefix}{value.Name}");
 
                     if (!string.IsNullOrEmpty(envVar))
                     {
