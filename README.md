@@ -203,10 +203,20 @@ The `<name>` represents the optional parameter name as defined in the type decla
 
 You can change the prefix for the Parser:
 ```csharp
-Parser.Configuration.EnvironmentVariablePrefix = "myPrefix";
+ParserOptions parserOptions = new ParserOptions() { VariableNamePrefix = "myPrefix" };
+
+if (!Parser.TryParse(args, out Options options, parserOptions))
+{
+    return;
+}
 ```
 
 You can also disable the feature completely:
 ```csharp
-Parser.Configuration.UseEnvironmentVariables = false;
+ParserOptions parserOptions = new ParserOptions() { ReadFromEnvironment = false };
+
+if (!Parser.TryParse(args, out Options options, parserOptions))
+{
+    return;
+}
 ```
