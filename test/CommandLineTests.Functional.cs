@@ -143,11 +143,11 @@ namespace CommandLine.Tests
         }
 
         [Trait("Category", "Basic")]
-        [Fact]
-        public void BasicTest12()
+        [Theory, MemberData(nameof(GetParserOptions))]
+        public void BasicTest12(ParserOptions parserOptions)
         {
             Options2 options;
-            var parsed = Parser.TryParse("p1 d e fc -opt2 a b c -opt1 10 -opt3 b", out options);
+            var parsed = Parser.TryParse("p1 d e fc -opt2 a b c -opt1 10 -opt3 b", out options, parserOptions);
 
             Assert.True(parsed);
             Assert.Equal("p1", options.p1);
@@ -156,6 +156,23 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt2, "a", "b", "c");
             Assert.Equal('b', options.Character);
         }
+
+        [Trait("Category", "Basic")]
+        [Theory, MemberData(nameof(GetParserOptions))]
+        public void TryParseWithArgumentArray(ParserOptions parserOptions)
+        {
+            Options2 options;
+            string[] array = new string[] { "p1", "d", "e", "fc", "-opt2", "a", "b", "c", "-opt1", "10", "-opt3", "b" };
+            var parsed = Parser.TryParse(array, out options, parserOptions);
+
+            Assert.True(parsed);
+            Assert.Equal("p1", options.p1);
+            Helpers.CollectionEquals(options.p2, "d", "e", "fc");
+            Assert.Equal(10, options.opt1);
+            Helpers.CollectionEquals(options.opt2, "a", "b", "c");
+            Assert.Equal('b', options.Character);
+        }
+
 
         [Trait("Category", "Basic")]
         [Fact]

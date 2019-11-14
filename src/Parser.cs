@@ -88,7 +88,7 @@ namespace CommandLine
         /// <param name="options">A variable that will contain the parsed arguments as an object</param>
         /// <param name="parserOptions">A <see cref="nameof(ParserOptions)"/> that controls how the parsing will happen</param>
         /// <returns>True if the parameters were parsed. False if not.</returns>
-        public static bool TryParse<TOptions>(string strArgs, out TOptions options, ParserOptions parserOptions = null)
+        public static bool TryParse<TOptions>(string strArgs, out TOptions options, ParserOptions parserOptions)
             where TOptions : new()
         {
             return TryParse(SplitCommandLineIntoSegments(strArgs).ToArray(), out options, parserOptions);
@@ -105,7 +105,7 @@ namespace CommandLine
         public static bool TryParse<TOptions>(string[] args, out TOptions options, ParserOptions parserOptions)
             where TOptions : new()
         {
-            return InternalTryParse(args, parserOptions, out options, out _);
+            return InternalTryParse(args, parserOptions ?? s_defaultParseOptions, out options, out _);
         }
         #endregion
 
