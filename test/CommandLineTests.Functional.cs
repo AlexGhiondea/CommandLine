@@ -173,7 +173,21 @@ namespace CommandLine.Tests
             Assert.Equal('b', options.Character);
         }
 
+        [Trait("Category", "Basic")]
+        [Fact]
+        public void TryParseWithArgumentArrayAndDefaultOptions()
+        {
+            Options2 options;
+            string[] array = new string[] { "p1", "d", "e", "fc", "-opt2", "a", "b", "c", "-opt1", "10", "-opt3", "b" };
+            var parsed = Parser.TryParse(array, out options);
 
+            Assert.True(parsed);
+            Assert.Equal("p1", options.p1);
+            Helpers.CollectionEquals(options.p2, "d", "e", "fc");
+            Assert.Equal(10, options.opt1);
+            Helpers.CollectionEquals(options.opt2, "a", "b", "c");
+            Assert.Equal('b', options.Character);
+        }
         [Trait("Category", "Basic")]
         [Fact]
         public void BasicTest13()
