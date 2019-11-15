@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using CommandLine.Colors;
+using CommandLine.ColorScheme;
 using Xunit;
 using Xunit.Extensions;
 
@@ -26,7 +26,6 @@ namespace CommandLine.Tests
         {
             TestWriter _printer = new TestWriter();
             var options = Helpers.Parse<Options3NoRequired>("-?", _printer, color);
-
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
@@ -504,18 +503,29 @@ namespace CommandLine.Tests
         [Theory, MemberData(nameof(GetBackgroundColors))]
         public void HelpForTypeWithEnumWithNoHelpSettingSet(IColors color)
         {
-            try
-            {
-                Parser.Configuration.DisplayErrorMessageOnError = false;
-                TestWriter _printer = new TestWriter();
-                var options = Helpers.Parse<Options3NoRequired>("/?", _printer, color);
+            // the help is not covered by the error flag.
+            ParserOptions po = new ParserOptions() { LogParseErrorToConsole = false };
+            TestWriter _printer = new TestWriter();
+            var options = Helpers.Parse<Options3NoRequired>("/?", _printer, color, po);
 
-                Validate(_printer);
-            }
-            catch
-            {
-                Parser.Configuration.DisplayErrorMessageOnError = true;
-            }
+            Validate(_printer,
+                new TextAndColor(_printer.ForegroundColor, "Usage: "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt1"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt2"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt3"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
+                new TextAndColor(color.AssemblyNameColor, "testhost --help"),
+                new TextAndColor(_printer.ForegroundColor, "'.")
+            );
         }
 
         [Trait("Category", "Help")]
@@ -750,8 +760,8 @@ namespace CommandLine.Tests
             try
             {
                 Console.BackgroundColor = ConsoleColor.Black;
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get());
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkBackground>(Parser.ColorScheme.Get());
             }
             finally
             {
@@ -767,50 +777,50 @@ namespace CommandLine.Tests
             try
             {
                 #region Dark backgound
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Black));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkGray));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkCyan));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkGreen));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkMagenta));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkRed));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Blue));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Magenta));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkBlue));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkBackground>(Parser.ColorScheme.Get(ConsoleColor.Black));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkBackground>(Parser.ColorScheme.Get(ConsoleColor.DarkGray));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkBackground>(Parser.ColorScheme.Get(ConsoleColor.DarkCyan));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkBackground>(Parser.ColorScheme.Get(ConsoleColor.DarkGreen));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkBackground>(Parser.ColorScheme.Get(ConsoleColor.DarkMagenta));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkBackground>(Parser.ColorScheme.Get(ConsoleColor.DarkRed));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkBackground>(Parser.ColorScheme.Get(ConsoleColor.Blue));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkBackground>(Parser.ColorScheme.Get(ConsoleColor.Magenta));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkBackground>(Parser.ColorScheme.Get(ConsoleColor.DarkBlue));
                 #endregion
 
                 #region Multicolor
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<GrayBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Gray));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkYellowBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.DarkYellow));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<GreenBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Green));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<CyanBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Cyan));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<RedBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Red));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<GrayBackground>(Parser.ColorScheme.Get(ConsoleColor.Gray));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkYellowBackground>(Parser.ColorScheme.Get(ConsoleColor.DarkYellow));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<GreenBackground>(Parser.ColorScheme.Get(ConsoleColor.Green));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<CyanBackground>(Parser.ColorScheme.Get(ConsoleColor.Cyan));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<RedBackground>(Parser.ColorScheme.Get(ConsoleColor.Red));
 
                 #endregion
 
                 #region Light background
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<LightBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.White));
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<LightBackgroundColors>(Parser.Configuration.DisplayColors.Get(ConsoleColor.Yellow));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<LightBackground>(Parser.ColorScheme.Get(ConsoleColor.White));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<LightBackground>(Parser.ColorScheme.Get(ConsoleColor.Yellow));
                 #endregion
 
                 #region Unknown color
-                Parser.Configuration.DisplayColors.Set(null);
-                Assert.IsType<DarkBackgroundColors>(Parser.Configuration.DisplayColors.Get((ConsoleColor)25));
+                Parser.ColorScheme.Set(null);
+                Assert.IsType<DarkBackground>(Parser.ColorScheme.Get((ConsoleColor)25));
                 #endregion
             }
             finally
@@ -821,13 +831,13 @@ namespace CommandLine.Tests
 
         public static IEnumerable<object[]> GetBackgroundColors()
         {
-            yield return new object[] { new DarkBackgroundColors() };
-            yield return new object[] { new LightBackgroundColors() };
-            yield return new object[] { new DarkYellowBackgroundColors() };
-            yield return new object[] { new GreenBackgroundColors() };
-            yield return new object[] { new CyanBackgroundColors() };
-            yield return new object[] { new RedBackgroundColors() };
-            yield return new object[] { new GrayBackgroundColors() };
+            yield return new object[] { new DarkBackground() };
+            yield return new object[] { new LightBackground() };
+            yield return new object[] { new DarkYellowBackground() };
+            yield return new object[] { new GreenBackground() };
+            yield return new object[] { new CyanBackground() };
+            yield return new object[] { new RedBackground() };
+            yield return new object[] { new GrayBackground() };
         }
 
         [Trait("Category", "Help")]
@@ -873,7 +883,7 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, "'.")
                 );
         }
-        
+
         [Trait("Category", "Help")]
         [Fact]
         public void ErrorWhenNoRequiredParametersInGroupSpecified()

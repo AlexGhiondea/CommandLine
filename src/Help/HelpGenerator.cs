@@ -4,7 +4,7 @@ using OutputColorizer;
 using System;
 using System.Linq;
 using System.Reflection;
-using CommandLine.Colors;
+using CommandLine.ColorScheme;
 
 namespace CommandLine
 {

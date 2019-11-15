@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommandLine.ColorScheme;
+using System;
 using System.IO;
 using Xunit;
 
@@ -140,6 +141,60 @@ namespace CommandLine.Tests
         {
             var exception = Assert.Throws<ParserException>(() => Helpers.Parse<object>("@\" foo "));
             Assert.IsType<FileNotFoundException>(exception.InnerException);
+        }
+
+        [Trait("Category", "Negative")]
+        [Fact]
+        public void TryParseWithLoggingToConsole()
+        {
+            TestWriter _printer = new TestWriter();
+            ParserOptions parserOptions = new ParserOptions() { LogParseErrorToConsole = true };
+            IColors color = Parser.ColorScheme.Get();
+            OutputColorizer.Colorizer.SetupWriter(_printer);
+            bool value = Parser.TryParse("foo", out Options1 options, parserOptions);
+            Assert.False(value);
+
+            Validate(_printer,
+                new TextAndColor(color.ErrorColor, "Error"),
+                new TextAndColor(_printer.ForegroundColor, $": Not all required arguments have been specified {Environment.NewLine}"), 
+                new TextAndColor(_printer.ForegroundColor, "Usage: "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "p1"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "p2"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt1"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt2"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt3"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "opt4"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
+                new TextAndColor(color.AssemblyNameColor, "testhost --help"),
+                new TextAndColor(_printer.ForegroundColor, "'.")
+            );
+        }
+
+        [Trait("Category", "Negative")]
+        [Fact]
+        public void TryParseWithoutLoggingToConsole()
+        {
+            TestWriter _printer = new TestWriter();
+            ParserOptions parserOptions = new ParserOptions() { LogParseErrorToConsole = false };
+            IColors color = Parser.ColorScheme.Get();
+            OutputColorizer.Colorizer.SetupWriter(_printer);
+            bool value = Parser.TryParse("foo", out Options1 options, parserOptions);
+            Assert.False(value);
+
+            Validate(_printer);
         }
     }
 }

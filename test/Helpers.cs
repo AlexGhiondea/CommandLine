@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using OutputColorizer;
 using System.IO;
 using System.Reflection;
-using CommandLine.Colors;
+using CommandLine.ColorScheme;
 
 namespace CommandLine.Tests
 {
@@ -15,7 +15,8 @@ namespace CommandLine.Tests
             return AppDomain.CurrentDomain.BaseDirectory;
         }
 
-        public static T Parse<T>(string argString, IOutputWriter writer = null, IColors colors = null) where T : new()
+        public static T Parse<T>(string argString, IOutputWriter writer = null, IColors colors = null, ParserOptions parserOptions = null)
+            where T : new()
         {
             if (writer == null)
             {
@@ -24,12 +25,12 @@ namespace CommandLine.Tests
 
             if (colors == null)
             {
-                colors = new DarkBackgroundColors();
+                colors = new DarkBackground();
             }
 
             Colorizer.SetupWriter(writer);
-            Parser.Configuration.DisplayColors.Set(colors);
-            return Parser.Parse<T>(argString);
+            Parser.ColorScheme.Set(colors);
+            return Parser.Parse<T>(argString, parserOptions);
         }
 
         public static void DisplayHelp<T>(HelpFormat helpFormat, IOutputWriter writer = null, IColors colors = null) where T : new()
@@ -41,11 +42,11 @@ namespace CommandLine.Tests
 
             if (colors == null)
             {
-                colors = new DarkBackgroundColors();
+                colors = new DarkBackground();
             }
 
             Colorizer.SetupWriter(writer);
-            Parser.Configuration.DisplayColors.Set(colors);
+            Parser.ColorScheme.Set(colors);
             Parser.DisplayHelp<T>(helpFormat);
         }
 

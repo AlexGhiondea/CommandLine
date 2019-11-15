@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using CommandLine.Colors;
+using CommandLine.ColorScheme;
 using Xunit;
 
 namespace CommandLine.Tests

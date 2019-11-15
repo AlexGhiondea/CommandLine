@@ -8,12 +8,12 @@ namespace CommandLine.Tests
         [Fact]
         public void EnvironmentTest1()
         {
-            Parser.Configuration.EnvironmentVariablePrefix = nameof(EnvironmentTest1);
+            ParserOptions po = new ParserOptions() { VariableNamePrefix = nameof(EnvironmentTest1) };
 
             Environment.SetEnvironmentVariable($"{nameof(EnvironmentTest1)}opt1", "10", EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable($"{nameof(EnvironmentTest1)}opt3", "A", EnvironmentVariableTarget.Process);
 
-            var options = Helpers.Parse<Options3NoRequired>("-opt2 d e fc");
+            var options = Helpers.Parse<Options3NoRequired>("-opt2 d e fc", null, null, po);
 
             Assert.Equal(10, options.opt1);
             Helpers.CollectionEquals(options.opt2, "d", "e", "fc");

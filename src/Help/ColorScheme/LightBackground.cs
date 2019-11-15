@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace CommandLine.Colors
+namespace CommandLine.ColorScheme
 {
-    public class LightBackgroundColors : IColors
+    public class LightBackground : IColors
     {
         public ConsoleColor ErrorColor => ConsoleColor.Red;
         public ConsoleColor AssemblyNameColor => ConsoleColor.DarkGray;
@@ -12,7 +12,7 @@ namespace CommandLine.Colors
         public ConsoleColor ArgumentValueColor => ConsoleColor.DarkGreen;
     }
 
-    public class GrayBackgroundColors : IColors
+    public class GrayBackground : IColors
     {
         public ConsoleColor ErrorColor => ConsoleColor.Red;
         public ConsoleColor AssemblyNameColor => ConsoleColor.DarkGray;

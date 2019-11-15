@@ -1,8 +1,8 @@
 using System;
 
-namespace CommandLine.Colors
+namespace CommandLine.ColorScheme
 {
-    public class DarkBackgroundColors : IColors
+    public class DarkBackground : IColors
     {
         public ConsoleColor AssemblyNameColor => ConsoleColor.White;
         public ConsoleColor ArgumentGroupColor => ConsoleColor.Green;
@@ -12,7 +12,7 @@ namespace CommandLine.Colors
         public ConsoleColor ArgumentValueColor => ConsoleColor.Green;
     }
 
-    public class DarkYellowBackgroundColors : IColors
+    public class DarkYellowBackground : IColors
     {
         public ConsoleColor AssemblyNameColor => ConsoleColor.White;
         public ConsoleColor ArgumentGroupColor => ConsoleColor.Green;
@@ -22,7 +22,7 @@ namespace CommandLine.Colors
         public ConsoleColor ArgumentValueColor => ConsoleColor.DarkGray;
     }
 
-    public class GreenBackgroundColors : IColors
+    public class GreenBackground : IColors
     {
         public ConsoleColor AssemblyNameColor => ConsoleColor.White;
         public ConsoleColor ArgumentGroupColor => ConsoleColor.DarkGreen;
@@ -32,7 +32,7 @@ namespace CommandLine.Colors
         public ConsoleColor ArgumentValueColor => ConsoleColor.DarkGray;
     }
 
-    public class CyanBackgroundColors : IColors
+    public class CyanBackground : IColors
     {
         public ConsoleColor AssemblyNameColor => ConsoleColor.White;
         public ConsoleColor ArgumentGroupColor => ConsoleColor.DarkGreen;
@@ -42,7 +42,7 @@ namespace CommandLine.Colors
         public ConsoleColor ArgumentValueColor => ConsoleColor.DarkGray;
     }
 
-        public class RedBackgroundColors : IColors
+    public class RedBackground : IColors
     {
         public ConsoleColor AssemblyNameColor => ConsoleColor.White;
         public ConsoleColor ArgumentGroupColor => ConsoleColor.Green;
