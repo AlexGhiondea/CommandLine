@@ -1,6 +1,6 @@
 ignore:
-- "test/*"           # Ignore tests
-- "analyzer/*"           # Ignore analyzer
+- "test/**/*"           # Ignore tests
+- "analyzer/**/*"           # Ignore analyzer
 - "**/*.Designer.cs"  # Ignore generated code
 - "CommandLine.Analyzer.dll" 
 - "CommandLine.dll"
