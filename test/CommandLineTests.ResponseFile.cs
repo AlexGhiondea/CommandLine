@@ -75,7 +75,7 @@ namespace CommandLine.Tests
             string responseFile = Path.Combine(Helpers.GetTestLocation(), Path.Combine("SampleRspFiles", "response4.rsp"));
 
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<Options3NoRequired>($"@{responseFile}", _printer, color);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<Options3NoRequired>($"@{responseFile}", _printer, color));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),

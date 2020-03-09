@@ -24,6 +24,7 @@
     <PackageProjectUrl>https://github.com/AlexGhiondea/CommandLine</PackageProjectUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>CommandLine, Command line, Command, Line, parser, objects, custom</PackageTags>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -160,12 +160,14 @@ namespace CommandLine
                     if (args[0] == HelpGenerator.RequestShortHelpParameter || args[0] == "/?")
                     {
                         HelpGenerator.DisplayHelp(HelpFormat.Short, arguments, ColorScheme.Get());
-                        return true;
+                        ex = new HelpRequestedException();
+                        return false;
                     }
                     else if (args[0] == HelpGenerator.RequestLongHelpParameter)
                     {
                         HelpGenerator.DisplayHelp(HelpFormat.Full, arguments, ColorScheme.Get());
-                        return true;
+                        ex = new HelpRequestedException();
+                        return false;
                     }
                 }
 

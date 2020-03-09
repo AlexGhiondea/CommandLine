@@ -231,6 +231,35 @@ namespace CommandLine.Tests
             Assert.Equal('b', options.Character);
         }
 
+        [Trait("Category", "Basic")]
+        [Fact]
+        public void TryParseShouldFailWhenFullHelpRequested()
+        {
+            var outcome = Parser.TryParse("--help", out Options2 options);
+
+            Assert.Null(options);
+            Assert.False(outcome);
+        }
+
+        [Trait("Category", "Basic")]
+        [Fact]
+        public void TryParseShouldFailWhenShortHelpRequested1()
+        {
+            var outcome = Parser.TryParse("-?", out Options2 options);
+
+            Assert.Null(options);
+            Assert.False(outcome);
+        }
+
+        [Trait("Category", "Basic")]
+        [Fact]
+        public void TryParseShouldFailWhenShortHelpRequested2()
+        {
+            var outcome = Parser.TryParse("/?", out Options2 options);
+
+            Assert.Null(options);
+            Assert.False(outcome);
+        }
         public static IEnumerable<object[]> GetParserOptions()
         {
             yield return new object[] { (ParserOptions)null };

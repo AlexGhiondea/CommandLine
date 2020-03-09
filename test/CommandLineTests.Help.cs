@@ -1,9 +1,8 @@
-﻿using System;
+﻿using CommandLine.ColorScheme;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
-using CommandLine.ColorScheme;
 using Xunit;
-using Xunit.Extensions;
 
 namespace CommandLine.Tests
 {
@@ -25,7 +24,7 @@ namespace CommandLine.Tests
         public void HelpTest1(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<Options3NoRequired>("-?", _printer, color);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<Options3NoRequired>("-?", _printer, color));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
@@ -79,8 +78,7 @@ namespace CommandLine.Tests
         public void HelpTest4(IColors color)
         {
             TestWriter _printer = new TestWriter();
-
-            var options = Helpers.Parse<Options3NoRequired>("/?", _printer, color);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<Options3NoRequired>("/?", _printer, color));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
@@ -107,7 +105,7 @@ namespace CommandLine.Tests
         public void HelpTest2(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<Options3NoRequired>("-?", _printer, color);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<Options3NoRequired>("-?", _printer, color));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
@@ -135,7 +133,7 @@ namespace CommandLine.Tests
         public void HelpTest3(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<OptionsNegative1>("-?", _printer, color);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<OptionsNegative1>("-?", _printer, color));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
@@ -157,7 +155,7 @@ namespace CommandLine.Tests
         public void DetailedHelp1(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<Options1>("--help", _printer, color);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<Options1>("--help", _printer, color));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
@@ -229,7 +227,7 @@ namespace CommandLine.Tests
         public void DetailedHelp2(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<Options3NoRequired>("--help", _printer, color);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<Options3NoRequired>("--help", _printer, color));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
@@ -345,7 +343,7 @@ namespace CommandLine.Tests
         public void DetailedHelpForGroups1(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<Groups1>("--help", _printer, color);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<Groups1>("--help", _printer, color));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
@@ -477,7 +475,7 @@ namespace CommandLine.Tests
         public void HelpForTypeWithEnum(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<Options3NoRequired>("/?", _printer, color);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<Options3NoRequired>("/?", _printer, color));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
@@ -506,7 +504,7 @@ namespace CommandLine.Tests
             // the help is not covered by the error flag.
             ParserOptions po = new ParserOptions() { LogParseErrorToConsole = false };
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<Options3NoRequired>("/?", _printer, color, po);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<Options3NoRequired>("/?", _printer, color, po));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
@@ -533,7 +531,7 @@ namespace CommandLine.Tests
         public void DetailedHelpForGroups2WithCommonArgs(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<Groups2>("--help", _printer, color);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<Groups2>("--help", _printer, color));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
@@ -628,7 +626,7 @@ namespace CommandLine.Tests
         public void HelpForTypeWithRequiredAndOptionalEnumsAndLists(IColors color)
         {
             TestWriter _printer = new TestWriter();
-            var options = Helpers.Parse<HelpGeneratorObject>("--help", _printer, color);
+            var options = Assert.Throws<HelpRequestedException>(() => Helpers.Parse<HelpGeneratorObject>("--help", _printer, color));
 
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
