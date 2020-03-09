@@ -126,7 +126,7 @@ namespace CommandLine
             } while (currentPosition < line.Length);
         }
 
-        private static bool ParseCommandGroups<TOptions>(string[] args, ref TOptions options, TypeArgumentInfo arguments) where TOptions : new()
+        private static bool ParseCommandGroups<TOptions>(string[] args, ref TOptions options, TypeArgumentInfo arguments, ParserOptions parserOptions) where TOptions : new()
         {
             if (arguments.ActionArgument == null)
             {
@@ -153,7 +153,7 @@ namespace CommandLine
                 return true;
             }
 
-            options = InternalParse<TOptions>(args, 1, arguments.ArgumentGroups[args[0]], s_defaultParseOptions);
+            options = InternalParse<TOptions>(args, 1, arguments.ArgumentGroups[args[0]], parserOptions);
             arguments.ActionArgument.SetValue(options, PropertyHelpers.GetValueAsType(args[0], arguments.ActionArgument));
             return true;
         }
