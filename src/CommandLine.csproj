@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyVersion>2.1.0</AssemblyVersion>
+    <AssemblyVersion>2.1.1</AssemblyVersion>
     <FileVersion>$(AssemblyVersion)</FileVersion>
-    <VersionPrefix>2.1.0</VersionPrefix>
+    <VersionPrefix>2.1.1</VersionPrefix>
   </PropertyGroup>
 
   <PropertyGroup>
