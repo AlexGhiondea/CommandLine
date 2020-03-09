@@ -174,7 +174,7 @@ namespace CommandLine
                 // we have groups!
                 if (!arguments.ArgumentGroups.ContainsKey(string.Empty))
                 {
-                    return ParseCommandGroups(args, ref options, arguments);
+                    return ParseCommandGroups(args, ref options, arguments, parserOptions);
                 }
 
                 // parse the arguments and build the options object
