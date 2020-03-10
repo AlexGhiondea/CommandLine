@@ -141,7 +141,7 @@ namespace CommandLine
             // parse based on the command passed in (the first arg).
             if (!arguments.ArgumentGroups.ContainsKey(args[0]))
             {
-                throw new ArgumentException($"Unknown command [Cyan!{args[0]}]");
+                throw new ArgumentException($"Unknown command '{args[0]}'");
             }
 
             // short circuit the request for help!
