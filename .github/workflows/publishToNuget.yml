@@ -7,7 +7,6 @@ name: Publish package
 on:
  release:
   types: [published]
-  
 jobs:
   build:
     runs-on: ubuntu-latest
