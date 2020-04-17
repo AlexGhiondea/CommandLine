@@ -7,6 +7,10 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLine.Net" Version="1.5.0" />
+    <PackageReference Include="coverlet.collector" Version="1.2.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.8.2">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
