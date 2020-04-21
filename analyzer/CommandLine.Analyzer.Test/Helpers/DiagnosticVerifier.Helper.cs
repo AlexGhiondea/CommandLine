@@ -18,7 +18,7 @@ namespace TestHelper
     public abstract partial class DiagnosticVerifier
     {
         // this is relative based on the CommandLine project. We are using Path.Combine for X-Plat support
-        private static readonly MetadataReference PathToCommandLineAssemblyToReference = MetadataReference.CreateFromFile(typeof(Parser).Assembly.Location); //Path.Combine("..","..","..","..","..","bin","Debug","netstandard1.5","CommandLine.dll");
+        private static readonly MetadataReference PathToCommandLineAssemblyToReference = MetadataReference.CreateFromFile(typeof(Parser).Assembly.Location);
 
         private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
         private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
@@ -156,6 +156,9 @@ namespace TestHelper
                 refs.Add(MetadataReference.CreateFromFile(item));
             }
 
+            // add netStandard.dll to the mix
+            var ns20 = Path.Combine(pathToSharedFx, "netstandard.dll");
+            refs.Add(MetadataReference.CreateFromFile(ns20));
 
             var solution = new AdhocWorkspace()
                 .CurrentSolution
