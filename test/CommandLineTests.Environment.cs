@@ -6,6 +6,7 @@ namespace CommandLine.Tests
     public partial class CommandLineTests
     {
         [Fact]
+        [Trait("Category", "Environment variable")]
         public void EnvironmentTest1()
         {
             ParserOptions po = new ParserOptions() { VariableNamePrefix = nameof(EnvironmentTest1) };
