@@ -51,6 +51,12 @@ Info
         private static DiagnosticDescriptor RequiredPositionalArgumentNotFound =
             new DiagnosticDescriptor("CMDNET07", "Required argument not found", "The type declares '{0}' properties as required. The property positions are 0-based. Could not find required argument at position '{1}'.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true);
 
+        private static DiagnosticDescriptor CollectionArgumentShouldBeLast =
+            new DiagnosticDescriptor("CMDNET08", "Required collection argument should be the last argument.", "The collection argument '{0}' needs to be the last argument in the list. Otherwise, it will not be possible to parse it at runtime.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true);
+
+        private static DiagnosticDescriptor OnlyOneRequiredCollection =
+            new DiagnosticDescriptor("CMDNET09", "Only one required collection argument is allowed", "Both arguments '{0}' and '{1}' are marked as required collection arguments. Only one can be required. The other should be changed to optional.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true);
+
         #endregion
 
         #region Warnings
@@ -73,7 +79,9 @@ Info
                     DuplicateActionArgumentRule,
                     ConflictingPropertyDeclarationRule,
                     ActionWithoutArgumentsInGroup,
-                    RequiredPositionalArgumentNotFound
+                    RequiredPositionalArgumentNotFound,
+                    CollectionArgumentShouldBeLast,
+                    OnlyOneRequiredCollection
                 );
             }
         }

@@ -1,4 +1,5 @@
 ﻿using CommandLine.ColorScheme;
+using CommandLine.Tests.TestObjects;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -232,7 +233,7 @@ namespace CommandLine.Tests
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(_printer.ForegroundColor, "[-"),
                 new TextAndColor(color.OptionalArgumentColor, "opt1"),
@@ -509,7 +510,7 @@ namespace CommandLine.Tests
             Validate(_printer,
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(_printer.ForegroundColor, "[-"),
                 new TextAndColor(color.OptionalArgumentColor, "opt1"),
@@ -633,9 +634,9 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.RequiredArgumentColor, "folders"),
-                new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.RequiredArgumentColor, "providers"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "folders"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(_printer.ForegroundColor, "[-"),
                 new TextAndColor(color.OptionalArgumentColor, "provider"),
@@ -650,16 +651,16 @@ namespace CommandLine.Tests
                 new TextAndColor(color.OptionalArgumentColor, "outputWriter"),
                 new TextAndColor(_printer.ForegroundColor, " value] "),
                 new TextAndColor(_printer.ForegroundColor, "  - "),
-                new TextAndColor(color.RequiredArgumentColor, "folders     "),
-                new TextAndColor(_printer.ForegroundColor, " : List of the folders to consider when scanning for duplicates ("),
-                new TextAndColor(color.ArgumentValueColor, "list"),
+                new TextAndColor(color.RequiredArgumentColor, "providers   "),
+                new TextAndColor(_printer.ForegroundColor, " : Some providers to have (one of "),
+                new TextAndColor(color.ArgumentValueColor, "SHA1,FileSize"),
                 new TextAndColor(_printer.ForegroundColor, ", "),
                 new TextAndColor(color.RequiredArgumentColor, "required"),
                 new TextAndColor(_printer.ForegroundColor, ")"),
                 new TextAndColor(_printer.ForegroundColor, "  - "),
-                new TextAndColor(color.RequiredArgumentColor, "providers   "),
-                new TextAndColor(_printer.ForegroundColor, " : Some providers to have (one of "),
-                new TextAndColor(color.ArgumentValueColor, "SHA1,FileSize"),
+                new TextAndColor(color.RequiredArgumentColor, "folders     "),
+                new TextAndColor(_printer.ForegroundColor, " : List of the folders to consider when scanning for duplicates ("),
+                new TextAndColor(color.ArgumentValueColor, "list"),
                 new TextAndColor(_printer.ForegroundColor, ", "),
                 new TextAndColor(color.RequiredArgumentColor, "required"),
                 new TextAndColor(_printer.ForegroundColor, ")"),
@@ -691,7 +692,7 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, ", default="),
                 new TextAndColor(color.OptionalArgumentColor, "Html, Csv"),
                 new TextAndColor(_printer.ForegroundColor, ")")
-            );
+        );
         }
 
         [Trait("Category", "Help")]
@@ -707,7 +708,7 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, $": Optional parameter name should start with '-' {Environment.NewLine}"),
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.RequiredArgumentColor, "a"),
                 new TextAndColor(_printer.ForegroundColor, " "),
@@ -855,7 +856,7 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, $": Could not find argument -opt1=value {Environment.NewLine}"),
                 new TextAndColor(ConsoleColor.Black, "Usage: "),
                 new TextAndColor(ConsoleColor.Black, " "),
-                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.White, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(ConsoleColor.Black, " "),
                 new TextAndColor(ConsoleColor.Black, " "),
                 new TextAndColor(ConsoleColor.Green, "Command1"),
@@ -866,7 +867,7 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Yellow, "opt1"),
                 new TextAndColor(ConsoleColor.Black, " value] "),
                 new TextAndColor(ConsoleColor.Black, " "),
-                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.White, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(ConsoleColor.Black, " "),
                 new TextAndColor(ConsoleColor.Black, " "),
                 new TextAndColor(ConsoleColor.Green, "Command2"),
@@ -899,7 +900,7 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, $": Required parameters have not been specified {Environment.NewLine}"),
                 new TextAndColor(ConsoleColor.Black, "Usage: "),
                 new TextAndColor(ConsoleColor.Black, " "),
-                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.White, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(ConsoleColor.Black, " "),
                 new TextAndColor(ConsoleColor.Black, " "),
                 new TextAndColor(ConsoleColor.Green, "Command1"),
@@ -910,7 +911,7 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Yellow, "opt1"),
                 new TextAndColor(ConsoleColor.Black, " value] "),
                 new TextAndColor(ConsoleColor.Black, " "),
-                new TextAndColor(ConsoleColor.White, "testhost.exe"),
+                new TextAndColor(ConsoleColor.White, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(ConsoleColor.Black, " "),
                 new TextAndColor(ConsoleColor.Black, " "),
                 new TextAndColor(ConsoleColor.Green, "Command2"),
@@ -923,6 +924,27 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, "For detailed information run '"),
                 new TextAndColor(ConsoleColor.White, "testhost --help"),
                 new TextAndColor(ConsoleColor.Black, "'.")
+                );
+        }
+
+        [Trait("Category", "Help")]
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void EnsureHelpForComplexType(IColors color)
+        {
+            TestWriter _printer = new TestWriter();
+            Helpers.DisplayHelp<SimpleType2>(HelpFormat.Full, _printer, color);
+            Validate(_printer, new TextAndColor(_printer.ForegroundColor, "Usage: "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "list1"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "  - "),
+                new TextAndColor(color.RequiredArgumentColor, "list1"),
+                new TextAndColor(_printer.ForegroundColor, " :  ("),
+                new TextAndColor(_printer.ForegroundColor, ", "),
+                new TextAndColor(color.RequiredArgumentColor, "required"),
+                new TextAndColor(_printer.ForegroundColor, ")")
                 );
         }
     }

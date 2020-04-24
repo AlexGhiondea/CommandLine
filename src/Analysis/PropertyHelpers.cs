@@ -54,7 +54,7 @@ namespace CommandLine.Analysis
                 Array.Copy(args, offsetInArray + currentLogicalPosition, list, 0, indexLastEntry - currentLogicalPosition - offsetInArray);
 
                 argValue = new List<string>(list);
-                currentLogicalPosition = indexLastEntry;
+                currentLogicalPosition = indexLastEntry - offsetInArray;  // we need  to take into account the offset in the array here.
             }
 
             return Convert.ChangeType(argValue, targetType.PropertyType);

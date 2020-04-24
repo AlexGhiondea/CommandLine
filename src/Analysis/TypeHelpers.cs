@@ -49,14 +49,14 @@ namespace CommandLine.Analysis
             }
 
             // parse the rest of the properties
-            foreach (var property in propertiesOnType)
+            foreach (PropertyInfo property in propertiesOnType)
             {
                 // get the group containing this property (note: more than one group can have the same property)
                 // this allows common required parameters
 
-                var groupsWhereThePropertyIsParticipating = GetGroupsForProperty(tInfo, property);
+                List<ArgumentGroupInfo> groupsWhereThePropertyIsParticipating = GetGroupsForProperty(tInfo, property);
+                List<ActualArgumentAttribute> actualAttribs = property.GetCustomAttributes<ActualArgumentAttribute>().ToList();
 
-                var actualAttribs = property.GetCustomAttributes<ActualArgumentAttribute>().ToList();
                 if (actualAttribs.Count > 1)
                 {
                     throw new ArgumentException($"Only one of Required/Optional attribute are allowed per property ({property.Name}). Help information might be incorrect!");
@@ -69,7 +69,7 @@ namespace CommandLine.Analysis
                     continue;
                 }
 
-                // add the property to add the groups it is a part of
+                // add the property to the groups it is a part of
                 if (baseAttrib is RequiredArgumentAttribute)
                 {
                     foreach (ArgumentGroupInfo grpPropInfo in groupsWhereThePropertyIsParticipating)
@@ -83,6 +83,17 @@ namespace CommandLine.Analysis
                         if (grpPropInfo.RequiredArguments.ContainsKey(requiredPositionIndex))
                         {
                             throw new ArgumentException("Two required arguments share the same position!!");
+                        }
+
+                        // if we have a collection argument, keep track of it
+                        if (baseAttrib.IsCollection)
+                        {
+                            // if we already have defined a required collection argument, throw an error
+                            if (grpPropInfo.IndexOfCollectionArgument >= 0)
+                            {
+                                throw new ArgumentException("Cannot declare two required collection arguments. Please convert one of them to an optional collection one.");
+                            }
+                            grpPropInfo.IndexOfCollectionArgument = requiredPositionIndex;
                         }
 
                         grpPropInfo.RequiredArguments[requiredPositionIndex] = property;
@@ -102,12 +113,27 @@ namespace CommandLine.Analysis
                 }
             }
 
-            ArgumentGroupInfo grp;
             // remove the empty one, if empty
-            if (tInfo.ArgumentGroups.TryGetValue(string.Empty, out grp))
+            if (tInfo.ArgumentGroups.TryGetValue(string.Empty, out ArgumentGroupInfo grp))
             {
                 if (grp.OptionalArguments.Count == 0 && grp.RequiredArguments.Count == 0)
                     tInfo.ArgumentGroups.Remove(string.Empty);
+            }
+
+            // validate that the collection is the last argument
+            foreach (KeyValuePair<string, ArgumentGroupInfo> group in tInfo.ArgumentGroups)
+            {
+                if (group.Value.IndexOfCollectionArgument >= 0 && group.Value.IndexOfCollectionArgument != group.Value.RequiredArguments.Count - 1)
+                {
+                    if (!string.IsNullOrEmpty(group.Key))
+                    {
+                        throw new ArgumentException($"The required collection argument for group `{group.Key}` needs to be on the last position of the required arguments.");
+                    }
+                    else
+                    {
+                        throw new ArgumentException("The required collection argument needs to be on the last position of the required arguments.");
+                    }
+                }
             }
         }
 

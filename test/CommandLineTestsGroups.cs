@@ -1,9 +1,9 @@
-﻿using System;
+﻿using CommandLine.Tests.TestObjects;
+using System;
 using Xunit;
 
 namespace CommandLine.Tests
 {
-
     public partial class CommandLineTests
     {
         [Trait("Category", "Groups")]
@@ -92,7 +92,7 @@ namespace CommandLine.Tests
         public void GroupsTest6()
         {
             var options = Helpers.Parse<OverridePositionGroup2>("Create Repo1 MileStoneFile");
-           
+
             Assert.Equal(Action.Create, options.Action);
             Assert.Equal("MileStoneFile", options.MilestoneFile);
             Assert.Equal("Repo1", options.Repository);
@@ -113,6 +113,53 @@ namespace CommandLine.Tests
 
             Groups1 ParsedArgs;
             Assert.False(Parser.TryParse(commandLine, out ParsedArgs));
+        }
+
+        [Trait("Category", "Groups")]
+        [Fact]
+        public void TestRequiredListBeforeOptionalArg()
+        {
+            string expectedRepo1 = "azure\azure-powershell";
+            string expectedRepo2 = "azure\azure-sdk-for-net";
+            var commandLine = $"List Label,Milestone {expectedRepo1} {expectedRepo2} -token <mySecretValue>";
+
+            Assert.True(Parser.TryParse(commandLine, out ComplexType1 complex));
+
+            Assert.Equal(CommandAction.List, complex.Action);
+            Assert.Equal(ObjectType.Label | ObjectType.Milestone, complex.ObjectType);
+            Assert.Equal(2, complex.Repositories.Count);
+            Helpers.CollectionEquals(complex.Repositories, expectedRepo1, expectedRepo2);
+        }
+
+        [Trait("Category", "Collections")]
+        [Fact]
+        public void TestRequiredPropertiesOnDifferentGroups()
+        {
+            string expectedRepo1 = "azure\azure-powershell";
+            string expectedRepo2 = "azure\azure-sdk-for-net";
+            var commandLine = $"Check {expectedRepo1} {expectedRepo2}";
+
+            Assert.True(Parser.TryParse(commandLine, out ComplexType4 complex));
+            Assert.Equal(CommandAction.Check, complex.Action);
+            Helpers.CollectionEquals(complex.List1, expectedRepo1, expectedRepo2);
+
+            commandLine = $"List {expectedRepo1} {expectedRepo2}";
+
+            Assert.True(Parser.TryParse(commandLine, out complex));
+            Assert.Equal(CommandAction.List, complex.Action);
+            Helpers.CollectionEquals(complex.List2, expectedRepo1, expectedRepo2);
+        }
+
+        [Trait("Category", "Collections")]
+        [Fact]
+        public void TestObjectWithJustList()
+        {
+            string expectedRepo1 = "azure\azure-powershell";
+            string expectedRepo2 = "azure\azure-sdk-for-net";
+            var commandLine = $"{expectedRepo1} {expectedRepo2}";
+
+            Assert.True(Parser.TryParse(commandLine, out SimpleType1 complex));
+            Helpers.CollectionEquals(complex.List1, expectedRepo1, expectedRepo2);
         }
     }
 }

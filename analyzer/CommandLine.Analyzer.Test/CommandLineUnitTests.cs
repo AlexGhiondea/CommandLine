@@ -514,7 +514,7 @@ internal class CommandLineOptions
 
         [TestCategory("Analyzer")]
         [TestMethod]
-        public void RedirectRequiredArg()
+        public void RequiredCollectionArgShouldBeTheOnlyOne()
         {
             var test = @"
 using CommandLine.Attributes;
@@ -534,7 +534,7 @@ using CommandLine.Attributes.Advanced;
         [RequiredArgument(1, ""repos"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
         public List<string> Repositories { get; set; }
 
-        [ArgumentGroup(nameof(Action.List)1)]
+        [ArgumentGroup(nameof(Action.List))]
         [RequiredArgument(1, ""repos2"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
         public List<string> Repositories2 { get; set; }
     }
@@ -547,7 +547,56 @@ using CommandLine.Attributes.Advanced;
 
 ";
 
-            VerifyCommandLineDiagnostic(test);
+            var expected = new DiagnosticResult
+            {
+                Id = "CMDNET09",
+                Message = "Both arguments 'repos' and 'repos2' are marked as required collection arguments. Only one can be required. The other should be changed to optional.",
+                Severity = DiagnosticSeverity.Error,
+                Locations =
+                 new[] {
+                            new DiagnosticResultLocation("Test0.cs", 21, 29)
+                     }
+            };
+
+            VerifyCommandLineDiagnostic(test,expected);
+        }
+
+        [TestCategory("Analyzer")]
+        [TestMethod]
+        public void RequiredArgumentShouldBeLast()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+
+    internal class CmdLineArgs
+    {
+        [RequiredArgument(1, ""milestoneInputFile"", ""The file containing the list of milestones to create."")]
+        public string MilestoneFile { get; set; }
+
+        [RequiredArgument(0, ""repos"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
+        public List<string> Repositories { get; set; }
+    }
+
+    public enum Action
+    {
+        Create,
+        List
+    }
+
+";
+            var expected = new DiagnosticResult
+            {
+                Id = "CMDNET08",
+                Message = "The collection argument 'repos' needs to be the last argument in the list. Otherwise, it will not be possible to parse it at runtime.",
+                Severity = DiagnosticSeverity.Error,
+                Locations =
+                 new[] {
+                            new DiagnosticResultLocation("Test0.cs", 11, 29)
+                     }
+            };
+
+            VerifyCommandLineDiagnostic(test, expected);
         }
 
         [TestCategory("Analyzer")]
@@ -621,7 +670,7 @@ class Options
 
             VerifyCommandLineDiagnostic(test);
         }
-        
+
         [TestCategory("Analyzer")]
         [TestMethod]
         public void InvalidCode4()
@@ -668,6 +717,91 @@ namespace DotNetVersions.Console
 
 ";
             VerifyCommandLineDiagnostic(test);
+        }
+
+        [TestCategory("Analyzer")]
+        [TestMethod]
+        public void TwoRequiredCollectionProperties()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CommandLine.Tests.TestObjects
+{
+    class ComplexType2
+    {
+        [RequiredArgument(0, ""repos"", ""The list of repositories where to add the milestones to."", true)]
+        public List<string> Repositories { get; set; }
+
+        [RequiredArgument(1, ""list"", ""Another list"", true)]
+        public List<string> List { get; set; }
+    }
+}";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "CMDNET09",
+                Message = "Both arguments 'repos' and 'list' are marked as required collection arguments. Only one can be required. The other should be changed to optional.",
+                Severity = DiagnosticSeverity.Error,
+                Locations =
+                   new[] {
+                            new DiagnosticResultLocation("Test0.cs", 16, 29)
+                       }
+            };
+
+            VerifyCommandLineDiagnostic(test, expected);
+        }
+
+        [TestCategory("Analyzer")]
+        [TestMethod]
+        public void TwoCollectionPropertiesOnArgumentGroup()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+
+    internal class CmdLineArgs
+    {
+        [ActionArgument]
+        public Action Action { get; set; }
+
+        [ArgumentGroup(nameof(Action.Create))]
+        [RequiredArgument(0, ""milestoneInputFile"", ""The file containing the list of milestones to create."")]
+        public string MilestoneFile { get; set; }
+
+        [ArgumentGroup(nameof(Action.Create))]
+        [RequiredArgument(1, ""repos"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
+        public List<string> Repositories { get; set; }
+
+        [ArgumentGroup(nameof(Action.Create))]
+        [RequiredArgument(2, ""repos2"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
+        public List<string> Repositories2 { get; set; }
+    }
+
+    public enum Action
+    {
+        Create,
+        List
+    }
+
+";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "CMDNET09",
+                Message = "Both arguments 'repos' and 'repos2' are marked as required collection arguments. Only one can be required. The other should be changed to optional.",
+                Severity = DiagnosticSeverity.Error,
+                Locations =
+                 new[] {
+                            new DiagnosticResultLocation("Test0.cs", 20, 29)
+                     }
+            };
+
+            VerifyCommandLineDiagnostic(test, expected);
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

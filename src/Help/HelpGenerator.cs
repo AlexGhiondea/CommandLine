@@ -121,10 +121,6 @@ namespace CommandLine
         private static void DisplayDetailedParameterHelp(ArgumentGroupInfo arguments, IColors colors)
         {
             int maxStringSize = DisplayCommandLine(arguments, colors);
-            if (maxStringSize < 0)
-            {
-                return;
-            }
 
             // write out the required arguments
             for (int i = 0; i < arguments.RequiredArguments.Count; i++)
