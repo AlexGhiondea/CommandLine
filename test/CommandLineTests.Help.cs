@@ -1,4 +1,5 @@
 ﻿using CommandLine.ColorScheme;
+using CommandLine.Tests.TestObjects;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -923,6 +924,27 @@ namespace CommandLine.Tests
                 new TextAndColor(ConsoleColor.Black, "For detailed information run '"),
                 new TextAndColor(ConsoleColor.White, "testhost --help"),
                 new TextAndColor(ConsoleColor.Black, "'.")
+                );
+        }
+
+        [Trait("Category", "Help")]
+        [Theory, MemberData(nameof(GetBackgroundColors))]
+        public void EnsureHelpForComplexType(IColors color)
+        {
+            TestWriter _printer = new TestWriter();
+            Helpers.DisplayHelp<SimpleType2>(HelpFormat.Full, _printer, color);
+            Validate(_printer, new TextAndColor(_printer.ForegroundColor, "Usage: "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "list1"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "  - "),
+                new TextAndColor(color.RequiredArgumentColor, "list1"),
+                new TextAndColor(_printer.ForegroundColor, " :  ("),
+                new TextAndColor(_printer.ForegroundColor, ", "),
+                new TextAndColor(color.RequiredArgumentColor, "required"),
+                new TextAndColor(_printer.ForegroundColor, ")")
                 );
         }
     }
