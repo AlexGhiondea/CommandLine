@@ -756,6 +756,54 @@ namespace CommandLine.Tests.TestObjects
             VerifyCommandLineDiagnostic(test, expected);
         }
 
+        [TestCategory("Analyzer")]
+        [TestMethod]
+        public void TwoCollectionPropertiesOnArgumentGroup()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+
+    internal class CmdLineArgs
+    {
+        [ActionArgument]
+        public Action Action { get; set; }
+
+        [ArgumentGroup(nameof(Action.Create))]
+        [RequiredArgument(0, ""milestoneInputFile"", ""The file containing the list of milestones to create."")]
+        public string MilestoneFile { get; set; }
+
+        [ArgumentGroup(nameof(Action.Create))]
+        [RequiredArgument(1, ""repos"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
+        public List<string> Repositories { get; set; }
+
+        [ArgumentGroup(nameof(Action.Create))]
+        [RequiredArgument(2, ""repos2"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
+        public List<string> Repositories2 { get; set; }
+    }
+
+    public enum Action
+    {
+        Create,
+        List
+    }
+
+";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "CMDNET09",
+                Message = "Both arguments 'repos' and 'repos2' are marked as required collection arguments. Only one can be required. The other should be changed to optional.",
+                Severity = DiagnosticSeverity.Error,
+                Locations =
+                 new[] {
+                            new DiagnosticResultLocation("Test0.cs", 20, 29)
+                     }
+            };
+
+            VerifyCommandLineDiagnostic(test, expected);
+        }
+
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
             return new CommandLineAnalyzer();
