@@ -199,7 +199,6 @@ namespace CommandLine.Tests
             Validate(_printer);
         }
 
-
         [Trait("Category", "Negative")]
         [Fact]
         public void TryParseObjectThatDefinesTwoRequiredLists()
@@ -257,7 +256,6 @@ namespace CommandLine.Tests
                 );
         }
 
-
         [Trait("Category", "Collections")]
         [Fact]
         public void DefineTwoRequiredCollectionsSameGroup()
@@ -295,7 +293,6 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, "'.")
                 );
         }
-
 
         [Trait("Category", "Collections")]
         [Fact]

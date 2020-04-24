@@ -263,7 +263,6 @@ namespace CommandLine.Tests
             Assert.False(outcome);
         }
 
-
         [Trait("Category", "Collections")]
         [Fact]
         public void ParseTwoOptionalCollections()
