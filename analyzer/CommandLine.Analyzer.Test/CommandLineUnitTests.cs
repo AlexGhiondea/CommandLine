@@ -534,7 +534,7 @@ using CommandLine.Attributes.Advanced;
         [RequiredArgument(1, ""repos"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
         public List<string> Repositories { get; set; }
 
-        [ArgumentGroup(nameof(Action.List)1)]
+        [ArgumentGroup(nameof(Action.List))]
         [RequiredArgument(1, ""repos2"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
         public List<string> Repositories2 { get; set; }
     }
@@ -546,8 +546,18 @@ using CommandLine.Attributes.Advanced;
     }
 
 ";
+            var expected = new DiagnosticResult
+            {
+                Id = "CMDNET08",
+                Message = "The type declares 'repos' and 'repos2' as required collection arguments. At runtime it is not going to be possible to determine where the value for one of them starts and other ends.",
+                Severity = DiagnosticSeverity.Error,
+                Locations =
+                 new[] {
+                            new DiagnosticResultLocation("Test0.cs", 21, 29)
+                     }
+            };
 
-            VerifyCommandLineDiagnostic(test);
+            VerifyCommandLineDiagnostic(test,expected);
         }
 
         [TestCategory("Analyzer")]
@@ -621,7 +631,7 @@ class Options
 
             VerifyCommandLineDiagnostic(test);
         }
-        
+
         [TestCategory("Analyzer")]
         [TestMethod]
         public void InvalidCode4()
@@ -669,6 +679,44 @@ namespace DotNetVersions.Console
 ";
             VerifyCommandLineDiagnostic(test);
         }
+
+        [TestCategory("Analyzer")]
+        [TestMethod]
+        public void TwoRequiredCollectionProperties()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CommandLine.Tests.TestObjects
+{
+    class ComplexType2
+    {
+        [RequiredArgument(0, ""repos"", ""The list of repositories where to add the milestones to."", true)]
+        public List<string> Repositories { get; set; }
+
+        [RequiredArgument(1, ""list"", ""Another list"", true)]
+        public List<string> List { get; set; }
+    }
+}";
+
+            var expected = new DiagnosticResult
+            {
+                Id = "CMDNET08",
+                Message = "The type declares 'repos' and 'list' as required collection arguments. At runtime it is not going to be possible to determine where the value for one of them starts and other ends.",
+                Severity = DiagnosticSeverity.Error,
+                Locations =
+                   new[] {
+                            new DiagnosticResultLocation("Test0.cs", 16, 29)
+                       }
+            };
+
+            VerifyCommandLineDiagnostic(test, expected);
+        }
+
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {

@@ -250,11 +250,11 @@ namespace CommandLine
                 {
                     throw new ArgumentException("Required parameters have not been specified");
                 }
-                var value = PropertyHelpers.GetValueFromArgsArray(args, offsetInArray, ref currentLogicalPosition, propInfo);
+                object value = PropertyHelpers.GetValueFromArgsArray(args, offsetInArray, ref currentLogicalPosition, propInfo);
 
                 propInfo.SetValue(options, value);
                 matchedRequiredParameters++;
-            } while (currentLogicalPosition < args.Length);
+            } while (offsetInArray + currentLogicalPosition < args.Length);
 
             // no more? do we have any properties that we have not yet set?
             if (TypeArgumentInfo.RequiredArguments.Count != matchedRequiredParameters)

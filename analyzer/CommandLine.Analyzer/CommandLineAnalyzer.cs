@@ -319,6 +319,7 @@ namespace CommandLine.Analyzer
             HashSet<string> namesOfAllArgs = new HashSet<string>();
             HashSet<int> positionsOrRequiredArgs = new HashSet<int>();
             int numberOfPositionalArgs = 0;
+            RequiredArgument requiredCollectionArg = null;
             foreach (var item in args)
             {
                 if (item is OptionalArgument)
@@ -350,6 +351,17 @@ namespace CommandLine.Analyzer
                     {
                         context.ReportDiagnostic(Diagnostic.Create(DuplicateArgumentNameRule, rag.Symbol.Locations.First(), rag.Name));
                     }
+
+                    // do we have more than 1 required collection arg?
+                    if (rag.IsCollection)
+                    {
+                        if (requiredCollectionArg != null)
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(TwoRequiredCollectionArgs, rag.Symbol.Locations.First(), requiredCollectionArg.Name, rag.Name));
+                        }
+                        requiredCollectionArg = rag;
+                    }
+
 
                     namesOfAllArgs.Add(rag.Name);
                     positionsOrRequiredArgs.Add(rag.Position);

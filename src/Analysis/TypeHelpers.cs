@@ -85,6 +85,20 @@ namespace CommandLine.Analysis
                             throw new ArgumentException("Two required arguments share the same position!!");
                         }
 
+                        // the required collection argument needs to be the last one
+
+                        if (baseAttrib.IsCollection)
+                        {
+                            if (grpPropInfo.CollectionArgument != null)
+                            {
+                                // we already have a required collection argument defined
+                                // In that case it is not possible to determine when one list starts and when the other ends.
+
+                                throw new ArgumentException("Cannot have two required arguments that are collection.");
+                            }
+                            grpPropInfo.CollectionArgument = property;
+                        }
+
                         grpPropInfo.RequiredArguments[requiredPositionIndex] = property;
                     }
                 }
@@ -102,9 +116,8 @@ namespace CommandLine.Analysis
                 }
             }
 
-            ArgumentGroupInfo grp;
             // remove the empty one, if empty
-            if (tInfo.ArgumentGroups.TryGetValue(string.Empty, out grp))
+            if (tInfo.ArgumentGroups.TryGetValue(string.Empty, out ArgumentGroupInfo grp))
             {
                 if (grp.OptionalArguments.Count == 0 && grp.RequiredArguments.Count == 0)
                     tInfo.ArgumentGroups.Remove(string.Empty);

@@ -1,4 +1,5 @@
 ﻿using CommandLine.ColorScheme;
+using CommandLine.Tests.TestObjects;
 using System;
 using System.IO;
 using Xunit;
@@ -156,7 +157,7 @@ namespace CommandLine.Tests
 
             Validate(_printer,
                 new TextAndColor(color.ErrorColor, "Error"),
-                new TextAndColor(_printer.ForegroundColor, $": Not all required arguments have been specified {Environment.NewLine}"), 
+                new TextAndColor(_printer.ForegroundColor, $": Not all required arguments have been specified {Environment.NewLine}"),
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
@@ -195,6 +196,35 @@ namespace CommandLine.Tests
             Assert.False(value);
 
             Validate(_printer);
+        }
+
+
+        [Trait("Category", "Negative")]
+        [Fact]
+        public void TryParseObjectThatDefinesTwoRequiredLists()
+        {
+            var commandLine = $"element1 element2 element3";
+
+            TestWriter _printer = new TestWriter();
+            IColors color = Parser.ColorScheme.Get();
+            OutputColorizer.Colorizer.SetupWriter(_printer);
+
+            bool value = Parser.TryParse(commandLine, out ComplexType2 options);
+            Assert.False(value);
+
+            Validate(_printer,
+                new TextAndColor(color.ErrorColor, "Error"),
+                new TextAndColor(_printer.ForegroundColor, $": Cannot have two required arguments that are collection. {Environment.NewLine}"),
+                new TextAndColor(_printer.ForegroundColor, "Usage: "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "repos"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
+                new TextAndColor(color.AssemblyNameColor, "testhost --help"),
+                new TextAndColor(_printer.ForegroundColor, "'.")
+                );
         }
     }
 }

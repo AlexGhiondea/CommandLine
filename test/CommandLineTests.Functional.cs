@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CommandLine.Tests.TestObjects;
+using System.Collections.Generic;
 using Xunit;
 
 namespace CommandLine.Tests
@@ -44,7 +45,7 @@ namespace CommandLine.Tests
             Assert.Null(options.opt3);
         }
 
-        [Trait("Category", "Basic")]
+        [Trait("Category", "Collections")]
         [Fact]
         public void BasicTest4()
         {
@@ -57,7 +58,7 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt3, "a", "b", "c");
         }
 
-        [Trait("Category", "Basic")]
+        [Trait("Category", "Collections")]
         [Fact]
         public void BasicTest5()
         {
@@ -70,7 +71,7 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt3, "a", "b", "c");
         }
 
-        [Trait("Category", "Basic")]
+        [Trait("Category", "Collections")]
         [Fact]
         public void BasicTest6()
         {
@@ -83,7 +84,7 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt3, "a", "b", "c");
         }
 
-        [Trait("Category", "Basic")]
+        [Trait("Category", "Collections")]
         [Fact]
         public void BasicTest7()
         {
@@ -95,7 +96,7 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt2, "a", "b", "c");
         }
 
-        [Trait("Category", "Basic")]
+        [Trait("Category", "Collections")]
         [Fact]
         public void BasicTest8()
         {
@@ -107,7 +108,7 @@ namespace CommandLine.Tests
             Assert.Null(options.opt2);
         }
 
-        [Trait("Category", "Basic")]
+        [Trait("Category", "Collections")]
         [Fact]
         public void BasicTest9()
         {
@@ -118,7 +119,7 @@ namespace CommandLine.Tests
             Assert.Equal(Enum1.B, options.opt3);
         }
 
-        [Trait("Category", "Basic")]
+        [Trait("Category", "Collections")]
         [Fact]
         public void BasicTest10()
         {
@@ -129,7 +130,7 @@ namespace CommandLine.Tests
             Assert.Equal(Enum1.A, options.opt3);
         }
 
-        [Trait("Category", "Basic")]
+        [Trait("Category", "Collections")]
         [Fact]
         public void BasicTest11()
         {
@@ -188,7 +189,8 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.opt2, "a", "b", "c");
             Assert.Equal('b', options.Character);
         }
-        [Trait("Category", "Basic")]
+
+        [Trait("Category", "Collections")]
         [Fact]
         public void BasicTest13()
         {
@@ -202,7 +204,7 @@ namespace CommandLine.Tests
             Assert.Equal('b', options.Character);
         }
 
-        [Trait("Category", "Basic")]
+        [Trait("Category", "Collections")]
         [Fact]
         public void BasicTest14()
         {
@@ -217,7 +219,7 @@ namespace CommandLine.Tests
             Assert.Equal('b', options.Character);
         }
 
-        [Trait("Category", "Basic")]
+        [Trait("Category", "Collections")]
         [Fact]
         public void BasicTest15()
         {
@@ -260,6 +262,19 @@ namespace CommandLine.Tests
             Assert.Null(options);
             Assert.False(outcome);
         }
+
+
+        [Trait("Category", "Collections")]
+        [Fact]
+        public void ParseTwoOptionalCollections()
+        {
+            var outcome = Parser.TryParse("-repos a b c -list d e f ", out ComplexType3 options);
+
+            Assert.True(outcome);
+            Helpers.CollectionEquals(options.Repositories, "a", "b", "c"); 
+            Helpers.CollectionEquals(options.List, "d", "e", "f");
+        }
+
         public static IEnumerable<object[]> GetParserOptions()
         {
             yield return new object[] { (ParserOptions)null };
@@ -268,6 +283,5 @@ namespace CommandLine.Tests
             yield return new object[] { new ParserOptions() { LogParseErrorToConsole = true, ReadFromEnvironment = false, VariableNamePrefix = "test" } };
             yield return new object[] { new ParserOptions() { LogParseErrorToConsole = false, ReadFromEnvironment = true, VariableNamePrefix = "test" } };
         }
-
     }
 }
