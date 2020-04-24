@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -319,7 +320,8 @@ namespace CommandLine.Analyzer
             HashSet<string> namesOfAllArgs = new HashSet<string>();
             HashSet<int> positionsOrRequiredArgs = new HashSet<int>();
             int numberOfPositionalArgs = 0;
-            RequiredArgument requiredCollectionArg = null;
+            int indexOfCollectionArg = -1;
+            RequiredArgument collectionArg = null;
             foreach (var item in args)
             {
                 if (item is OptionalArgument)
@@ -352,16 +354,18 @@ namespace CommandLine.Analyzer
                         context.ReportDiagnostic(Diagnostic.Create(DuplicateArgumentNameRule, rag.Symbol.Locations.First(), rag.Name));
                     }
 
-                    // do we have more than 1 required collection arg?
-                    if (rag.IsCollection)
+                    // is the required collection argument the last one AND do we only have one of them?
+                    if (indexOfCollectionArg >= 0 && rag.Position > indexOfCollectionArg)
                     {
-                        if (requiredCollectionArg != null)
-                        {
-                            context.ReportDiagnostic(Diagnostic.Create(TwoRequiredCollectionArgs, rag.Symbol.Locations.First(), requiredCollectionArg.Name, rag.Name));
-                        }
-                        requiredCollectionArg = rag;
+                        context.ReportDiagnostic(Diagnostic.Create(OnlyOneRequiredCollection, rag.Symbol.Locations.First(), collectionArg.Name, rag.Name));
                     }
 
+                    // do we have a collection argument specified?
+                    if (rag.IsCollection)
+                    {
+                        indexOfCollectionArg = rag.Position;
+                        collectionArg = rag;
+                    }
 
                     namesOfAllArgs.Add(rag.Name);
                     positionsOrRequiredArgs.Add(rag.Position);
@@ -379,6 +383,12 @@ namespace CommandLine.Analyzer
                     context.ReportDiagnostic(Diagnostic.Create(RequiredPositionalArgumentNotFound, args.First().Symbol.ContainingType.Locations.First(), numberOfPositionalArgs, checkedPositions));
                     break;
                 }
+            }
+
+            // Ensure that the required collection argument (if present) is last.
+            if (indexOfCollectionArg >= 0 && indexOfCollectionArg != numberOfPositionalArgs - 1)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(CollectionArgumentShouldBeLast, collectionArg.Symbol.Locations.First(), collectionArg.Name));
             }
         }
 

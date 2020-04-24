@@ -149,5 +149,17 @@ namespace CommandLine.Tests
             Assert.Equal(CommandAction.List, complex.Action);
             Helpers.CollectionEquals(complex.List2, expectedRepo1, expectedRepo2);
         }
+
+        [Trait("Category", "Collections")]
+        [Fact]
+        public void TestObjectWithJustList()
+        {
+            string expectedRepo1 = "azure\azure-powershell";
+            string expectedRepo2 = "azure\azure-sdk-for-net";
+            var commandLine = $"{expectedRepo1} {expectedRepo2}";
+
+            Assert.True(Parser.TryParse(commandLine, out SimpleType1 complex));
+            Helpers.CollectionEquals(complex.List1, expectedRepo1, expectedRepo2);
+        }
     }
 }

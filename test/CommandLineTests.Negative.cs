@@ -2,6 +2,7 @@
 using CommandLine.Tests.TestObjects;
 using System;
 using System.IO;
+using System.Reflection;
 using Xunit;
 
 namespace CommandLine.Tests
@@ -160,7 +161,7 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, $": Not all required arguments have been specified {Environment.NewLine}"),
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.RequiredArgumentColor, "p1"),
                 new TextAndColor(_printer.ForegroundColor, " "),
@@ -214,12 +215,41 @@ namespace CommandLine.Tests
 
             Validate(_printer,
                 new TextAndColor(color.ErrorColor, "Error"),
-                new TextAndColor(_printer.ForegroundColor, $": Cannot have two required arguments that are collection. {Environment.NewLine}"),
+                new TextAndColor(_printer.ForegroundColor, $": There should only be one required collection argument and it should be the last position in the required set. You can have multiple optional collection arguments but a single required collection one. {Environment.NewLine}"),
+                new TextAndColor(_printer.ForegroundColor, "Usage: "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "repos"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
+                new TextAndColor(color.AssemblyNameColor, "testhost --help"),
+                new TextAndColor(_printer.ForegroundColor, "'.")
+                );
+        }
+
+        [Trait("Category", "Collections")]
+        [Fact]
+        public void TryParseObjectThatHasListAsFirstArgument()
+        {
+            var commandLine = $"element1 element2 element3";
+
+            TestWriter _printer = new TestWriter();
+            IColors color = Parser.ColorScheme.Get();
+            OutputColorizer.Colorizer.SetupWriter(_printer);
+
+            bool value = Parser.TryParse(commandLine, out ComplexType5 options);
+            Assert.False(value);
+
+            Validate(_printer, new TextAndColor(color.ErrorColor, "Error"),
+                new TextAndColor(_printer.ForegroundColor, $": The required collection argument needs to be on the last position of the required arguments. {Environment.NewLine}"), 
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.RequiredArgumentColor, "repos"),
+                new TextAndColor(color.RequiredArgumentColor, "list1"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "nonList"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
                 new TextAndColor(color.AssemblyNameColor, "testhost --help"),

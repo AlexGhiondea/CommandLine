@@ -514,7 +514,7 @@ internal class CommandLineOptions
 
         [TestCategory("Analyzer")]
         [TestMethod]
-        public void RedirectRequiredArg()
+        public void RequiredCollectionArgShouldBeTheOnlyOne()
         {
             var test = @"
 using CommandLine.Attributes;
@@ -546,10 +546,11 @@ using CommandLine.Attributes.Advanced;
     }
 
 ";
+
             var expected = new DiagnosticResult
             {
-                Id = "CMDNET08",
-                Message = "The type declares 'repos' and 'repos2' as required collection arguments. At runtime it is not going to be possible to determine where the value for one of them starts and other ends.",
+                Id = "CMDNET09",
+                Message = "Both arguments 'repos' and 'repos2' are marked as required collection arguments. Only one can be required. The other should be changed to optional.",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                  new[] {
@@ -558,6 +559,44 @@ using CommandLine.Attributes.Advanced;
             };
 
             VerifyCommandLineDiagnostic(test,expected);
+        }
+
+        [TestCategory("Analyzer")]
+        [TestMethod]
+        public void RequiredArgumentShouldBeLast()
+        {
+            var test = @"
+using CommandLine.Attributes;
+using CommandLine.Attributes.Advanced;
+
+    internal class CmdLineArgs
+    {
+        [RequiredArgument(1, ""milestoneInputFile"", ""The file containing the list of milestones to create."")]
+        public string MilestoneFile { get; set; }
+
+        [RequiredArgument(0, ""repos"", ""The list of repositories where to add the milestones to. The format is: owner\\repoName."", true)]
+        public List<string> Repositories { get; set; }
+    }
+
+    public enum Action
+    {
+        Create,
+        List
+    }
+
+";
+            var expected = new DiagnosticResult
+            {
+                Id = "CMDNET08",
+                Message = "The collection argument 'repos' needs to be the last argument in the list. Otherwise, it will not be possible to parse it at runtime.",
+                Severity = DiagnosticSeverity.Error,
+                Locations =
+                 new[] {
+                            new DiagnosticResultLocation("Test0.cs", 11, 29)
+                     }
+            };
+
+            VerifyCommandLineDiagnostic(test, expected);
         }
 
         [TestCategory("Analyzer")]
@@ -705,8 +744,8 @@ namespace CommandLine.Tests.TestObjects
 
             var expected = new DiagnosticResult
             {
-                Id = "CMDNET08",
-                Message = "The type declares 'repos' and 'list' as required collection arguments. At runtime it is not going to be possible to determine where the value for one of them starts and other ends.",
+                Id = "CMDNET09",
+                Message = "Both arguments 'repos' and 'list' are marked as required collection arguments. Only one can be required. The other should be changed to optional.",
                 Severity = DiagnosticSeverity.Error,
                 Locations =
                    new[] {
@@ -716,7 +755,6 @@ namespace CommandLine.Tests.TestObjects
 
             VerifyCommandLineDiagnostic(test, expected);
         }
-
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {

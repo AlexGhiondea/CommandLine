@@ -9,10 +9,10 @@ namespace CommandLine.Tests
         [OptionalArgument(UniqueProviders.FileSize, "provider", "The mechanism to use when determining if the files are unique")]
         public UniqueProviders Provider { get; set; }
 
-        [RequiredArgument(0, "folders", "List of the folders to consider when scanning for duplicates", true)]
+        [RequiredArgument(1, "folders", "List of the folders to consider when scanning for duplicates", true)]
         public List<string> RootFolders { get; set; }
 
-        [RequiredArgument(1, "providers", "Some providers to have")]
+        [RequiredArgument(0, "providers", "Some providers to have")]
         public UniqueProviders Providers { get; set; }
 
         [OptionalArgument("output", "out", "The name of the file where to write the result")]
