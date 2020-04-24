@@ -11,15 +11,15 @@ namespace CommandLine.Tests.TestObjects
         public Action Action { get; set; }
 
         [ArgumentGroup(nameof(Action.Create))]
-        [RequiredArgument(0, "milestoneInputFile", "The file containing the list of milestones to create.")]
-        public string MilestoneFile { get; set; }
+        [RequiredArgument(0, "repos2", "The list of repositories where to add the milestones to.The format is: owner\\repoName.", true)]
+        public List<string> Repositories2 { get; set; }
 
         [ArgumentGroup(nameof(Action.Create))]
         [RequiredArgument(1, "repos", "The list of repositories where to add the milestones to.The format is: owner\\repoName.", true)]
         public List<string> Repositories { get; set; }
 
         [ArgumentGroup(nameof(Action.Create))]
-        [RequiredArgument(2, "repos2", "The list of repositories where to add the milestones to.The format is: owner\\repoName.", true)]
-        public List<string> Repositories2 { get; set; }
+        [RequiredArgument(2, "milestoneInputFile", "The file containing the list of milestones to create.")]
+        public string MilestoneFile { get; set; }
     }
 }

@@ -85,12 +85,6 @@ namespace CommandLine.Analysis
                             throw new ArgumentException("Two required arguments share the same position!!");
                         }
 
-                        // if we have a required collection argument and the position of the current argument is beyond the collection one, throw an error
-                        if (grpPropInfo.IndexOfCollectionArgument >= 0 && requiredPositionIndex > grpPropInfo.IndexOfCollectionArgument)
-                        {
-                            throw new ArgumentException("There should only be one required collection argument and it should be the last position in the required set. You can have multiple optional collection arguments but a single required collection one.");
-                        }
-
                         // if we have a collection argument, keep track of it
                         if (baseAttrib.IsCollection)
                         {
@@ -133,7 +127,7 @@ namespace CommandLine.Analysis
                 {
                     if (!string.IsNullOrEmpty(group.Key))
                     {
-                        throw new ArgumentException("The required collection argument for group `{0}` needs to be on the last position of the required arguments.", group.Key);
+                        throw new ArgumentException($"The required collection argument for group `{group.Key}` needs to be on the last position of the required arguments.");
                     }
                     else
                     {

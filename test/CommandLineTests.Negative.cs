@@ -215,7 +215,7 @@ namespace CommandLine.Tests
 
             Validate(_printer,
                 new TextAndColor(color.ErrorColor, "Error"),
-                new TextAndColor(_printer.ForegroundColor, $": There should only be one required collection argument and it should be the last position in the required set. You can have multiple optional collection arguments but a single required collection one. {Environment.NewLine}"),
+                new TextAndColor(_printer.ForegroundColor, $": Cannot declare two required collection arguments. Please convert one of them to an optional collection one. {Environment.NewLine}"),
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, $"{Assembly.GetEntryAssembly()?.GetName()?.Name}.exe"),
@@ -260,11 +260,11 @@ namespace CommandLine.Tests
 
         [Trait("Category", "Collections")]
         [Fact]
-        public void DefineTwoRequiredCollectionSameGroup()
+        public void DefineTwoRequiredCollectionsSameGroup()
         {
             string expectedRepo1 = "azure\azure-powershell";
             string expectedRepo2 = "azure\azure-sdk-for-net";
-            var commandLine = $"Check {expectedRepo1} {expectedRepo2}";
+            var commandLine = $"Create {expectedRepo1} {expectedRepo2}";
 
             TestWriter _printer = new TestWriter();
             IColors color = Parser.ColorScheme.Get();
@@ -274,7 +274,7 @@ namespace CommandLine.Tests
             Assert.False(value);
 
             Validate(_printer, new TextAndColor(color.ErrorColor, "Error"),
-                new TextAndColor(_printer.ForegroundColor, $": There should only be one required collection argument and it should be the last position in the required set. You can have multiple optional collection arguments but a single required collection one. {Environment.NewLine}"), 
+                new TextAndColor(_printer.ForegroundColor, $": Cannot declare two required collection arguments. Please convert one of them to an optional collection one. {Environment.NewLine}"), 
                 new TextAndColor(_printer.ForegroundColor, "Usage: "),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
@@ -282,9 +282,7 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.ArgumentValueColor, "Create"),
                 new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.RequiredArgumentColor, "milestoneInputFile"),
-                new TextAndColor(_printer.ForegroundColor, " "),
-                new TextAndColor(color.RequiredArgumentColor, "repos"),
+                new TextAndColor(color.RequiredArgumentColor, "repos2"),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
@@ -292,6 +290,87 @@ namespace CommandLine.Tests
                 new TextAndColor(_printer.ForegroundColor, " "),
                 new TextAndColor(color.ArgumentValueColor, "List"),
                 new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
+                new TextAndColor(color.AssemblyNameColor, "testhost --help"),
+                new TextAndColor(_printer.ForegroundColor, "'.")
+                );
+        }
+
+
+        [Trait("Category", "Collections")]
+        [Fact]
+        public void DefineRequiredCollectionWrongPositionGroup()
+        {
+            string expectedRepo1 = "azure\azure-powershell";
+            string expectedRepo2 = "azure\azure-sdk-for-net";
+            var commandLine = $"Create {expectedRepo1} {expectedRepo2}";
+
+            TestWriter _printer = new TestWriter();
+            IColors color = Parser.ColorScheme.Get();
+            OutputColorizer.Colorizer.SetupWriter(_printer);
+
+            bool value = Parser.TryParse(commandLine, out ComplexType7 options);
+            Assert.False(value);
+
+            Validate(_printer, new TextAndColor(color.ErrorColor, "Error"),
+                new TextAndColor(_printer.ForegroundColor, $": The required collection argument for group `Create` needs to be on the last position of the required arguments. {Environment.NewLine}"), 
+                new TextAndColor(_printer.ForegroundColor, "Usage: "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.ArgumentValueColor, "Create"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "repos"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "objectsFile"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "token"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.ArgumentValueColor, "CreateOrUpdate"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "repos"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "objectsFile"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "token"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.ArgumentValueColor, "List"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "repos"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, $"{Environment.NewLine}"), 
+                new TextAndColor(color.ErrorColor, "Error"),
+                new TextAndColor(_printer.ForegroundColor, ": Required argument expected at position"),
+                new TextAndColor(color.RequiredArgumentColor, "1"),
+                new TextAndColor(_printer.ForegroundColor, ". Type declares arguments at position(s) "),
+                new TextAndColor(color.RequiredArgumentColor, "0,2"),
+                new TextAndColor(_printer.ForegroundColor, ". "),
+                new TextAndColor(color.ErrorColor, "Check type definition"),
+                new TextAndColor(_printer.ForegroundColor, "."),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.AssemblyNameColor, "testhost.exe"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.ArgumentValueColor, "Check"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "repos"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(color.RequiredArgumentColor, "objectsFile"),
+                new TextAndColor(_printer.ForegroundColor, " "),
+                new TextAndColor(_printer.ForegroundColor, "[-"),
+                new TextAndColor(color.OptionalArgumentColor, "token"),
+                new TextAndColor(_printer.ForegroundColor, " value] "),
                 new TextAndColor(_printer.ForegroundColor, "For detailed information run '"),
                 new TextAndColor(color.AssemblyNameColor, "testhost --help"),
                 new TextAndColor(_printer.ForegroundColor, "'.")
