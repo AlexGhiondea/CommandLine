@@ -70,6 +70,21 @@ You can ask for the long version of the help by using the `HelpFormat.Full` spec
 Parser.DisplayHelp<Options>(HelpFormat.Full);
 ```
 
+### Specifying multiple enum values
+
+If you have an enum defined as a flags enum, you need to pass this value as an argument in order for it to be correctly parsed: `"A, B"` or `A,B`.
+```csharp
+[Flags]
+enum MyFlags
+{
+  A = 1,
+  B = 2
+}
+```
+Note:
+- The enum values need to be starting at 1, otherwise when the OR operation happens, the value that is 0 will be lost
+- The string needs to either be inside a double quote (if it contains a space) or have no space inside
+
 ## Types of arguments 
 
 To use you need to provide a class that is going to hold the options parsed from the command line and use attributes to define the behavior of the parser.
