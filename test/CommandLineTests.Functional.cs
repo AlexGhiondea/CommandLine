@@ -278,8 +278,19 @@ namespace CommandLine.Tests
         [Fact]
         public void ParseEnumCaseSensitive()
         {
-            var outcome = Parser.TryParse("convert", out SimpleType3 outputType);
+            SimpleType3 outputType;
+            var outcome = Parser.TryParse("convert", out outputType);
 
+            Assert.True(outcome);
+            Assert.Equal(ActionType.Convert, outputType.ActionType);
+
+            outputType = null;
+            outcome = Parser.TryParse("conVErt", out outputType);
+            Assert.True(outcome);
+            Assert.Equal(ActionType.Convert, outputType.ActionType);
+
+            outputType = null;
+            outcome = Parser.TryParse("Convert", out outputType);
             Assert.True(outcome);
             Assert.Equal(ActionType.Convert, outputType.ActionType);
         }
