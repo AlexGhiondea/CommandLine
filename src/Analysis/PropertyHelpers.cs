@@ -14,7 +14,8 @@ namespace CommandLine.Analysis
         {
             if (TypeHelpers.IsEnum(targetType.PropertyType))
             {
-                return Enum.Parse(targetType.PropertyType, value);
+                // We are going to parse the enum as case insensitive
+                return Enum.Parse(targetType.PropertyType, value, true);
             }
 
             return value;
