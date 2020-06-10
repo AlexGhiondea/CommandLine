@@ -274,6 +274,27 @@ namespace CommandLine.Tests
             Helpers.CollectionEquals(options.List, "d", "e", "f");
         }
 
+        [Trait("Category", "Basic")]
+        [Fact]
+        public void ParseEnumCaseSensitive()
+        {
+            SimpleType3 outputType;
+            var outcome = Parser.TryParse("convert", out outputType);
+
+            Assert.True(outcome);
+            Assert.Equal(ActionType.Convert, outputType.ActionType);
+
+            outputType = null;
+            outcome = Parser.TryParse("conVErt", out outputType);
+            Assert.True(outcome);
+            Assert.Equal(ActionType.Convert, outputType.ActionType);
+
+            outputType = null;
+            outcome = Parser.TryParse("Convert", out outputType);
+            Assert.True(outcome);
+            Assert.Equal(ActionType.Convert, outputType.ActionType);
+        }
+
         public static IEnumerable<object[]> GetParserOptions()
         {
             yield return new object[] { (ParserOptions)null };
