@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyVersion>2.2.0</AssemblyVersion>
+    <AssemblyVersion>2.2.1</AssemblyVersion>
     <FileVersion>$(AssemblyVersion)</FileVersion>
     <VersionPrefix>2.2.0</VersionPrefix>
   </PropertyGroup>
@@ -20,12 +20,13 @@
     <Description>Parse command line arguments into user defined objects</Description>
     <releaseNotes>Fix an issue where TryParse returns true when parsing help which leads to a null reference later.
     Also ensure that Parse throws a ParseException when the help was requested to ensure we don't end up with null options after parsing.</releaseNotes>
-    <Copyright>Alex Ghiondea (c) 2019</Copyright>
+    <Copyright>Alex Ghiondea (c) 2020</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/AlexGhiondea/CommandLine/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/AlexGhiondea/CommandLine</PackageProjectUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>CommandLine, Command line, Command, Line, parser, objects, custom</PackageTags>
     <LangVersion>7.1</LangVersion>
+    <Version>2.2.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
