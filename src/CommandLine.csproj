@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyVersion>2.2.1</AssemblyVersion>
-    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <AssemblyVersion>2.2.2</AssemblyVersion>
+    <FileVersion>2.2.2</FileVersion>
     <VersionPrefix>2.2.0</VersionPrefix>
   </PropertyGroup>
 
@@ -26,7 +26,7 @@
     <RepositoryType>Git</RepositoryType>
     <PackageTags>CommandLine, Command line, Command, Line, parser, objects, custom</PackageTags>
     <LangVersion>7.1</LangVersion>
-    <Version>2.2.1</Version>
+    <Version>2.2.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
