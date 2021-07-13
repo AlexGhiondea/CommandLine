@@ -8,6 +8,14 @@
   </PropertyGroup>
    
   <ItemGroup>
+    <PackageReference Include="DotNet.ReproducibleBuilds" Version="0.1.64">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="DotNet.ReproducibleBuilds.Isolated" Version="0.1.64">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="2.8.2">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

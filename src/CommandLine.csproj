@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyVersion>2.2.2</AssemblyVersion>
-    <FileVersion>2.2.2</FileVersion>
+    <AssemblyVersion>2.2.3</AssemblyVersion>
+    <FileVersion>2.2.3</FileVersion>
     <VersionPrefix>2.2.0</VersionPrefix>
   </PropertyGroup>
 
@@ -18,9 +18,8 @@
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Authors>Alex Ghiondea</Authors>
     <Description>Parse command line arguments into user defined objects</Description>
-    <releaseNotes>Fix an issue where TryParse returns true when parsing help which leads to a null reference later.
-    Also ensure that Parse throws a ParseException when the help was requested to ensure we don't end up with null options after parsing.</releaseNotes>
-    <Copyright>Alex Ghiondea (c) 2020</Copyright>
+    <releaseNotes>Make the package have a reproducible build</releaseNotes>
+    <Copyright>Alex Ghiondea (c) 2021</Copyright>
     <PackageLicenseUrl>https://raw.githubusercontent.com/AlexGhiondea/CommandLine/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/AlexGhiondea/CommandLine</PackageProjectUrl>
     <RepositoryType>Git</RepositoryType>
@@ -30,6 +29,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DotNet.ReproducibleBuilds" Version="0.1.64">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="DotNet.ReproducibleBuilds.Isolated" Version="0.1.64">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="OutputColorizer" Version="2.0.0" />
   </ItemGroup>
 
