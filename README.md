@@ -11,7 +11,13 @@ CommandLine parser
 
 ## Getting started
 
-Here is how you can define a class that can be used with the parser:
+First install the package:
+
+```powershell
+Install-Package CommandLine.Net
+```
+
+Then you can define a class that can be used with the parser:
 
 ```csharp
 class Options
