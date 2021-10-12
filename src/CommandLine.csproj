@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyVersion>2.2.3</AssemblyVersion>
-    <FileVersion>2.2.3</FileVersion>
+    <AssemblyVersion>2.3.0</AssemblyVersion>
+    <FileVersion>2.3.0</FileVersion>
     <VersionPrefix>2.2.0</VersionPrefix>
   </PropertyGroup>
 
@@ -25,7 +25,10 @@
     <RepositoryType>Git</RepositoryType>
     <PackageTags>CommandLine, Command line, Command, Line, parser, objects, custom</PackageTags>
     <LangVersion>7.1</LangVersion>
-    <Version>2.2.2</Version>
+    <Version>2.3.0</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)..\commandline.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,7 +40,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="OutputColorizer" Version="2.0.0" />
+    <PackageReference Include="OutputColorizer" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net45'">

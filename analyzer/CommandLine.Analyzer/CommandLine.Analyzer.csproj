@@ -5,6 +5,8 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IsPackable>false</IsPackable>
     <DebugType>full</DebugType>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)..\..\commandline.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
    
   <ItemGroup>
