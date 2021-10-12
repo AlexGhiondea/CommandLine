@@ -20,7 +20,6 @@
     <Description>Parse command line arguments into user defined objects</Description>
     <releaseNotes>Make the package have a reproducible build</releaseNotes>
     <Copyright>Alex Ghiondea (c) 2021</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/AlexGhiondea/CommandLine/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/AlexGhiondea/CommandLine</PackageProjectUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>CommandLine, Command line, Command, Line, parser, objects, custom</PackageTags>
